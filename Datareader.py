@@ -8,6 +8,7 @@ import glob
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 # In[19]:
@@ -20,54 +21,37 @@ df_from_each_file = (pd.read_csv(f,sep= ";") for f in all_files)
 concatenated_df   = pd.concat(df_from_each_file, ignore_index=True)
 # doesn't create a list, nor does it append to one
 
-concatenated_df.tail(1000)
-
-
-# In[15]:
-
-
-concatenated_df.count()
-
-
-# In[17]:
-
-
-concatenated_df.describe()
-
-
-# In[10]:
+# calculate abs accleration
+concatenated_df["abs_acceleration"] = np.linalg.norm(concatenated_df[["ACCELEROMETER X (m/s²)","ACCELEROMETER Y (m/s²)","ACCELEROMETER Z (m/s²)"]].values,axis=1)
+concatenated_df["abs_loc"] = np.linalg.norm(concatenated_df[['LOCATION Latitude : ', 'LOCATION Longitude : ']].values,axis=1)
 
 
 concatenated_df.plot(x="YYYY-MO-DD HH-MI-SS_SSS", y=["ACCELEROMETER X (m/s²)","ACCELEROMETER Y (m/s²)","ACCELEROMETER Z (m/s²)"])
-#plt.show()
 
 
-# In[20]:
 
 
-concatenated_df.plot(y="LOCATION Latitude : ", x="LOCATION Longitude : ")
+# remove all duplicated long lat positions
+concatenated_df = concatenated_df.groupby('abs_loc').mean().reset_index()
+
+concatenated_df["gps_acceleration"] = concatenated_df["LOCATION Speed ( Kmh)"].diff()
+
+concatenated_df["power"] = concatenated_df["gps_acceleration"] * concatenated_df["LOCATION Speed ( Kmh)"] * 80
 
 
-# In[22]:
+concatenated_df.to_csv(r"D:\OneDrive - Imperial College London\University Storage\Masters project\Raw data\combined.csv")
 
 
-unique_df = concatenated_df.drop_duplicates(subset=['LOCATION Latitude : ', 'LOCATION Longitude : '], keep='last')
 
 
-# In[23]:
-
-
-#unique_df.to_csv(r"D:\OneDrive - Imperial College London\University Storage\Masters project\Raw data\combined.csv")
-
-
-# In[2]:
-
-
-import pandas as pd
 
 import plotly.express as px
 
-fig = px.scatter_mapbox(unique_df, lat="LOCATION Latitude : ", lon="LOCATION Longitude : ",color="LOCATION Speed ( Kmh)")
+#fig = px.scatter_mapbox(concatenated_df, lat="LOCATION Latitude : ", lon="LOCATION Longitude : ",color="LOCATION Speed ( Kmh)")
+#fig = px.scatter_mapbox(concatenated_df, lat="LOCATION Latitude : ", lon="LOCATION Longitude : ",color="abs_acceleration")
+#fig = px.scatter_mapbox(concatenated_df, lat="LOCATION Latitude : ", lon="LOCATION Longitude : ",color="gps_acceleration")
+fig = px.scatter_mapbox(concatenated_df, lat="LOCATION Latitude : ", lon="LOCATION Longitude : ",color="power")
+
 fig.update_layout(mapbox_style="open-street-map")
 fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 fig.show()
