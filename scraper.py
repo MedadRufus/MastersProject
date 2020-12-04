@@ -2,6 +2,7 @@ import logging
 import time
 from datetime import datetime
 from pathlib import Path
+from socket import gaierror
 
 import requests
 import schedule
@@ -31,13 +32,15 @@ def job():
     p.mkdir(parents=True, exist_ok=True)
 
     for site in sites_to_scrape:
-        logger.info("Scraping site: {}".format(site))
+        try:
+            logger.info("Scraping site: {}".format(site))
 
-        response = requests.get(sites_to_scrape[site]["url"])
-        file_name = '{0}_{1}.json'.format(site,file_time)
-        filepath = p / file_name
-        filepath.write_bytes(response.content)
-
+            response = requests.get(sites_to_scrape[site]["url"])
+            file_name = '{0}_{1}.json'.format(site,file_time)
+            filepath = p / file_name
+            filepath.write_bytes(response.content)
+        except gaierror:
+            logging.exception("Connection error")
 
 
 for i in range(0, 60, HOW_OFTEN_TO_SCRAPE):

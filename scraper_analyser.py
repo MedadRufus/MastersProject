@@ -1,23 +1,25 @@
-from pathlib import Path
-import datetime
 import json
-import pandas as pd
+from pathlib import Path
 from statistics import variance
 
-path = Path(r'C:\Users\Medad\PycharmProjects\MastersProject\datadump')
-
+path = Path(r'D:\Github_data\MastersProject\datadump')
 
 bikes = {}
+
+# Choose either "helbiz_*.json" or "bird_*.json"
 for e in path.glob('helbiz_*.json'):
     json_data = json.loads(e.read_text())
-
+    print(json_data)
     for i in json_data["data"]["bikes"]:
-        bikes[i["bike_id"]] = bikes.get(i["bike_id"], []) + [float(i["lat"])]
-
-
-    #pd_temp = pd.DataFrame(json_data["data"]["bikes"])
-    #print(pd_temp.head(4))
+        
+        bikes[i["bike_id"]] = bikes.get(i["bike_id"], []) + [
+            {"lat": float(i["lat"]),
+             "lon": float(i["lon"]),
+             "in_use": int(i["in_use"]),
+             "is_reserved":int(i["is_reserved"])
+        }]
 
 for bike in bikes:
-    #print(bikes[bike])
-    print(variance(bikes[bike]))
+    print(bikes[bike])
+    print(variance([i["is_reserved"] for i in bikes[bike]]))
+    # print(bikes[bike])
