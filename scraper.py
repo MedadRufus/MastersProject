@@ -19,10 +19,11 @@ logger.set_colors(False, LOG_FORMAT_CUSTOM)
 logger.set_unhandled_exception_handler()
 
 sites_to_scrape = {"helbiz": {"url": "https://api.helbiz.com/admin/reporting/washington/gbfs/all_bike_status.json"},
-                   "bird": {"url": "https://gbfs.bird.co/dc"}
+                   "bird": {"url": "https://gbfs.bird.co/dc"},
+                   "lime": {"url": "https://data.lime.bike/api/partners/v1/gbfs/washington_dc/free_bike_status"}# taken from A Stochastic Model for Electric Scooter Systems
                    }
 
-HOW_OFTEN_TO_SCRAPE = 30 # every 10 seconds
+HOW_OFTEN_TO_SCRAPE = 60 # every 10 seconds
 
 def job():
 
@@ -41,6 +42,8 @@ def job():
             filepath.write_bytes(response.content)
         except gaierror:
             logging.exception("Connection error")
+        except:
+            logging.exception("Connection Error unknown")
 
 
 for i in range(0, 60, HOW_OFTEN_TO_SCRAPE):
