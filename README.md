@@ -17,3 +17,10 @@ It needs to
 
 The idea is to see how estimate battery discharge profiles to do accurate range and state of charge estimations.
 
+
+
+Hardware ideas:
+* Accleration/tilt from LSM9DS1. Tilt can be measured from sensor fusino on the mcu
+* Processor: ESP32
+* Current sensor: https://czh-labs.com/products/panel-mount-100amp-ac-dc-current-sensor-module-board-based-on-acs758?gclid=Cj0KCQiA5bz-BRD-ARIsABjT4nioMhV6DkzQXXQlWWHhvIdOrb4SGj647ZOateWpy3lJSrJUT42GOLYaAohTEALw_wcB
+* GPS: Ublox with antenna
