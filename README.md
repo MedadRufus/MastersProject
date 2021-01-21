@@ -24,3 +24,14 @@ Hardware ideas:
 * Processor: ESP32
 * Current sensor: https://czh-labs.com/products/panel-mount-100amp-ac-dc-current-sensor-module-board-based-on-acs758?gclid=Cj0KCQiA5bz-BRD-ARIsABjT4nioMhV6DkzQXXQlWWHhvIdOrb4SGj647ZOateWpy3lJSrJUT42GOLYaAohTEALw_wcB
 * GPS: Ublox with antenna
+
+
+# System diagram
+![image](https://user-images.githubusercontent.com/26815217/105333825-1219bf80-5bce-11eb-83dc-ac001538fb16.png)
+
+# Uses of sensor variables
+
+![image](https://user-images.githubusercontent.com/26815217/105334068-5dcc6900-5bce-11eb-9cbd-acdfb5919756.png)
+
+
+
