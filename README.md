@@ -29,8 +29,11 @@ Hardware ideas:
 * GPS: Ublox with antenna
 
 
-# System diagram
+# Overall System diagram
 ![image](https://user-images.githubusercontent.com/26815217/105333825-1219bf80-5bce-11eb-83dc-ac001538fb16.png)
+
+# Basic physical design
+![image](https://github.com/MedadRufus/MastersProject/blob/main/Bike%20logger/Images/system_diagram.png)
 
 # Uses of sensor variables
 
