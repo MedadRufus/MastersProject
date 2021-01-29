@@ -36,17 +36,6 @@ F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_
 	1    4050 5050
 	1    0    0    -1  
 $EndComp
-$Comp
-L Sensor_Current:ACS758xCB-200B-PFF U4
-U 1 1 60096B8D
-P 11800 4850
-F 0 "U4" H 12300 4200 50  0000 L CNN
-F 1 "ACS758xCB-200B-PFF" H 11300 4250 50  0000 L CNN
-F 2 "Sensor_Current:Allegro_CB_PFF" H 11800 4850 50  0001 C CNN
-F 3 "http://www.allegromicro.com/~/media/Files/Datasheets/ACS758-Datasheet.ashx?la=en" H 11800 4850 50  0001 C CNN
-	1    11800 4850
-	1    0    0    -1  
-$EndComp
 Text Label 13600 2200 0    50   ~ 0
 SCL1
 Text Label 13600 2100 0    50   ~ 0
@@ -92,10 +81,6 @@ MOSI
 Wire Wire Line
 	4650 5450 5050 5450
 Wire Wire Line
-	12200 4850 12250 4850
-Text Label 13000 4850 2    50   ~ 0
-output_Current_Adc
-Wire Wire Line
 	4650 6050 5500 6050
 Text Label 5500 6050 2    50   ~ 0
 output_Current_Adc
@@ -112,52 +97,6 @@ F 3 "~" H 8700 1200 50  0001 C CNN
 	1    8700 1200
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R1
-U 1 1 600A2093
-P 750 6900
-F 0 "R1" H 820 6946 50  0000 L CNN
-F 1 "R" H 820 6855 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 6900 50  0001 C CNN
-F 3 "~" H 750 6900 50  0001 C CNN
-	1    750  6900
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R2
-U 1 1 600A24E6
-P 750 7200
-F 0 "R2" H 820 7246 50  0000 L CNN
-F 1 "R" H 820 7155 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 7200 50  0001 C CNN
-F 3 "~" H 750 7200 50  0001 C CNN
-	1    750  7200
-	1    0    0    -1  
-$EndComp
-$Comp
-L custom_symbols:VBATT #PWR0101
-U 1 1 600A3C45
-P 750 6750
-F 0 "#PWR0101" H 750 6600 50  0001 C CNN
-F 1 "VBATT" H 765 6923 50  0000 C CNN
-F 2 "" H 750 6750 50  0001 C CNN
-F 3 "" H 750 6750 50  0001 C CNN
-	1    750  6750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0102
-U 1 1 600A4EB2
-P 750 7350
-F 0 "#PWR0102" H 750 7100 50  0001 C CNN
-F 1 "GND" H 755 7177 50  0000 C CNN
-F 2 "" H 750 7350 50  0001 C CNN
-F 3 "" H 750 7350 50  0001 C CNN
-	1    750  7350
-	1    0    0    -1  
-$EndComp
-Text Label 1800 7050 0    50   ~ 0
-BATT_V_ADC
 Wire Wire Line
 	4650 6150 5500 6150
 Text Label 5500 6150 2    50   ~ 0
@@ -244,28 +183,6 @@ Wire Wire Line
 Wire Wire Line
 	11700 1450 11700 1300
 Connection ~ 11700 1300
-$Comp
-L power:+3.3V #PWR010
-U 1 1 600ADE9F
-P 11800 4300
-F 0 "#PWR010" H 11800 4150 50  0001 C CNN
-F 1 "+3.3V" H 11815 4473 50  0000 C CNN
-F 2 "" H 11800 4300 50  0001 C CNN
-F 3 "" H 11800 4300 50  0001 C CNN
-	1    11800 4300
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR011
-U 1 1 600AE477
-P 11800 5150
-F 0 "#PWR011" H 11800 4900 50  0001 C CNN
-F 1 "GND" H 11805 4977 50  0000 C CNN
-F 2 "" H 11800 5150 50  0001 C CNN
-F 3 "" H 11800 5150 50  0001 C CNN
-	1    11800 5150
-	1    0    0    -1  
-$EndComp
 Wire Notes Line
 	9950 800  9950 3750
 Wire Notes Line
@@ -300,22 +217,6 @@ Wire Notes Line
 	3700 2650 3700 650 
 Wire Notes Line
 	3700 650  600  650 
-Wire Notes Line
-	11000 3900 11000 5650
-Wire Notes Line
-	11000 5650 13050 5650
-Wire Notes Line
-	13050 5650 13050 3900
-Wire Notes Line
-	13050 3900 11000 3900
-Text Notes 11100 4050 0    50   ~ 0
-Batt output Current Sensing
-Wire Notes Line
-	600  6300 600  7900
-Wire Notes Line
-	2300 7900 2300 6300
-Text Notes 700  6450 0    50   ~ 0
-Battery Voltage Sensing
 NoConn ~ 12400 1850
 NoConn ~ 12400 1950
 NoConn ~ 12400 2050
@@ -335,63 +236,6 @@ NoConn ~ 11000 2150
 NoConn ~ 1400 2150
 NoConn ~ 1400 2050
 NoConn ~ 1400 1250
-Connection ~ 750  7050
-Wire Wire Line
-	750  7350 1100 7350
-Connection ~ 750  7350
-$Comp
-L Device:C C2
-U 1 1 600DCBBC
-P 1100 7200
-F 0 "C2" H 1215 7246 50  0000 L CNN
-F 1 "C" H 1215 7155 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1138 7050 50  0001 C CNN
-F 3 "~" H 1100 7200 50  0001 C CNN
-	1    1100 7200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	750  7050 1100 7050
-Connection ~ 1100 7050
-Wire Wire Line
-	1100 7050 1600 7050
-$Comp
-L Diode:BAT54S D1
-U 1 1 600DEC7F
-P 1600 7050
-F 0 "D1" V 1646 7138 50  0000 L CNN
-F 1 "BAT54S" V 1555 7138 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1675 7175 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 1480 7050 50  0001 C CNN
-	1    1600 7050
-	0    -1   -1   0   
-$EndComp
-Wire Notes Line
-	600  7900 2300 7900
-Wire Notes Line
-	600  6300 2300 6300
-$Comp
-L power:GND #PWR018
-U 1 1 600E53F6
-P 1600 7350
-F 0 "#PWR018" H 1600 7100 50  0001 C CNN
-F 1 "GND" H 1605 7177 50  0000 C CNN
-F 2 "" H 1600 7350 50  0001 C CNN
-F 3 "" H 1600 7350 50  0001 C CNN
-	1    1600 7350
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR017
-U 1 1 600E5D48
-P 1600 6750
-F 0 "#PWR017" H 1600 6600 50  0001 C CNN
-F 1 "+3.3V" H 1615 6923 50  0000 C CNN
-F 2 "" H 1600 6750 50  0001 C CNN
-F 3 "" H 1600 6750 50  0001 C CNN
-	1    1600 6750
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:+3.3V #PWR012
 U 1 1 600E8BB8
@@ -586,60 +430,6 @@ Text Label 7750 1500 0    50   ~ 0
 PAS
 Wire Wire Line
 	8500 1500 7750 1500
-Wire Wire Line
-	11800 4400 11800 4300
-Connection ~ 11800 4400
-Wire Wire Line
-	11800 4550 11800 4400
-$Comp
-L power:GND #PWR022
-U 1 1 6015742A
-P 12150 4400
-F 0 "#PWR022" H 12150 4150 50  0001 C CNN
-F 1 "GND" H 12155 4227 50  0000 C CNN
-F 2 "" H 12150 4400 50  0001 C CNN
-F 3 "" H 12150 4400 50  0001 C CNN
-	1    12150 4400
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C6
-U 1 1 60153A2A
-P 12000 4400
-F 0 "C6" V 11748 4400 50  0000 C CNN
-F 1 "100nF" V 11839 4400 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 12038 4250 50  0001 C CNN
-F 3 "~" H 12000 4400 50  0001 C CNN
-	1    12000 4400
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	11800 4400 11850 4400
-$Comp
-L Device:C C7
-U 1 1 6015BC37
-P 12250 5000
-F 0 "C7" H 12135 4954 50  0000 R CNN
-F 1 "C" H 12135 5045 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 12288 4850 50  0001 C CNN
-F 3 "~" H 12250 5000 50  0001 C CNN
-	1    12250 5000
-	-1   0    0    1   
-$EndComp
-Connection ~ 12250 4850
-Wire Wire Line
-	12250 4850 13000 4850
-$Comp
-L power:GND #PWR023
-U 1 1 6015DDCF
-P 12250 5150
-F 0 "#PWR023" H 12250 4900 50  0001 C CNN
-F 1 "GND" H 12255 4977 50  0000 C CNN
-F 2 "" H 12250 5150 50  0001 C CNN
-F 3 "" H 12250 5150 50  0001 C CNN
-	1    12250 5150
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	13450 8700 13450 8800
 Wire Wire Line
@@ -1001,107 +791,6 @@ Text Label 750  5000 0    50   ~ 0
 Throttle
 Text Label 2700 4150 0    50   ~ 0
 throttle_ADC
-$Comp
-L Sensor_Current:ACS758xCB-200B-PFF U6
-U 1 1 601F25BD
-P 14000 4850
-F 0 "U6" H 13600 4400 50  0000 L CNN
-F 1 "ACS758xCB-200B-PFF" H 13700 4200 50  0000 L CNN
-F 2 "Sensor_Current:Allegro_CB_PFF" H 14000 4850 50  0001 C CNN
-F 3 "http://www.allegromicro.com/~/media/Files/Datasheets/ACS758-Datasheet.ashx?la=en" H 14000 4850 50  0001 C CNN
-	1    14000 4850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	14400 4850 14450 4850
-Text Label 15200 4850 2    50   ~ 0
-charge_Current_Adc
-$Comp
-L power:+3.3V #PWR0103
-U 1 1 601F25C9
-P 14000 4300
-F 0 "#PWR0103" H 14000 4150 50  0001 C CNN
-F 1 "+3.3V" H 14015 4473 50  0000 C CNN
-F 2 "" H 14000 4300 50  0001 C CNN
-F 3 "" H 14000 4300 50  0001 C CNN
-	1    14000 4300
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0104
-U 1 1 601F25D3
-P 14000 5150
-F 0 "#PWR0104" H 14000 4900 50  0001 C CNN
-F 1 "GND" H 14005 4977 50  0000 C CNN
-F 2 "" H 14000 5150 50  0001 C CNN
-F 3 "" H 14000 5150 50  0001 C CNN
-	1    14000 5150
-	1    0    0    -1  
-$EndComp
-Wire Notes Line
-	13200 3900 13200 5650
-Wire Notes Line
-	13200 5650 15250 5650
-Wire Notes Line
-	15250 5650 15250 3900
-Wire Notes Line
-	15250 3900 13200 3900
-Text Notes 13300 4050 0    50   ~ 0
-Batt charge Current Sensing
-Wire Wire Line
-	14000 4400 14000 4300
-Connection ~ 14000 4400
-Wire Wire Line
-	14000 4550 14000 4400
-$Comp
-L power:GND #PWR0105
-U 1 1 601F25E5
-P 14350 4400
-F 0 "#PWR0105" H 14350 4150 50  0001 C CNN
-F 1 "GND" H 14355 4227 50  0000 C CNN
-F 2 "" H 14350 4400 50  0001 C CNN
-F 3 "" H 14350 4400 50  0001 C CNN
-	1    14350 4400
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C9
-U 1 1 601F25EF
-P 14200 4400
-F 0 "C9" V 13948 4400 50  0000 C CNN
-F 1 "100nF" V 14039 4400 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 14238 4250 50  0001 C CNN
-F 3 "~" H 14200 4400 50  0001 C CNN
-	1    14200 4400
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	14000 4400 14050 4400
-$Comp
-L Device:C C10
-U 1 1 601F25FA
-P 14450 5000
-F 0 "C10" H 14335 4954 50  0000 R CNN
-F 1 "C" H 14335 5045 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 14488 4850 50  0001 C CNN
-F 3 "~" H 14450 5000 50  0001 C CNN
-	1    14450 5000
-	-1   0    0    1   
-$EndComp
-Connection ~ 14450 4850
-Wire Wire Line
-	14450 4850 15200 4850
-$Comp
-L power:GND #PWR0106
-U 1 1 601F2606
-P 14450 5150
-F 0 "#PWR0106" H 14450 4900 50  0001 C CNN
-F 1 "GND" H 14455 4977 50  0000 C CNN
-F 2 "" H 14450 5150 50  0001 C CNN
-F 3 "" H 14450 5150 50  0001 C CNN
-	1    14450 5150
-	1    0    0    -1  
-$EndComp
 Text Label 5500 5950 2    50   ~ 0
 charge_Current_Adc
 Wire Wire Line
@@ -1221,8 +910,6 @@ Wire Wire Line
 	750  1550 750  1050
 Wire Wire Line
 	750  1750 1400 1750
-Text Notes 12050 5800 0    50   ~ 0
-TODO: move current sensing to seperate PCB.
 $Comp
 L Connector_Generic:Conn_01x05 J5
 U 1 1 601071EE
