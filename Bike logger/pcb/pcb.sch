@@ -80,10 +80,6 @@ Text Label 5050 5450 2    50   ~ 0
 MOSI
 Wire Wire Line
 	4650 5450 5050 5450
-Wire Wire Line
-	4650 6050 5500 6050
-Text Label 5500 6050 2    50   ~ 0
-output_Current_Adc
 Text Notes 4100 7100 0    50   ~ 0
 Note: ADC2 pins cannot be used when Wi-Fi is used. 
 $Comp
@@ -92,15 +88,11 @@ U 1 1 600A1449
 P 8700 1200
 F 0 "J2" H 8780 1192 50  0000 L CNN
 F 1 "Conn_01x08" H 8780 1101 50  0000 L CNN
-F 2 "" H 8700 1200 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 8700 1200 50  0001 C CNN
 F 3 "~" H 8700 1200 50  0001 C CNN
 	1    8700 1200
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4650 6150 5500 6150
-Text Label 5500 6150 2    50   ~ 0
-BATT_V_ADC
 Text Label 7750 1600 0    50   ~ 0
 Throttle
 Wire Wire Line
@@ -371,9 +363,12 @@ L Sensor_Pressure:MS5607-02BA U3
 U 1 1 600959C0
 P 14400 2100
 F 0 "U3" H 14730 2146 50  0000 L CNN
-F 1 "MS5607-02BA" H 14730 2055 50  0000 L CNN
+F 1 "MS8607-02BA" H 14730 2055 50  0000 L CNN
 F 2 "Package_LGA:LGA-8_3x5mm_P1.25mm" H 14400 2100 50  0001 C CNN
 F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5607-02BA03%7FB2%7Fpdf%7FEnglish%7FENG_DS_MS5607-02BA03_B2.pdf%7FCAT-BLPS0035" H 14400 2100 50  0001 C CNN
+F 4 "1" H 14400 2100 50  0001 C CNN "min_qty"
+F 5 "5.47" H 14400 2100 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/sensor-solutions-te-connectivity/ms860702ba01-50/pressure-sensor-10mbar-29psi-qfn/dp/2748850?st=MS860702BA01-50" H 14400 2100 50  0001 C CNN "purchase_link"
 	1    14400 2100
 	1    0    0    -1  
 $EndComp
@@ -489,6 +484,9 @@ F 0 "Q1" H 9791 6096 50  0000 L CNN
 F 1 "MMBT5551L" H 9791 6005 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 9800 5975 50  0001 L CIN
 F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 9600 6050 50  0001 L CNN
+F 4 "5" H 9600 6050 50  0001 C CNN "min_qty"
+F 5 "0.165" H 9600 6050 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 9600 6050 50  0001 C CNN "purchase_link"
 	1    9600 6050
 	1    0    0    -1  
 $EndComp
@@ -500,6 +498,9 @@ F 0 "Q2" H 9791 6604 50  0000 L CNN
 F 1 "MMBT5551L" H 9791 6695 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 9800 6575 50  0001 L CIN
 F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 9600 6650 50  0001 L CNN
+F 4 "5" H 9600 6650 50  0001 C CNN "min_qty"
+F 5 "0.165" H 9600 6650 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 9600 6650 50  0001 C CNN "purchase_link"
 	1    9600 6650
 	1    0    0    1   
 $EndComp
@@ -791,10 +792,6 @@ Text Label 750  5000 0    50   ~ 0
 Throttle
 Text Label 2700 4150 0    50   ~ 0
 throttle_ADC
-Text Label 5500 5950 2    50   ~ 0
-charge_Current_Adc
-Wire Wire Line
-	4650 5950 5500 5950
 NoConn ~ 14000 2300
 Wire Wire Line
 	12750 7300 12550 7300
@@ -916,7 +913,7 @@ U 1 1 601071EE
 P 4700 1600
 F 0 "J5" H 4618 1175 50  0000 C CNN
 F 1 "Conn_01x05" H 4618 1266 50  0000 C CNN
-F 2 "" H 4700 1600 50  0001 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 4700 1600 50  0001 C CNN
 F 3 "~" H 4700 1600 50  0001 C CNN
 	1    4700 1600
 	-1   0    0    1   
@@ -925,51 +922,49 @@ $Comp
 L Connector_Generic:Conn_01x04 J4
 U 1 1 60109051
 P 4300 9150
-F 0 "J4" H 4218 8725 50  0000 C CNN
-F 1 "Conn_01x04" H 4218 8816 50  0000 C CNN
-F 2 "" H 4300 9150 50  0001 C CNN
+F 0 "J4" H 4500 8700 50  0000 C CNN
+F 1 "Conn_01x04" H 4450 8800 50  0000 C CNN
+F 2 "Connector:NS-Tech_Grove_1x04_P2mm_Vertical" H 4300 9150 50  0001 C CNN
 F 3 "~" H 4300 9150 50  0001 C CNN
 	1    4300 9150
 	-1   0    0    1   
 $EndComp
-Text Label 4900 9050 2    50   ~ 0
-SDA1
 Text Label 4900 9150 2    50   ~ 0
+SDA1
+Text Label 4900 9250 2    50   ~ 0
 SCL1
 Wire Wire Line
-	4500 9050 4900 9050
-Wire Wire Line
 	4500 9150 4900 9150
+Wire Wire Line
+	4500 9250 4900 9250
 $Comp
 L power:+3.3V #PWR031
 U 1 1 6011E472
-P 4850 8850
-F 0 "#PWR031" H 4850 8700 50  0001 C CNN
-F 1 "+3.3V" H 4865 9023 50  0000 C CNN
-F 2 "" H 4850 8850 50  0001 C CNN
-F 3 "" H 4850 8850 50  0001 C CNN
-	1    4850 8850
+P 4850 8950
+F 0 "#PWR031" H 4850 8800 50  0001 C CNN
+F 1 "+3.3V" H 4865 9123 50  0000 C CNN
+F 2 "" H 4850 8950 50  0001 C CNN
+F 3 "" H 4850 8950 50  0001 C CNN
+	1    4850 8950
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4500 8950 4850 8950
+	4500 9050 4850 9050
 Wire Wire Line
-	4850 8950 4850 8850
+	4850 9050 4850 8950
 $Comp
 L power:GND #PWR032
 U 1 1 6012326B
-P 4850 9400
-F 0 "#PWR032" H 4850 9150 50  0001 C CNN
-F 1 "GND" H 4855 9227 50  0000 C CNN
-F 2 "" H 4850 9400 50  0001 C CNN
-F 3 "" H 4850 9400 50  0001 C CNN
-	1    4850 9400
-	1    0    0    -1  
+P 4500 8600
+F 0 "#PWR032" H 4500 8350 50  0001 C CNN
+F 1 "GND" H 4505 8427 50  0000 C CNN
+F 2 "" H 4500 8600 50  0001 C CNN
+F 3 "" H 4500 8600 50  0001 C CNN
+	1    4500 8600
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	4500 9250 4850 9250
-Wire Wire Line
-	4850 9250 4850 9400
+	4500 8950 4650 8950
 Wire Notes Line
 	3800 8250 3800 9950
 Wire Notes Line
@@ -1048,6 +1043,9 @@ F 0 "U7" H 7350 8765 50  0000 C CNN
 F 1 "STH0548S3V3" H 7350 8674 50  0000 C CNN
 F 2 "" H 7350 8700 50  0001 C CNN
 F 3 "" H 7350 8700 50  0001 C CNN
+F 4 "1" H 7350 8700 50  0001 C CNN "min_qty"
+F 5 "7.45" H 7350 8700 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/xp-power/sth0548s3v3/dc-dc-converter-3-3v-0-5a/dp/3212474" H 7350 8700 50  0001 C CNN "purchase_link"
 	1    7350 8700
 	1    0    0    -1  
 $EndComp
@@ -1165,4 +1163,179 @@ Wire Notes Line
 	8900 8250 5800 8250
 Text Notes 5900 8400 0    50   ~ 0
 3.3V regulator that converts Vbatt(36-42V input) to 3.3V.
+Wire Wire Line
+	4500 8600 4500 8500
+Wire Wire Line
+	4500 8500 4650 8500
+Wire Wire Line
+	4650 8500 4650 8950
+$Comp
+L Mechanical:MountingHole_Pad H1
+U 1 1 60208D6F
+P 11600 4250
+F 0 "H1" V 11837 4253 50  0000 C CNN
+F 1 "MountingHole_Pad" V 11746 4253 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 4250 50  0001 C CNN
+F 3 "~" H 11600 4250 50  0001 C CNN
+	1    11600 4250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H2
+U 1 1 6021C578
+P 11600 4650
+F 0 "H2" V 11837 4653 50  0000 C CNN
+F 1 "MountingHole_Pad" V 11746 4653 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 4650 50  0001 C CNN
+F 3 "~" H 11600 4650 50  0001 C CNN
+	1    11600 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H3
+U 1 1 6021C836
+P 11600 5000
+F 0 "H3" V 11837 5003 50  0000 C CNN
+F 1 "MountingHole_Pad" V 11746 5003 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 5000 50  0001 C CNN
+F 3 "~" H 11600 5000 50  0001 C CNN
+	1    11600 5000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H4
+U 1 1 6021CA96
+P 11600 5400
+F 0 "H4" V 11837 5403 50  0000 C CNN
+F 1 "MountingHole_Pad" V 11746 5403 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 5400 50  0001 C CNN
+F 3 "~" H 11600 5400 50  0001 C CNN
+	1    11600 5400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	11700 4250 12000 4250
+$Comp
+L power:GND #PWR0101
+U 1 1 602271B8
+P 12000 5550
+F 0 "#PWR0101" H 12000 5300 50  0001 C CNN
+F 1 "GND" H 12005 5377 50  0000 C CNN
+F 2 "" H 12000 5550 50  0001 C CNN
+F 3 "" H 12000 5550 50  0001 C CNN
+	1    12000 5550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11700 5400 12000 5400
+Wire Wire Line
+	12000 4250 12000 4650
+Connection ~ 12000 5400
+Wire Wire Line
+	12000 5400 12000 5550
+Wire Wire Line
+	11700 5000 12000 5000
+Connection ~ 12000 5000
+Wire Wire Line
+	12000 5000 12000 5400
+Wire Wire Line
+	11700 4650 12000 4650
+Connection ~ 12000 4650
+Wire Wire Line
+	12000 4650 12000 5000
+$Comp
+L Mechanical:MountingHole_Pad H5
+U 1 1 60240B7D
+P 12800 4250
+F 0 "H5" V 13037 4253 50  0000 C CNN
+F 1 "MountingHole_Pad" V 12946 4253 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 4250 50  0001 C CNN
+F 3 "~" H 12800 4250 50  0001 C CNN
+	1    12800 4250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H6
+U 1 1 60240B87
+P 12800 4650
+F 0 "H6" V 13037 4653 50  0000 C CNN
+F 1 "MountingHole_Pad" V 12946 4653 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 4650 50  0001 C CNN
+F 3 "~" H 12800 4650 50  0001 C CNN
+	1    12800 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H7
+U 1 1 60240B91
+P 12800 5000
+F 0 "H7" V 13037 5003 50  0000 C CNN
+F 1 "MountingHole_Pad" V 12946 5003 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 5000 50  0001 C CNN
+F 3 "~" H 12800 5000 50  0001 C CNN
+	1    12800 5000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H8
+U 1 1 60240B9B
+P 12800 5400
+F 0 "H8" V 13037 5403 50  0000 C CNN
+F 1 "MountingHole_Pad" V 12946 5403 50  0000 C CNN
+F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 5400 50  0001 C CNN
+F 3 "~" H 12800 5400 50  0001 C CNN
+	1    12800 5400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	12900 4250 13200 4250
+$Comp
+L power:GND #PWR0102
+U 1 1 60240BA6
+P 13200 5550
+F 0 "#PWR0102" H 13200 5300 50  0001 C CNN
+F 1 "GND" H 13205 5377 50  0000 C CNN
+F 2 "" H 13200 5550 50  0001 C CNN
+F 3 "" H 13200 5550 50  0001 C CNN
+	1    13200 5550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	12900 5400 13200 5400
+Wire Wire Line
+	13200 4250 13200 4650
+Connection ~ 13200 5400
+Wire Wire Line
+	13200 5400 13200 5550
+Wire Wire Line
+	12900 5000 13200 5000
+Connection ~ 13200 5000
+Wire Wire Line
+	13200 5000 13200 5400
+Wire Wire Line
+	12900 4650 13200 4650
+Connection ~ 13200 4650
+Wire Wire Line
+	13200 4650 13200 5000
+Wire Notes Line
+	10950 3800 13650 3800
+Wire Notes Line
+	13650 3800 13650 5800
+Wire Notes Line
+	13650 5800 10950 5800
+Wire Notes Line
+	10950 5800 10950 3800
+Text Notes 11050 3900 0    50   ~ 0
+Mounting Holes
+$Comp
+L Sensor_Motion:LSM6DS3 U?
+U 1 1 60257B3F
+P 8550 3650
+F 0 "U?" H 9194 3696 50  0000 L CNN
+F 1 "LSM6DS3" H 9194 3605 50  0000 L CNN
+F 2 "Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y" H 8150 2950 50  0001 L CNN
+F 3 "www.st.com/resource/en/datasheet/lsm6ds3.pdf" H 8650 3000 50  0001 C CNN
+	1    8550 3650
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:current_voltage_sensor-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -195,7 +196,7 @@ U 1 1 6016B1C6
 P 7200 3550
 F 0 "TP1" V 7154 3738 50  0000 L CNN
 F 1 "TestPoint" V 7245 3738 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded" H 7400 3550 50  0001 C CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 7400 3550 50  0001 C CNN
 F 3 "~" H 7400 3550 50  0001 C CNN
 	1    7200 3550
 	0    1    1    0   
@@ -206,7 +207,7 @@ U 1 1 6016EB9B
 P 7200 3750
 F 0 "TP2" V 7154 3938 50  0000 L CNN
 F 1 "TestPoint" V 7245 3938 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded" H 7400 3750 50  0001 C CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 7400 3750 50  0001 C CNN
 F 3 "~" H 7400 3750 50  0001 C CNN
 	1    7200 3750
 	0    1    1    0   
@@ -227,6 +228,9 @@ F 0 "U1" H 5900 3415 50  0000 C CNN
 F 1 "LTC4151" H 5900 3324 50  0000 C CNN
 F 2 "Package_DFN_QFN:DFN-10-1EP_3x3mm_P0.5mm_EP1.55x2.48mm" H 5800 3250 50  0001 C CNN
 F 3 "" H 5800 3250 50  0001 C CNN
+F 4 "1" H 5900 3250 50  0001 C CNN "min_qty"
+F 5 "1.96" H 5900 3250 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/linear-technology/ltc4151cdd-pbf/monitor-current-voltage-i2c-10dfn/dp/2295457?scope=partnumberlookahead&ost=LTC4151CDD%23PBF&searchref=searchlookahead&exaMfpn=true" H 5900 3250 50  0001 C CNN "purchase_link"
 	1    5900 3250
 	1    0    0    -1  
 $EndComp
