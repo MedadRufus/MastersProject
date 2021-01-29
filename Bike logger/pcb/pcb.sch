@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 1
+Sheet 1 3
 Title "Design of E bike datalogger"
 Date "2021-01-21"
 Rev "v0.1"
@@ -14,28 +14,6 @@ Comment2 "Based on design: https://www.pedelecforum.de/wiki/doku.php?id=elektrot
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Sensor_Motion:LSM9DS1 U2
-U 1 1 6009312A
-P 11700 2250
-F 0 "U2" H 11700 1150 50  0000 C CNN
-F 1 "LSM9DS1" H 11700 1050 50  0000 C CNN
-F 2 "Package_LGA:LGA-24L_3x3.5mm_P0.43mm" H 13200 3000 50  0001 C CNN
-F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/1e/3f/2a/d6/25/eb/48/46/DM00103319.pdf/files/DM00103319.pdf/jcr:content/translations/en.DM00103319.pdf" H 11700 2350 50  0001 C CNN
-	1    11700 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L RF_Module:ESP32-WROOM-32 U1
-U 1 1 60094C13
-P 4050 5050
-F 0 "U1" H 4050 6750 50  0000 C CNN
-F 1 "ESP32-WROOM-32" H 4050 6850 50  0000 C CNN
-F 2 "RF_Module:ESP32-WROOM-32" H 4050 3550 50  0001 C CNN
-F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" H 3750 5100 50  0001 C CNN
-	1    4050 5050
-	1    0    0    -1  
-$EndComp
 Text Label 13600 2200 0    50   ~ 0
 SCL1
 Text Label 13600 2100 0    50   ~ 0
@@ -329,7 +307,6 @@ Wire Wire Line
 	14000 2200 13600 2200
 Wire Wire Line
 	14000 2100 13600 2100
-NoConn ~ 14000 2000
 $Comp
 L power:GND #PWR016
 U 1 1 600A9865
@@ -341,7 +318,6 @@ F 3 "" H 14400 2500 50  0001 C CNN
 	1    14400 2500
 	1    0    0    -1  
 $EndComp
-NoConn ~ 14000 1900
 $Comp
 L power:+3.3V #PWR015
 U 1 1 600AEB50
@@ -358,20 +334,6 @@ Wire Wire Line
 Connection ~ 14400 1250
 Wire Wire Line
 	14650 1250 14400 1250
-$Comp
-L Sensor_Pressure:MS5607-02BA U3
-U 1 1 600959C0
-P 14400 2100
-F 0 "U3" H 14730 2146 50  0000 L CNN
-F 1 "MS8607-02BA" H 14730 2055 50  0000 L CNN
-F 2 "Package_LGA:LGA-8_3x5mm_P1.25mm" H 14400 2100 50  0001 C CNN
-F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS5607-02BA03%7FB2%7Fpdf%7FEnglish%7FENG_DS_MS5607-02BA03_B2.pdf%7FCAT-BLPS0035" H 14400 2100 50  0001 C CNN
-F 4 "1" H 14400 2100 50  0001 C CNN "min_qty"
-F 5 "5.47" H 14400 2100 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/sensor-solutions-te-connectivity/ms860702ba01-50/pressure-sensor-10mbar-29psi-qfn/dp/2748850?st=MS860702BA01-50" H 14400 2100 50  0001 C CNN "purchase_link"
-	1    14400 2100
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:C C5
 U 1 1 6013D55A
@@ -440,13 +402,6 @@ Connection ~ 13250 6300
 Wire Wire Line
 	13450 6800 13450 6300
 Connection ~ 13450 6300
-Wire Wire Line
-	13450 6300 13650 6300
-Wire Wire Line
-	13650 6800 13650 6300
-Connection ~ 13650 6300
-Wire Wire Line
-	13650 6300 13900 6300
 $Comp
 L power:VBUS #PWR09
 U 1 1 60130B9C
@@ -479,94 +434,94 @@ Wire Wire Line
 $Comp
 L Transistor_BJT:MMBT5551L Q1
 U 1 1 60150D6F
-P 9600 6050
-F 0 "Q1" H 9791 6096 50  0000 L CNN
-F 1 "MMBT5551L" H 9791 6005 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 9800 5975 50  0001 L CIN
-F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 9600 6050 50  0001 L CNN
-F 4 "5" H 9600 6050 50  0001 C CNN "min_qty"
-F 5 "0.165" H 9600 6050 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 9600 6050 50  0001 C CNN "purchase_link"
-	1    9600 6050
+P 2200 9300
+F 0 "Q1" H 2391 9346 50  0000 L CNN
+F 1 "MMBT5551L" H 2391 9255 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 2400 9225 50  0001 L CIN
+F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 2200 9300 50  0001 L CNN
+F 4 "5" H 2200 9300 50  0001 C CNN "min_qty"
+F 5 "0.165" H 2200 9300 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 2200 9300 50  0001 C CNN "purchase_link"
+	1    2200 9300
 	1    0    0    -1  
 $EndComp
 $Comp
 L Transistor_BJT:MMBT5551L Q2
 U 1 1 60151B9F
-P 9600 6650
-F 0 "Q2" H 9791 6604 50  0000 L CNN
-F 1 "MMBT5551L" H 9791 6695 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 9800 6575 50  0001 L CIN
-F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 9600 6650 50  0001 L CNN
-F 4 "5" H 9600 6650 50  0001 C CNN "min_qty"
-F 5 "0.165" H 9600 6650 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 9600 6650 50  0001 C CNN "purchase_link"
-	1    9600 6650
+P 2200 9900
+F 0 "Q2" H 2391 9854 50  0000 L CNN
+F 1 "MMBT5551L" H 2391 9945 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 2400 9825 50  0001 L CIN
+F 3 "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF" H 2200 9900 50  0001 L CNN
+F 4 "5" H 2200 9900 50  0001 C CNN "min_qty"
+F 5 "0.165" H 2200 9900 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/on-semiconductor/mmbt5551lt1g/transistor-npn-sot-23/dp/1459109?st=mmbt5551l" H 2200 9900 50  0001 C CNN "purchase_link"
+	1    2200 9900
 	1    0    0    1   
 $EndComp
 Wire Wire Line
-	9700 6850 9700 7000
+	2300 10100 2300 10250
 Wire Wire Line
-	9700 7000 10250 7000
+	2300 10250 2850 10250
 Wire Wire Line
-	9700 5850 9700 5650
+	2300 9100 2300 8900
 Wire Wire Line
-	9700 5650 10250 5650
+	2300 8900 2850 8900
 Wire Wire Line
-	9700 6250 9100 6250
+	2300 9500 1700 9500
 Wire Wire Line
-	9100 6250 9100 6650
+	1700 9500 1700 9900
 $Comp
 L Device:R R4
 U 1 1 601657EE
-P 9250 6650
-F 0 "R4" V 9043 6650 50  0000 C CNN
-F 1 "10k" V 9134 6650 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 9180 6650 50  0001 C CNN
-F 3 "~" H 9250 6650 50  0001 C CNN
-	1    9250 6650
+P 1850 9900
+F 0 "R4" V 1643 9900 50  0000 C CNN
+F 1 "10k" V 1734 9900 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 1780 9900 50  0001 C CNN
+F 3 "~" H 1850 9900 50  0001 C CNN
+	1    1850 9900
 	0    1    1    0   
 $EndComp
-Connection ~ 9100 6650
+Connection ~ 1700 9900
 Wire Wire Line
-	9100 6650 9100 7000
+	1700 9900 1700 10250
 $Comp
 L Device:R R3
 U 1 1 601663DB
-P 9250 6050
-F 0 "R3" V 9043 6050 50  0000 C CNN
-F 1 "10k" V 9134 6050 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 9180 6050 50  0001 C CNN
-F 3 "~" H 9250 6050 50  0001 C CNN
-	1    9250 6050
+P 1850 9300
+F 0 "R3" V 1643 9300 50  0000 C CNN
+F 1 "10k" V 1734 9300 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 1780 9300 50  0001 C CNN
+F 3 "~" H 1850 9300 50  0001 C CNN
+	1    1850 9300
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	9700 6450 9700 6400
+	2300 9700 2300 9650
 Wire Wire Line
-	9700 6400 8900 6400
+	2300 9650 1500 9650
 Wire Wire Line
-	8900 6400 8900 6050
+	1500 9650 1500 9300
 Wire Wire Line
-	8900 6050 9100 6050
+	1500 9300 1700 9300
 Wire Wire Line
-	8900 6050 8900 5600
-Connection ~ 8900 6050
+	1500 9300 1500 8850
+Connection ~ 1500 9300
 Wire Wire Line
 	4650 3850 5100 3850
-Text Label 8900 5600 3    50   ~ 0
+Text Label 1500 8850 3    50   ~ 0
 RTS
 Text Label 14600 7900 2    50   ~ 0
 RTS
 Wire Wire Line
 	14150 7900 14600 7900
-Text Label 10250 5650 2    50   ~ 0
+Text Label 2850 8900 2    50   ~ 0
 GPIO0
 Text Label 5100 3850 2    50   ~ 0
 GPIO0
-Text Label 10250 7000 2    50   ~ 0
+Text Label 2850 10250 2    50   ~ 0
 RESET
-Text Label 9100 7000 1    50   ~ 0
+Text Label 1700 10250 1    50   ~ 0
 DTR
 Text Label 2700 3850 0    50   ~ 0
 RESET
@@ -581,218 +536,27 @@ Wire Notes Line
 Wire Notes Line
 	15500 5900 15500 9300
 Wire Notes Line
-	8400 5100 10600 5100
+	1000 8350 3200 8350
 Wire Notes Line
-	10600 5100 10600 7550
+	3200 8350 3200 10800
 Wire Notes Line
-	10600 7550 8400 7550
+	3200 10800 1000 10800
 Wire Notes Line
-	8400 7550 8400 5100
-Text Notes 8550 5250 0    50   ~ 0
+	1000 10800 1000 8350
+Text Notes 1150 8500 0    50   ~ 0
 Programming intricacies of ESP32
-$Comp
-L Device:R R5
-U 1 1 60195C55
-P 750 3400
-F 0 "R5" H 820 3446 50  0000 L CNN
-F 1 "R" H 820 3355 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 3400 50  0001 C CNN
-F 3 "~" H 750 3400 50  0001 C CNN
-	1    750  3400
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R6
-U 1 1 60195C5F
-P 750 3700
-F 0 "R6" H 820 3746 50  0000 L CNN
-F 1 "R" H 820 3655 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 3700 50  0001 C CNN
-F 3 "~" H 750 3700 50  0001 C CNN
-	1    750  3700
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR014
-U 1 1 60195C73
-P 750 3850
-F 0 "#PWR014" H 750 3600 50  0001 C CNN
-F 1 "GND" H 755 3677 50  0000 C CNN
-F 2 "" H 750 3850 50  0001 C CNN
-F 3 "" H 750 3850 50  0001 C CNN
-	1    750  3850
-	1    0    0    -1  
-$EndComp
-Wire Notes Line
-	600  2800 600  4400
-Wire Notes Line
-	2300 4400 2300 2800
 Text Notes 700  2950 0    50   ~ 0
 Pedal Assist Sensing
-Connection ~ 750  3550
-Wire Wire Line
-	750  3850 1100 3850
-Connection ~ 750  3850
-$Comp
-L Device:C C1
-U 1 1 60195C86
-P 1100 3700
-F 0 "C1" H 1215 3746 50  0000 L CNN
-F 1 "C" H 1215 3655 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1138 3550 50  0001 C CNN
-F 3 "~" H 1100 3700 50  0001 C CNN
-	1    1100 3700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	750  3550 1100 3550
-Connection ~ 1100 3550
-Wire Wire Line
-	1100 3550 1600 3550
-$Comp
-L Diode:BAT54S D2
-U 1 1 60195C93
-P 1600 3550
-F 0 "D2" V 1646 3638 50  0000 L CNN
-F 1 "BAT54S" V 1555 3638 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1675 3675 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 1480 3550 50  0001 C CNN
-	1    1600 3550
-	0    -1   -1   0   
-$EndComp
 Wire Notes Line
 	600  4400 2300 4400
 Wire Notes Line
 	600  2800 2300 2800
-$Comp
-L power:GND #PWR026
-U 1 1 60195C9F
-P 1600 3850
-F 0 "#PWR026" H 1600 3600 50  0001 C CNN
-F 1 "GND" H 1605 3677 50  0000 C CNN
-F 2 "" H 1600 3850 50  0001 C CNN
-F 3 "" H 1600 3850 50  0001 C CNN
-	1    1600 3850
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR025
-U 1 1 60195CA9
-P 1600 3250
-F 0 "#PWR025" H 1600 3100 50  0001 C CNN
-F 1 "+3.3V" H 1615 3423 50  0000 C CNN
-F 2 "" H 1600 3250 50  0001 C CNN
-F 3 "" H 1600 3250 50  0001 C CNN
-	1    1600 3250
-	1    0    0    -1  
-$EndComp
-Text Label 1800 3550 0    50   ~ 0
-PAS_ADC
-Text Label 750  3250 0    50   ~ 0
-PAS
-$Comp
-L Device:R R7
-U 1 1 601A6544
-P 750 5150
-F 0 "R7" H 820 5196 50  0000 L CNN
-F 1 "R" H 820 5105 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 5150 50  0001 C CNN
-F 3 "~" H 750 5150 50  0001 C CNN
-	1    750  5150
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R8
-U 1 1 601A654E
-P 750 5450
-F 0 "R8" H 820 5496 50  0000 L CNN
-F 1 "R" H 820 5405 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 680 5450 50  0001 C CNN
-F 3 "~" H 750 5450 50  0001 C CNN
-	1    750  5450
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR024
-U 1 1 601A6558
-P 750 5600
-F 0 "#PWR024" H 750 5350 50  0001 C CNN
-F 1 "GND" H 755 5427 50  0000 C CNN
-F 2 "" H 750 5600 50  0001 C CNN
-F 3 "" H 750 5600 50  0001 C CNN
-	1    750  5600
-	1    0    0    -1  
-$EndComp
-Wire Notes Line
-	600  4550 600  6150
-Wire Notes Line
-	2300 6150 2300 4550
-Text Notes 700  4700 0    50   ~ 0
+Text Notes 700  4550 0    50   ~ 0
 Throttle Sensing
-Connection ~ 750  5300
-Wire Wire Line
-	750  5600 1100 5600
-Connection ~ 750  5600
-$Comp
-L Device:C C8
-U 1 1 601A6568
-P 1100 5450
-F 0 "C8" H 1215 5496 50  0000 L CNN
-F 1 "C" H 1215 5405 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1138 5300 50  0001 C CNN
-F 3 "~" H 1100 5450 50  0001 C CNN
-	1    1100 5450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	750  5300 1100 5300
-Connection ~ 1100 5300
-Wire Wire Line
-	1100 5300 1600 5300
-$Comp
-L Diode:BAT54S D3
-U 1 1 601A6575
-P 1600 5300
-F 0 "D3" V 1646 5388 50  0000 L CNN
-F 1 "BAT54S" V 1555 5388 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1675 5425 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 1480 5300 50  0001 C CNN
-	1    1600 5300
-	0    -1   -1   0   
-$EndComp
 Wire Notes Line
-	600  6150 2300 6150
-Wire Notes Line
-	600  4550 2300 4550
-$Comp
-L power:GND #PWR028
-U 1 1 601A6581
-P 1600 5600
-F 0 "#PWR028" H 1600 5350 50  0001 C CNN
-F 1 "GND" H 1605 5427 50  0000 C CNN
-F 2 "" H 1600 5600 50  0001 C CNN
-F 3 "" H 1600 5600 50  0001 C CNN
-	1    1600 5600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR027
-U 1 1 601A658B
-P 1600 5000
-F 0 "#PWR027" H 1600 4850 50  0001 C CNN
-F 1 "+3.3V" H 1615 5173 50  0000 C CNN
-F 2 "" H 1600 5000 50  0001 C CNN
-F 3 "" H 1600 5000 50  0001 C CNN
-	1    1600 5000
-	1    0    0    -1  
-$EndComp
-Text Label 1800 5300 0    50   ~ 0
-throttle_ADC
-Text Label 750  5000 0    50   ~ 0
-Throttle
+	600  6000 2300 6000
 Text Label 2700 4150 0    50   ~ 0
 throttle_ADC
-NoConn ~ 14000 2300
 Wire Wire Line
 	12750 7300 12550 7300
 $Comp
@@ -875,7 +639,7 @@ F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 2300 1650 50  
 $EndComp
 Text Notes 800  2550 0    50   ~ 0
 Wired according to: \nhttps://community.st.com/s/contentdocument/0690X00000604T2QAI
-Text Notes 5050 4700 0    50   ~ 0
+Text Notes 4850 6550 0    50   ~ 0
 TODO: verify the miso/mosi connections on MCU
 Wire Wire Line
 	750  1750 750  2150
@@ -1243,80 +1007,6 @@ Wire Wire Line
 Connection ~ 12000 4650
 Wire Wire Line
 	12000 4650 12000 5000
-$Comp
-L Mechanical:MountingHole_Pad H5
-U 1 1 60240B7D
-P 12800 4250
-F 0 "H5" V 13037 4253 50  0000 C CNN
-F 1 "MountingHole_Pad" V 12946 4253 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 4250 50  0001 C CNN
-F 3 "~" H 12800 4250 50  0001 C CNN
-	1    12800 4250
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Mechanical:MountingHole_Pad H6
-U 1 1 60240B87
-P 12800 4650
-F 0 "H6" V 13037 4653 50  0000 C CNN
-F 1 "MountingHole_Pad" V 12946 4653 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 4650 50  0001 C CNN
-F 3 "~" H 12800 4650 50  0001 C CNN
-	1    12800 4650
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Mechanical:MountingHole_Pad H7
-U 1 1 60240B91
-P 12800 5000
-F 0 "H7" V 13037 5003 50  0000 C CNN
-F 1 "MountingHole_Pad" V 12946 5003 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 5000 50  0001 C CNN
-F 3 "~" H 12800 5000 50  0001 C CNN
-	1    12800 5000
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Mechanical:MountingHole_Pad H8
-U 1 1 60240B9B
-P 12800 5400
-F 0 "H8" V 13037 5403 50  0000 C CNN
-F 1 "MountingHole_Pad" V 12946 5403 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 12800 5400 50  0001 C CNN
-F 3 "~" H 12800 5400 50  0001 C CNN
-	1    12800 5400
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	12900 4250 13200 4250
-$Comp
-L power:GND #PWR0102
-U 1 1 60240BA6
-P 13200 5550
-F 0 "#PWR0102" H 13200 5300 50  0001 C CNN
-F 1 "GND" H 13205 5377 50  0000 C CNN
-F 2 "" H 13200 5550 50  0001 C CNN
-F 3 "" H 13200 5550 50  0001 C CNN
-	1    13200 5550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	12900 5400 13200 5400
-Wire Wire Line
-	13200 4250 13200 4650
-Connection ~ 13200 5400
-Wire Wire Line
-	13200 5400 13200 5550
-Wire Wire Line
-	12900 5000 13200 5000
-Connection ~ 13200 5000
-Wire Wire Line
-	13200 5000 13200 5400
-Wire Wire Line
-	12900 4650 13200 4650
-Connection ~ 13200 4650
-Wire Wire Line
-	13200 4650 13200 5000
 Wire Notes Line
 	10950 3800 13650 3800
 Wire Notes Line
@@ -1328,14 +1018,426 @@ Wire Notes Line
 Text Notes 11050 3900 0    50   ~ 0
 Mounting Holes
 $Comp
-L Sensor_Motion:LSM6DS3 U?
+L Sensor_Motion:LSM9DS1 U2
+U 1 1 6009312A
+P 11700 2250
+F 0 "U2" H 11700 1150 50  0000 C CNN
+F 1 "LSM9DS1" H 11700 1050 50  0000 C CNN
+F 2 "Package_LGA:LGA-24L_3x3.5mm_P0.43mm" H 13200 3000 50  0001 C CNN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/1e/3f/2a/d6/25/eb/48/46/DM00103319.pdf/files/DM00103319.pdf/jcr:content/translations/en.DM00103319.pdf" H 11700 2350 50  0001 C CNN
+	1    11700 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR011
+U 1 1 60276B94
+P 9100 6250
+F 0 "#PWR011" H 9100 6000 50  0001 C CNN
+F 1 "GND" H 9105 6077 50  0000 C CNN
+F 2 "" H 9100 6250 50  0001 C CNN
+F 3 "" H 9100 6250 50  0001 C CNN
+	1    9100 6250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9050 6200 9050 6250
+Wire Wire Line
+	9050 6250 9100 6250
+Wire Wire Line
+	9150 6200 9150 6250
+Wire Wire Line
+	9150 6250 9100 6250
+Connection ~ 9100 6250
+$Comp
+L power:+3.3V #PWR010
+U 1 1 60287440
+P 9050 4550
+F 0 "#PWR010" H 9050 4400 50  0001 C CNN
+F 1 "+3.3V" H 9065 4723 50  0000 C CNN
+F 2 "" H 9050 4550 50  0001 C CNN
+F 3 "" H 9050 4550 50  0001 C CNN
+	1    9050 4550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9050 4550 9050 5000
+Connection ~ 9050 4550
+Wire Wire Line
+	9300 4550 9050 4550
+$Comp
+L Device:C C2
+U 1 1 6028744D
+P 9300 4700
+F 0 "C2" H 9415 4746 50  0000 L CNN
+F 1 "C" H 9415 4655 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 9338 4550 50  0001 C CNN
+F 3 "~" H 9300 4700 50  0001 C CNN
+	1    9300 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR017
+U 1 1 60287457
+P 9300 4850
+F 0 "#PWR017" H 9300 4600 50  0001 C CNN
+F 1 "GND" H 9305 4677 50  0000 C CNN
+F 2 "" H 9300 4850 50  0001 C CNN
+F 3 "" H 9300 4850 50  0001 C CNN
+	1    9300 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9050 5000 9150 5000
+Connection ~ 9050 5000
+Wire Wire Line
+	8450 5800 8050 5800
+Wire Wire Line
+	8450 5700 8050 5700
+Text Label 8050 5800 0    50   ~ 0
+SCL1
+Text Label 8050 5700 0    50   ~ 0
+SDA1
+$Comp
+L Sensor_Motion:LSM6DS3 U4
 U 1 1 60257B3F
-P 8550 3650
-F 0 "U?" H 9194 3696 50  0000 L CNN
-F 1 "LSM6DS3" H 9194 3605 50  0000 L CNN
-F 2 "Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y" H 8150 2950 50  0001 L CNN
-F 3 "www.st.com/resource/en/datasheet/lsm6ds3.pdf" H 8650 3000 50  0001 C CNN
-	1    8550 3650
+P 9050 5600
+F 0 "U4" H 9694 5646 50  0000 L CNN
+F 1 "LSM6DS3" H 9694 5555 50  0000 L CNN
+F 2 "Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y" H 8650 4900 50  0001 L CNN
+F 3 "www.st.com/resource/en/datasheet/lsm6ds3.pdf" H 9150 4950 50  0001 C CNN
+	1    9050 5600
+	1    0    0    -1  
+$EndComp
+NoConn ~ 8450 5300
+NoConn ~ 8450 5400
+NoConn ~ 8450 5500
+NoConn ~ 8450 5900
+NoConn ~ 9650 5300
+NoConn ~ 9650 5400
+Wire Notes Line
+	7550 4100 7550 6600
+Wire Notes Line
+	7550 6600 10400 6600
+Wire Notes Line
+	10400 6600 10400 4100
+Wire Notes Line
+	10400 4100 7550 4100
+Text Notes 7850 4250 0    50   ~ 0
+Acclerometer/gyro
+$Sheet
+S 750  5150 900  300 
+U 60156738
+F0 "throttle protection" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1650 5350 50 
+F3 "protected_adc_input" I R 1650 5250 50 
+$EndSheet
+Text Label 2200 5250 2    50   ~ 0
+throttle_ADC
+Wire Wire Line
+	2200 5250 1650 5250
+Text Label 2200 5350 2    50   ~ 0
+Throttle
+Wire Wire Line
+	1650 5350 2200 5350
+Wire Notes Line
+	600  2800 600  7100
+Wire Notes Line
+	2300 2800 2300 7100
+Wire Notes Line
+	600  7100 2300 7100
+Text Label 2200 3600 2    50   ~ 0
+PAS
+Text Label 2200 3500 2    50   ~ 0
+PAS_ADC
+Wire Wire Line
+	1650 3600 2200 3600
+$Sheet
+S 750  3400 900  300 
+U 601BF9C2
+F0 "PAS protection" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1650 3600 50 
+F3 "protected_adc_input" I R 1650 3500 50 
+$EndSheet
+Wire Wire Line
+	2200 3500 1650 3500
+$Comp
+L Connector:TestPoint TP9
+U 1 1 6024B8B0
+P 4900 4450
+F 0 "TP9" V 4900 5050 50  0000 L CNN
+F 1 "TestPoint" V 4900 4650 50  0000 L CNN
+F 2 "" H 5100 4450 50  0001 C CNN
+F 3 "~" H 5100 4450 50  0001 C CNN
+	1    4900 4450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4450 4650 4450
+$Comp
+L Connector:TestPoint TP10
+U 1 1 6027077D
+P 4900 4550
+F 0 "TP10" V 4900 5150 50  0000 L CNN
+F 1 "TestPoint" V 4900 4750 50  0000 L CNN
+F 2 "" H 5100 4550 50  0001 C CNN
+F 3 "~" H 5100 4550 50  0001 C CNN
+	1    4900 4550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4550 4650 4550
+$Comp
+L Connector:TestPoint TP11
+U 1 1 602766BD
+P 4900 4650
+F 0 "TP11" V 4900 5250 50  0000 L CNN
+F 1 "TestPoint" V 4900 4850 50  0000 L CNN
+F 2 "" H 5100 4650 50  0001 C CNN
+F 3 "~" H 5100 4650 50  0001 C CNN
+	1    4900 4650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4650 4650 4650
+$Comp
+L Connector:TestPoint TP12
+U 1 1 6027C73C
+P 4900 4750
+F 0 "TP12" V 4900 5350 50  0000 L CNN
+F 1 "TestPoint" V 4900 4950 50  0000 L CNN
+F 2 "" H 5100 4750 50  0001 C CNN
+F 3 "~" H 5100 4750 50  0001 C CNN
+	1    4900 4750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4750 4650 4750
+$Comp
+L Connector:TestPoint TP13
+U 1 1 60282CBC
+P 4900 5550
+F 0 "TP13" V 4900 6150 50  0000 L CNN
+F 1 "TestPoint" V 4900 5750 50  0000 L CNN
+F 2 "" H 5100 5550 50  0001 C CNN
+F 3 "~" H 5100 5550 50  0001 C CNN
+	1    4900 5550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 5550 4650 5550
+$Comp
+L Connector:TestPoint TP14
+U 1 1 60282CC7
+P 4900 5650
+F 0 "TP14" V 4900 6250 50  0000 L CNN
+F 1 "TestPoint" V 4900 5850 50  0000 L CNN
+F 2 "" H 5100 5650 50  0001 C CNN
+F 3 "~" H 5100 5650 50  0001 C CNN
+	1    4900 5650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 5650 4650 5650
+$Comp
+L Connector:TestPoint TP15
+U 1 1 60282CD2
+P 4900 5750
+F 0 "TP15" V 4900 6350 50  0000 L CNN
+F 1 "TestPoint" V 4900 5950 50  0000 L CNN
+F 2 "" H 5100 5750 50  0001 C CNN
+F 3 "~" H 5100 5750 50  0001 C CNN
+	1    4900 5750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 5750 4650 5750
+$Comp
+L Connector:TestPoint TP16
+U 1 1 60282CDD
+P 4900 5850
+F 0 "TP16" V 4900 6450 50  0000 L CNN
+F 1 "TestPoint" V 4900 6050 50  0000 L CNN
+F 2 "" H 5100 5850 50  0001 C CNN
+F 3 "~" H 5100 5850 50  0001 C CNN
+	1    4900 5850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 5850 4650 5850
+$Comp
+L Connector:TestPoint TP17
+U 1 1 6028A43C
+P 4900 5950
+F 0 "TP17" V 4900 6550 50  0000 L CNN
+F 1 "TestPoint" V 4900 6150 50  0000 L CNN
+F 2 "" H 5100 5950 50  0001 C CNN
+F 3 "~" H 5100 5950 50  0001 C CNN
+	1    4900 5950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 5950 4650 5950
+$Comp
+L Connector:TestPoint TP18
+U 1 1 6028A447
+P 4900 6050
+F 0 "TP18" V 4900 6650 50  0000 L CNN
+F 1 "TestPoint" V 4900 6250 50  0000 L CNN
+F 2 "" H 5100 6050 50  0001 C CNN
+F 3 "~" H 5100 6050 50  0001 C CNN
+	1    4900 6050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 6050 4650 6050
+$Comp
+L Connector:TestPoint TP19
+U 1 1 6028A452
+P 4900 6150
+F 0 "TP19" V 4900 6750 50  0000 L CNN
+F 1 "TestPoint" V 4900 6350 50  0000 L CNN
+F 2 "" H 5100 6150 50  0001 C CNN
+F 3 "~" H 5100 6150 50  0001 C CNN
+	1    4900 6150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 6150 4650 6150
+$Comp
+L RF_Module:ESP32-WROOM-32 U1
+U 1 1 60094C13
+P 4050 5050
+F 0 "U1" H 4050 6750 50  0000 C CNN
+F 1 "ESP32-WROOM-32" H 4050 6850 50  0000 C CNN
+F 2 "RF_Module:ESP32-WROOM-32" H 4050 3550 50  0001 C CNN
+F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" H 3750 5100 50  0001 C CNN
+	1    4050 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP6
+U 1 1 602A0B97
+P 3200 5550
+F 0 "TP6" V 3200 6150 50  0000 L CNN
+F 1 "TestPoint" V 3200 5750 50  0000 L CNN
+F 2 "" H 3400 5550 50  0001 C CNN
+F 3 "~" H 3400 5550 50  0001 C CNN
+	1    3200 5550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5550 3450 5550
+$Comp
+L Connector:TestPoint TP5
+U 1 1 602A0BA2
+P 3200 5450
+F 0 "TP5" V 3200 6050 50  0000 L CNN
+F 1 "TestPoint" V 3200 5650 50  0000 L CNN
+F 2 "" H 3400 5450 50  0001 C CNN
+F 3 "~" H 3400 5450 50  0001 C CNN
+	1    3200 5450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5450 3450 5450
+$Comp
+L Connector:TestPoint TP4
+U 1 1 602A0BAD
+P 3200 5350
+F 0 "TP4" V 3200 5950 50  0000 L CNN
+F 1 "TestPoint" V 3200 5550 50  0000 L CNN
+F 2 "" H 3400 5350 50  0001 C CNN
+F 3 "~" H 3400 5350 50  0001 C CNN
+	1    3200 5350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5350 3450 5350
+$Comp
+L Connector:TestPoint TP3
+U 1 1 602A0BB8
+P 3200 5250
+F 0 "TP3" V 3200 5850 50  0000 L CNN
+F 1 "TestPoint" V 3200 5450 50  0000 L CNN
+F 2 "" H 3400 5250 50  0001 C CNN
+F 3 "~" H 3400 5250 50  0001 C CNN
+	1    3200 5250
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5250 3450 5250
+$Comp
+L Connector:TestPoint TP2
+U 1 1 602A0BC3
+P 3200 5150
+F 0 "TP2" V 3200 5750 50  0000 L CNN
+F 1 "TestPoint" V 3200 5350 50  0000 L CNN
+F 2 "" H 3400 5150 50  0001 C CNN
+F 3 "~" H 3400 5150 50  0001 C CNN
+	1    3200 5150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5150 3450 5150
+$Comp
+L Connector:TestPoint TP1
+U 1 1 602A0BCE
+P 3200 5050
+F 0 "TP1" V 3200 5650 50  0000 L CNN
+F 1 "TestPoint" V 3200 5250 50  0000 L CNN
+F 2 "" H 3400 5050 50  0001 C CNN
+F 3 "~" H 3400 5050 50  0001 C CNN
+	1    3200 5050
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3200 5050 3450 5050
+$Comp
+L Connector:TestPoint TP7
+U 1 1 602C4207
+P 4900 4050
+F 0 "TP7" V 4900 4650 50  0000 L CNN
+F 1 "TestPoint" V 4900 4250 50  0000 L CNN
+F 2 "" H 5100 4050 50  0001 C CNN
+F 3 "~" H 5100 4050 50  0001 C CNN
+	1    4900 4050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4050 4650 4050
+$Comp
+L Connector:TestPoint TP8
+U 1 1 602CC0FB
+P 4900 4250
+F 0 "TP8" V 4900 4850 50  0000 L CNN
+F 1 "TestPoint" V 4900 4450 50  0000 L CNN
+F 2 "" H 5100 4250 50  0001 C CNN
+F 3 "~" H 5100 4250 50  0001 C CNN
+	1    4900 4250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4900 4250 4650 4250
+Wire Wire Line
+	13450 6300 13900 6300
+NoConn ~ 13650 6800
+NoConn ~ 8500 900 
+NoConn ~ 8500 1000
+NoConn ~ 8500 1100
+NoConn ~ 8500 1200
+NoConn ~ 8500 1300
+NoConn ~ 8500 1400
+$Comp
+L custom_symbols:MS8607-02BA U?
+U 1 1 60333A79
+P 14400 2100
+F 0 "U?" H 14730 2146 50  0000 L CNN
+F 1 "MS8607-02BA" H 14730 2055 50  0000 L CNN
+F 2 "Package_LGA:LGA-8_3x5mm_P1.25mm" H 14400 2100 50  0001 C CNN
+F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS8607-02BA01%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS8607-02BA01_B3.pdf%7FCAT-BLPS0018" H 14400 2100 50  0001 C CNN
+	1    14400 2100
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
