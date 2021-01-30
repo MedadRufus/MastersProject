@@ -1498,19 +1498,6 @@ F 3 "~" H 12500 7350 50  0001 C CNN
 	1    12300 7350
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:TestPoint TP32
-U 1 1 602C9A17
-P 10550 6950
-F 0 "TP32" V 10550 7550 50  0000 L CNN
-F 1 "TestPoint" V 10550 7150 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 10750 6950 50  0001 C CNN
-F 3 "~" H 10750 6950 50  0001 C CNN
-	1    10550 6950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10550 6950 10550 7200
 Wire Wire Line
 	12300 7350 12300 7700
 Connection ~ 12200 7600
