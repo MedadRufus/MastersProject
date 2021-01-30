@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 7 11
+Sheet 5 11
 Title ""
 Date ""
 Rev ""
@@ -89,8 +89,6 @@ Wire Wire Line
 	5100 3700 5200 3700
 Connection ~ 5100 3500
 Wire Wire Line
-	5100 3500 4800 3500
-Wire Wire Line
 	5600 3700 5700 3700
 Wire Wire Line
 	5700 3700 5700 3500
@@ -115,4 +113,43 @@ F 6 "https://uk.farnell.com/alcoswitch-te-connectivity/1571563-4/tactile-switch-
 	1    5400 3500
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	4800 4000 4800 4050
+$Comp
+L Device:C C18
+U 1 1 60913F70
+P 4800 3850
+AR Path="/6036C998/60913F70" Ref="C18"  Part="1" 
+AR Path="/6035EFCE/60913F70" Ref="C17"  Part="1" 
+AR Path="/60374312/60913F70" Ref="C19"  Part="1" 
+AR Path="/6037BC78/60913F70" Ref="C20"  Part="1" 
+F 0 "C20" H 4915 3896 50  0000 L CNN
+F 1 "C" H 4915 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4838 3700 50  0001 C CNN
+F 3 "~" H 4800 3850 50  0001 C CNN
+	1    4800 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR074
+U 1 1 6091378B
+P 4800 4050
+AR Path="/6035EFCE/6091378B" Ref="#PWR074"  Part="1" 
+AR Path="/6036C998/6091378B" Ref="#PWR075"  Part="1" 
+AR Path="/60374312/6091378B" Ref="#PWR076"  Part="1" 
+AR Path="/6037BC78/6091378B" Ref="#PWR077"  Part="1" 
+AR Path="/603C8DCA/6091378B" Ref="#PWR?"  Part="1" 
+AR Path="/603D0726/6091378B" Ref="#PWR?"  Part="1" 
+AR Path="/603D8094/6091378B" Ref="#PWR?"  Part="1" 
+F 0 "#PWR077" H 4800 3800 50  0001 C CNN
+F 1 "GND" H 4805 3877 50  0000 C CNN
+F 2 "" H 4800 4050 50  0001 C CNN
+F 3 "" H 4800 4050 50  0001 C CNN
+	1    4800 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 3500 4800 3700
+Wire Wire Line
+	4800 3500 5100 3500
 $EndSCHEMATC
