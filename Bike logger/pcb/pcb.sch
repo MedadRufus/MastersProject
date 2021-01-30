@@ -482,7 +482,7 @@ Wire Wire Line
 Wire Wire Line
 	750  1750 1400 1750
 Text Notes 4100 800  0    50   ~ 0
-U-blox GPS module connector
+U-blox GPS module connector(Grove)
 Text Label 5250 1950 2    50   ~ 0
 GPS_RX
 Text Label 5250 1850 2    50   ~ 0
@@ -1587,7 +1587,7 @@ Wire Notes Line
 Wire Notes Line
 	10150 5900 15950 5900
 Text Notes 8150 800  0    50   ~ 0
-I2C OLED display Connector
+I2C OLED display Connector(Grove)
 Wire Notes Line
 	600  8000 3850 8000
 Wire Wire Line
@@ -1640,7 +1640,7 @@ F 3 "~" H 10500 2000 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Text Notes 9750 800  0    50   ~ 0
-Connector for External I2C devices
+Connector for External I2C devices(Grove)
 Text Notes 9800 2550 0    50   ~ 0
 The Voltage/current sensors connect here.
 $Comp
@@ -1906,8 +1906,6 @@ F 3 "~" H 1400 10550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1600 9850 1600 10050
-Wire Wire Line
-	1000 9850 1000 10050
 $Comp
 L Regulator_Linear:XC6220B331MR U2
 U 1 1 60817C70
@@ -2010,7 +2008,7 @@ Wire Wire Line
 	1850 10700 1850 10750
 Connection ~ 1850 10250
 Wire Wire Line
-	1850 10250 2150 10250
+	1850 10250 2000 10250
 $Comp
 L Device:C C16
 U 1 1 608E3116
@@ -2142,4 +2140,42 @@ F 3 "~" H 4650 1850 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5000 1200 5000 1650
+$Comp
+L Connector:TestPoint TP1
+U 1 1 609DDD43
+P 750 10300
+F 0 "TP1" V 750 10900 50  0000 L CNN
+F 1 "TestPoint" V 750 10500 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 950 10300 50  0001 C CNN
+F 3 "~" H 950 10300 50  0001 C CNN
+	1    750  10300
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1000 9850 1000 10050
+$Comp
+L power:+5V #PWR0104
+U 1 1 609EC29B
+P 750 10300
+F 0 "#PWR0104" H 750 10150 50  0001 C CNN
+F 1 "+5V" H 765 10473 50  0000 C CNN
+F 2 "" H 750 10300 50  0001 C CNN
+F 3 "" H 750 10300 50  0001 C CNN
+	1    750  10300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 609ED29F
+P 2000 10250
+F 0 "#FLG0101" H 2000 10325 50  0001 C CNN
+F 1 "PWR_FLAG" H 2000 10423 50  0000 C CNN
+F 2 "" H 2000 10250 50  0001 C CNN
+F 3 "~" H 2000 10250 50  0001 C CNN
+	1    2000 10250
+	1    0    0    -1  
+$EndComp
+Connection ~ 2000 10250
+Wire Wire Line
+	2000 10250 2150 10250
 $EndSCHEMATC
