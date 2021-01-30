@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 7 11
+Sheet 5 11
 Title ""
 Date ""
 Rev ""
@@ -14,26 +14,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Switch:SW_Push SW1
-U 1 1 6035FB21
-P 5400 3500
-AR Path="/6035EFCE/6035FB21" Ref="SW1"  Part="1" 
-AR Path="/6036C998/6035FB21" Ref="SW2"  Part="1" 
-AR Path="/60374312/6035FB21" Ref="SW3"  Part="1" 
-AR Path="/6037BC78/6035FB21" Ref="SW4"  Part="1" 
-AR Path="/603C8DCA/6035FB21" Ref="SW?"  Part="1" 
-AR Path="/603D0726/6035FB21" Ref="SW?"  Part="1" 
-AR Path="/603D8094/6035FB21" Ref="SW?"  Part="1" 
-F 0 "SW4" H 5400 3785 50  0000 C CNN
-F 1 "SW_Push" H 5400 3694 50  0000 C CNN
-F 2 "" H 5400 3700 50  0001 C CNN
-F 3 "~" H 5400 3700 50  0001 C CNN
-	1    5400 3500
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	5200 3500 4800 3500
+	5200 3500 5100 3500
 Wire Wire Line
 	4800 3500 4800 3200
 $Comp
@@ -66,8 +48,8 @@ AR Path="/603C8DCA/603613F2" Ref="R?"  Part="1"
 AR Path="/603D0726/603613F2" Ref="R?"  Part="1" 
 AR Path="/603D8094/603613F2" Ref="R?"  Part="1" 
 F 0 "R14" H 4870 3096 50  0000 L CNN
-F 1 "R" H 4870 3005 50  0000 L CNN
-F 2 "" V 4730 3050 50  0001 C CNN
+F 1 "4.7k" H 4870 3005 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 4730 3050 50  0001 C CNN
 F 3 "~" H 4800 3050 50  0001 C CNN
 	1    4800 3050
 	1    0    0    -1  
@@ -80,7 +62,7 @@ Connection ~ 4800 3500
 Wire Wire Line
 	5900 3500 5900 4050
 Wire Wire Line
-	5600 3500 5900 3500
+	5600 3500 5700 3500
 $Comp
 L power:GND #PWR05
 U 1 1 60361937
@@ -101,4 +83,73 @@ F 3 "" H 5900 4050 50  0001 C CNN
 $EndComp
 Text HLabel 4050 3500 0    50   Input ~ 0
 pin_value
+Wire Wire Line
+	5100 3500 5100 3700
+Wire Wire Line
+	5100 3700 5200 3700
+Connection ~ 5100 3500
+Wire Wire Line
+	5600 3700 5700 3700
+Wire Wire Line
+	5700 3700 5700 3500
+Connection ~ 5700 3500
+Wire Wire Line
+	5700 3500 5900 3500
+$Comp
+L custom_symbols:SW_Push_1571563-4 SW1
+U 1 1 607B3BD3
+P 5400 3500
+AR Path="/6035EFCE/607B3BD3" Ref="SW1"  Part="1" 
+AR Path="/6036C998/607B3BD3" Ref="SW2"  Part="1" 
+AR Path="/60374312/607B3BD3" Ref="SW3"  Part="1" 
+AR Path="/6037BC78/607B3BD3" Ref="SW4"  Part="1" 
+F 0 "SW4" H 5400 3785 50  0000 C CNN
+F 1 "SW_Push_1571563-4" H 5400 3694 50  0000 C CNN
+F 2 "custom_footprints:SW_1571563-4" H 5400 3700 50  0001 C CNN
+F 3 "~" H 5400 3700 50  0001 C CNN
+F 4 "1" H 5400 3500 50  0001 C CNN "min_qty"
+F 5 "0.082" H 5400 3500 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/alcoswitch-te-connectivity/1571563-4/tactile-switch-0-05a-24vdc-260gf/dp/3397757?st=surface%20mount%20button" H 5400 3500 50  0001 C CNN "purchase_link"
+	1    5400 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 4000 4800 4050
+$Comp
+L Device:C C18
+U 1 1 60913F70
+P 4800 3850
+AR Path="/6036C998/60913F70" Ref="C18"  Part="1" 
+AR Path="/6035EFCE/60913F70" Ref="C17"  Part="1" 
+AR Path="/60374312/60913F70" Ref="C19"  Part="1" 
+AR Path="/6037BC78/60913F70" Ref="C20"  Part="1" 
+F 0 "C20" H 4915 3896 50  0000 L CNN
+F 1 "C" H 4915 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4838 3700 50  0001 C CNN
+F 3 "~" H 4800 3850 50  0001 C CNN
+	1    4800 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR074
+U 1 1 6091378B
+P 4800 4050
+AR Path="/6035EFCE/6091378B" Ref="#PWR074"  Part="1" 
+AR Path="/6036C998/6091378B" Ref="#PWR075"  Part="1" 
+AR Path="/60374312/6091378B" Ref="#PWR076"  Part="1" 
+AR Path="/6037BC78/6091378B" Ref="#PWR077"  Part="1" 
+AR Path="/603C8DCA/6091378B" Ref="#PWR?"  Part="1" 
+AR Path="/603D0726/6091378B" Ref="#PWR?"  Part="1" 
+AR Path="/603D8094/6091378B" Ref="#PWR?"  Part="1" 
+F 0 "#PWR077" H 4800 3800 50  0001 C CNN
+F 1 "GND" H 4805 3877 50  0000 C CNN
+F 2 "" H 4800 4050 50  0001 C CNN
+F 3 "" H 4800 4050 50  0001 C CNN
+	1    4800 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 3500 4800 3700
+Wire Wire Line
+	4800 3500 5100 3500
 $EndSCHEMATC
