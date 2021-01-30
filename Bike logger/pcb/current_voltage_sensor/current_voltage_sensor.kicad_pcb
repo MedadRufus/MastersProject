@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 6)
+    (drawings 7)
     (tracks 9)
     (zones 0)
     (modules 11)
@@ -585,6 +585,18 @@
     )
   )
 
+  (dimension 16.51 (width 0.15) (layer Dwgs.User)
+    (gr_text "16.510 mm" (at 191.8 84.455 270) (layer Dwgs.User)
+      (effects (font (size 1 1) (thickness 0.15)))
+    )
+    (feature1 (pts (xy 182.88 92.71) (xy 191.086421 92.71)))
+    (feature2 (pts (xy 182.88 76.2) (xy 191.086421 76.2)))
+    (crossbar (pts (xy 190.5 76.2) (xy 190.5 92.71)))
+    (arrow1a (pts (xy 190.5 92.71) (xy 189.913579 91.583496)))
+    (arrow1b (pts (xy 190.5 92.71) (xy 191.086421 91.583496)))
+    (arrow2a (pts (xy 190.5 76.2) (xy 189.913579 77.326504)))
+    (arrow2b (pts (xy 190.5 76.2) (xy 191.086421 77.326504)))
+  )
   (gr_text "Power Sensor module\nMedad Newman, Richard Ibbotson\nJan 2021\nv0.0.1" (at 165.1 81.28) (layer B.SilkS)
     (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
   )
