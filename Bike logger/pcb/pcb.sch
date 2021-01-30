@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 7
+Sheet 1 11
 Title "Design of E bike datalogger"
 Date "2021-01-21"
 Rev "v0.1"
@@ -51,7 +51,7 @@ MOSI
 Wire Wire Line
 	4800 5400 5750 5400
 Text Notes 4250 7050 0    50   ~ 0
-Note: ADC2 pins cannot be used when Wi-Fi is used. 
+Note: ADC2 pins cannot be used when Wi-Fi is used. \nADC2 pins are: GPIO 4, 0, 2, 15, 13, 12, 14, 27, 25, 26
 $Comp
 L Connector_Generic:Conn_01x08 J2
 U 1 1 600A1449
@@ -966,12 +966,6 @@ Text Label 2150 4450 2    50   ~ 0
 Throttle
 Wire Wire Line
 	1600 4450 2150 4450
-Wire Notes Line
-	600  2800 600  7100
-Wire Notes Line
-	2300 2800 2300 7100
-Wire Notes Line
-	600  7100 2300 7100
 Text Label 2200 3600 2    50   ~ 0
 PAS
 Text Label 2200 3500 2    50   ~ 0
@@ -1145,10 +1139,6 @@ Wire Wire Line
 Wire Wire Line
 	13450 6300 13900 6300
 NoConn ~ 13650 6800
-NoConn ~ 8500 900 
-NoConn ~ 8500 1000
-NoConn ~ 8500 1100
-NoConn ~ 8500 1200
 $Comp
 L custom_symbols:MS8607-02BA U3
 U 1 1 60333A79
@@ -1282,9 +1272,9 @@ Wire Notes Line
 	10250 6650 9250 6650
 Text Notes 9350 6750 0    50   ~ 0
 Pullup I2C1
-Text Label 5200 5900 2    50   ~ 0
+Text Label 5050 5900 2    50   ~ 0
 SDA2
-Text Label 5200 5800 2    50   ~ 0
+Text Label 5050 5800 2    50   ~ 0
 SCL2
 Wire Wire Line
 	9950 9700 9950 10100
@@ -1633,4 +1623,106 @@ Text Label 8350 5550 0    50   ~ 0
 button_extra
 Wire Wire Line
 	8200 5550 8350 5550
+Text Notes 750  4900 0    50   ~ 0
+Motor monitoring
+$Sheet
+S 750  5050 900  300 
+U 6040F615
+F0 "sheet6040F615" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1650 5250 50 
+F3 "protected_adc_input" I R 1650 5150 50 
+$EndSheet
+Text Label 2200 5150 2    50   ~ 0
+Motor_B_adc
+Wire Wire Line
+	2200 5150 1650 5150
+Wire Wire Line
+	1650 5250 2200 5250
+Text Label 2200 5250 2    50   ~ 0
+Motor_pulse_B
+$Sheet
+S 750  5700 900  300 
+U 6042797A
+F0 "sheet6042797A" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1650 5900 50 
+F3 "protected_adc_input" I R 1650 5800 50 
+$EndSheet
+Text Label 2200 5800 2    50   ~ 0
+Motor_A_adc
+Wire Wire Line
+	2200 5800 1650 5800
+Wire Wire Line
+	1650 5900 2200 5900
+Text Label 2200 5900 2    50   ~ 0
+Motor_pulse_A
+Text Label 5000 6000 0    50   ~ 0
+Motor_B_adc
+Text Label 5000 6100 0    50   ~ 0
+Motor_A_adc
+Wire Wire Line
+	8500 1200 7750 1200
+Text Label 7750 1100 0    50   ~ 0
+misc_adc_raw_1
+Wire Wire Line
+	8500 1100 7750 1100
+Text Label 7750 1200 0    50   ~ 0
+misc_adc_raw_2
+Wire Notes Line
+	600  6250 2300 6250
+Text Label 2250 6800 2    50   ~ 0
+misc_adc_raw_1
+Wire Wire Line
+	1550 6800 2250 6800
+Wire Wire Line
+	2250 6700 1550 6700
+$Sheet
+S 650  6600 900  300 
+U 60465E6A
+F0 "sheet60465E6A" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1550 6800 50 
+F3 "protected_adc_input" I R 1550 6700 50 
+$EndSheet
+Text Label 2250 6700 2    50   ~ 0
+misc_adc_1
+Text Label 5700 5800 2    50   ~ 0
+misc_adc_1
+Text Label 5700 5900 2    50   ~ 0
+misc_adc_2
+Text Notes 9350 10550 0    50   ~ 0
+Must not be \npopulated if I2C2\npins are used as ADC
+Text Label 2250 7400 2    50   ~ 0
+misc_adc_raw_2
+Wire Wire Line
+	1550 7400 2250 7400
+Wire Wire Line
+	2250 7300 1550 7300
+Text Label 2250 7300 2    50   ~ 0
+misc_adc_2
+$Sheet
+S 650  7200 900  300 
+U 6049D147
+F0 "sheet6049D147" 50
+F1 "ADC_input_protected.sch" 50
+F2 "raw_adc_input" I R 1550 7400 50 
+F3 "protected_adc_input" I R 1550 7300 50 
+$EndSheet
+Text Notes 700  6350 0    50   ~ 0
+Misc ADC inputs
+Wire Notes Line
+	600  7700 2300 7700
+Wire Notes Line
+	2300 2800 2300 7700
+Wire Notes Line
+	600  2800 600  7700
+Text Label 5000 5400 0    50   ~ 0
+button_up
+Text Label 5000 5500 0    50   ~ 0
+button_down
+Text Label 5000 5600 0    50   ~ 0
+button_select
+Text Label 5000 5700 0    50   ~ 0
+button_extra
 $EndSCHEMATC
