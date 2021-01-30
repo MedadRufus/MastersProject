@@ -12,6 +12,12 @@ K pressure temp humidity I2C
 F https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS8607-02BA01%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS8607-02BA01_B3.pdf%7FCAT-BLPS0018
 $ENDCMP
 #
+$CMP SW_Push_1571563-4
+D Push button switch, generic, symbol, four pins
+K switch normally-open pushbutton push-button
+F ~
+$ENDCMP
+#
 $CMP VBATT
 D Power symbol creates a global label with name "VBUS"
 K power-flag
