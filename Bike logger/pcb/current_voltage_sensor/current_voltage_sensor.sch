@@ -9,8 +9,8 @@ Title "Design of the shunt module"
 Date "2021-01-29"
 Rev ""
 Comp ""
-Comment1 "The design features a shunt resistor and the LTC4151 to convert the analogue signal to a digital I2C signal."
-Comment2 ""
+Comment1 "The design features a shunt resistor and the LTC4151 to convert"
+Comment2 "the analogue signal to a digital I2C signal."
 Comment3 ""
 Comment4 ""
 $EndDescr
@@ -27,8 +27,6 @@ F 3 "~" H 9450 2800 50  0001 C CNN
 $EndComp
 Text Label 7100 3350 2    50   ~ 0
 SCL
-Wire Wire Line
-	6400 3350 6750 3350
 Text Label 7100 3450 2    50   ~ 0
 SDA
 Text Label 9000 2700 0    50   ~ 0
@@ -84,62 +82,6 @@ F 3 "" H 8800 2850 50  0001 C CNN
 	1    8800 2850
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R2
-U 1 1 60160E84
-P 6500 3050
-F 0 "R2" H 6570 3096 50  0000 L CNN
-F 1 "2K" H 6570 3005 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 6430 3050 50  0001 C CNN
-F 3 "~" H 6500 3050 50  0001 C CNN
-	1    6500 3050
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R3
-U 1 1 601617D0
-P 6750 3050
-F 0 "R3" H 6820 3096 50  0000 L CNN
-F 1 "2K" H 6820 3005 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 6680 3050 50  0001 C CNN
-F 3 "~" H 6750 3050 50  0001 C CNN
-	1    6750 3050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6500 3200 6500 3450
-Wire Wire Line
-	6400 3450 6500 3450
-Connection ~ 6500 3450
-Wire Wire Line
-	6500 3450 7100 3450
-Wire Wire Line
-	6750 3200 6750 3350
-Connection ~ 6750 3350
-Wire Wire Line
-	6750 3350 7100 3350
-$Comp
-L power:+3.3V #PWR02
-U 1 1 601621A6
-P 6600 2650
-F 0 "#PWR02" H 6600 2500 50  0001 C CNN
-F 1 "+3.3V" H 6615 2823 50  0000 C CNN
-F 2 "" H 6600 2650 50  0001 C CNN
-F 3 "" H 6600 2650 50  0001 C CNN
-	1    6600 2650
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6500 2900 6500 2750
-Wire Wire Line
-	6500 2750 6600 2750
-Wire Wire Line
-	6600 2750 6600 2650
-Wire Wire Line
-	6750 2750 6600 2750
-Connection ~ 6600 2750
-Wire Wire Line
-	6750 2750 6750 2900
 $Comp
 L Device:R R1
 U 1 1 6016433A
@@ -220,20 +162,6 @@ Wire Wire Line
 	5050 3450 5400 3450
 Wire Wire Line
 	5050 3350 5400 3350
-$Comp
-L custom_symbols:LTC4151 U1
-U 1 1 6015A2EC
-P 5900 3250
-F 0 "U1" H 5900 3415 50  0000 C CNN
-F 1 "LTC4151" H 5900 3324 50  0000 C CNN
-F 2 "Package_DFN_QFN:DFN-10-1EP_3x3mm_P0.5mm_EP1.55x2.48mm" H 5800 3250 50  0001 C CNN
-F 3 "" H 5800 3250 50  0001 C CNN
-F 4 "1" H 5900 3250 50  0001 C CNN "min_qty"
-F 5 "1.96" H 5900 3250 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/linear-technology/ltc4151cdd-pbf/monitor-current-voltage-i2c-10dfn/dp/2295457?scope=partnumberlookahead&ost=LTC4151CDD%23PBF&searchref=searchlookahead&exaMfpn=true" H 5900 3250 50  0001 C CNN "purchase_link"
-	1    5900 3250
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5050 3550 5400 3550
 Text Label 2900 3500 0    50   ~ 0
@@ -371,4 +299,167 @@ Wire Notes Line
 	7900 4900 7900 1900
 Wire Notes Line
 	7900 1900 4750 1900
+$Comp
+L Connector:TestPoint TP3
+U 1 1 601F9105
+P 6500 2900
+F 0 "TP3" V 6454 3088 50  0000 L CNN
+F 1 "TestPoint" V 6545 3088 50  0000 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 6700 2900 50  0001 C CNN
+F 3 "~" H 6700 2900 50  0001 C CNN
+	1    6500 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP4
+U 1 1 601F910F
+P 6750 3000
+F 0 "TP4" V 6704 3188 50  0000 L CNN
+F 1 "TestPoint" V 6795 3188 50  0000 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 6950 3000 50  0001 C CNN
+F 3 "~" H 6950 3000 50  0001 C CNN
+	1    6750 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 3350 6500 2900
+Wire Wire Line
+	6750 3450 6750 3000
+Text Label 4250 6800 1    50   ~ 0
+SCL
+Text Label 4000 6800 1    50   ~ 0
+SDA
+$Comp
+L Device:R R2
+U 1 1 601FDDA5
+P 4000 6400
+F 0 "R2" H 4070 6446 50  0000 L CNN
+F 1 "2K" H 4070 6355 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3930 6400 50  0001 C CNN
+F 3 "~" H 4000 6400 50  0001 C CNN
+	1    4000 6400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 601FDDAF
+P 4250 6400
+F 0 "R3" H 4320 6446 50  0000 L CNN
+F 1 "2K" H 4320 6355 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 4180 6400 50  0001 C CNN
+F 3 "~" H 4250 6400 50  0001 C CNN
+	1    4250 6400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 6550 4000 6800
+$Comp
+L power:+3.3V #PWR02
+U 1 1 601FDDC0
+P 4100 6000
+F 0 "#PWR02" H 4100 5850 50  0001 C CNN
+F 1 "+3.3V" H 4115 6173 50  0000 C CNN
+F 2 "" H 4100 6000 50  0001 C CNN
+F 3 "" H 4100 6000 50  0001 C CNN
+	1    4100 6000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 6250 4000 6100
+Wire Wire Line
+	4000 6100 4100 6100
+Wire Wire Line
+	4100 6100 4100 6000
+Wire Wire Line
+	4250 6100 4100 6100
+Connection ~ 4100 6100
+Wire Wire Line
+	4250 6100 4250 6250
+$Comp
+L custom_symbols:LTC4151 U1
+U 1 1 6015A2EC
+P 5900 3250
+F 0 "U1" H 5900 3415 50  0000 C CNN
+F 1 "LTC4151" H 5900 3324 50  0000 C CNN
+F 2 "Package_DFN_QFN:DFN-10-1EP_3x3mm_P0.5mm_EP1.55x2.48mm" H 5800 3250 50  0001 C CNN
+F 3 "" H 5800 3250 50  0001 C CNN
+F 4 "1" H 5900 3250 50  0001 C CNN "min_qty"
+F 5 "1.96" H 5900 3250 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/linear-technology/ltc4151cdd-pbf/monitor-current-voltage-i2c-10dfn/dp/2295457?scope=partnumberlookahead&ost=LTC4151CDD%23PBF&searchref=searchlookahead&exaMfpn=true" H 5900 3250 50  0001 C CNN "purchase_link"
+	1    5900 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6400 3350 6500 3350
+Wire Wire Line
+	6400 3450 6750 3450
+Connection ~ 6750 3450
+Wire Wire Line
+	6750 3450 7100 3450
+Connection ~ 6500 3350
+Wire Wire Line
+	6500 3350 7100 3350
+Wire Wire Line
+	4250 6550 4250 6800
+Wire Notes Line
+	3600 5600 4700 5600
+Wire Notes Line
+	4700 5600 4700 7150
+Wire Notes Line
+	4700 7150 3600 7150
+Wire Notes Line
+	3600 7150 3600 5600
+Text Notes 3750 5700 0    50   ~ 0
+I2C pullups
+$Comp
+L Connector:TestPoint TP5
+U 1 1 60217198
+P 6400 5600
+F 0 "TP5" V 6354 5788 50  0000 L CNN
+F 1 "TestPoint" V 6445 5788 50  0000 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 6600 5600 50  0001 C CNN
+F 3 "~" H 6600 5600 50  0001 C CNN
+	1    6400 5600
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5950 5600 6400 5600
+Text Label 5950 5600 0    50   ~ 0
+Vin
+$Comp
+L Connector:TestPoint TP6
+U 1 1 6021987E
+P 6400 5800
+F 0 "TP6" V 6354 5988 50  0000 L CNN
+F 1 "TestPoint" V 6445 5988 50  0000 L CNN
+F 2 "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm" H 6600 5800 50  0001 C CNN
+F 3 "~" H 6600 5800 50  0001 C CNN
+	1    6400 5800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5950 5800 6400 5800
+Text Label 5950 5800 0    50   ~ 0
+SENSE-
+Wire Notes Line
+	5500 5250 7300 5250
+Wire Notes Line
+	7300 5250 7300 6150
+Wire Notes Line
+	7300 6150 5500 6150
+Wire Notes Line
+	5500 6150 5500 5250
+Text Notes 5550 5400 0    50   ~ 0
+Test points to verify voltage drop
+$Comp
+L Analog_ADC:INA226 U?
+U 1 1 6021BFB1
+P 13200 3700
+F 0 "U?" H 13200 4381 50  0000 C CNN
+F 1 "INA226" H 13200 4290 50  0000 C CNN
+F 2 "Package_SO:MSOP-10_3x3mm_P0.5mm" H 13250 3800 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/ina226.pdf" H 13550 3600 50  0001 C CNN
+	1    13200 3700
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
