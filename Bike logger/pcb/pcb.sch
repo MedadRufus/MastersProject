@@ -119,8 +119,6 @@ Wire Notes Line
 	3700 2650 3700 650 
 Wire Notes Line
 	3700 650  600  650 
-NoConn ~ 1400 2150
-NoConn ~ 1400 2050
 NoConn ~ 1400 1250
 $Comp
 L power:+3.3V #PWR012
@@ -451,17 +449,6 @@ Wire Wire Line
 	1400 1450 900  1450
 Wire Wire Line
 	1400 1350 900  1350
-$Comp
-L Connector:Micro_SD_Card_Det_Hirose_DM3AT J1
-U 1 1 6009789F
-P 2300 1650
-F 0 "J1" H 2250 2467 50  0000 C CNN
-F 1 "Micro_SD_Card" H 2250 2376 50  0000 C CNN
-F 2 "Connector_Card:microSD_HC_Hirose_DM3AT-SF-PEJM5" H 3450 1950 50  0001 C CNN
-F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 2300 1650 50  0001 C CNN
-	1    2300 1650
-	1    0    0    -1  
-$EndComp
 Text Notes 800  2550 0    50   ~ 0
 Wired according to: \nhttps://community.st.com/s/contentdocument/0690X00000604T2QAI
 Text Notes 4450 6850 0    50   ~ 0
@@ -1968,4 +1955,18 @@ F 3 "~" H 12150 1200 50  0001 C CNN
 $EndComp
 Text Label 13050 1050 2    50   ~ 0
 SDA1
+NoConn ~ 1400 2150
+NoConn ~ 1400 2050
+$Comp
+L Connector:Micro_SD_Card_Det_Hirose_DM3AT J1
+U 1 1 6009789F
+P 2300 1650
+F 0 "J1" H 2250 2467 50  0000 C CNN
+F 1 "Micro_SD_Card" H 2250 2376 50  0000 C CNN
+F 2 "Connector_Card:microSD_HC_Hirose_DM3AT-SF-PEJM5" H 3450 1950 50  0001 C CNN
+F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 2300 1650 50  0001 C CNN
+F 4 "https://uk.farnell.com/hirose-hrs/dm3at-sf-pejm5/connector-micro-sd-standard-8pos/dp/2427719?st=dm3at-sf-pejm5" H 2300 1650 50  0001 C CNN "purchase_link"
+	1    2300 1650
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
