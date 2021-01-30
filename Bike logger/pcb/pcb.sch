@@ -378,8 +378,6 @@ Wire Wire Line
 Wire Wire Line
 	10900 7400 10900 6950
 Connection ~ 10900 7400
-Wire Wire Line
-	4800 3800 5250 3800
 Text Label 10900 6950 3    50   ~ 0
 RTS
 Text Label 15950 8050 2    50   ~ 0
@@ -483,61 +481,12 @@ Wire Wire Line
 	750  1550 750  1050
 Wire Wire Line
 	750  1750 1400 1750
-$Comp
-L Connector_Generic:Conn_01x05 J5
-U 1 1 601071EE
-P 4550 1600
-F 0 "J5" H 4468 1175 50  0000 C CNN
-F 1 "Conn_01x05" H 4468 1266 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 4550 1600 50  0001 C CNN
-F 3 "~" H 4550 1600 50  0001 C CNN
-	1    4550 1600
-	-1   0    0    1   
-$EndComp
 Text Notes 4100 800  0    50   ~ 0
 U-blox GPS module connector
-Text Label 5150 1500 2    50   ~ 0
+Text Label 5250 1950 2    50   ~ 0
 GPS_RX
-Text Label 5150 1600 2    50   ~ 0
+Text Label 5250 1850 2    50   ~ 0
 GPS_TX
-Wire Wire Line
-	4750 1500 5150 1500
-Wire Wire Line
-	4750 1600 5150 1600
-$Comp
-L power:+3.3V #PWR033
-U 1 1 6013BDFD
-P 5100 1300
-F 0 "#PWR033" H 5100 1150 50  0001 C CNN
-F 1 "+3.3V" H 5115 1473 50  0000 C CNN
-F 2 "" H 5100 1300 50  0001 C CNN
-F 3 "" H 5100 1300 50  0001 C CNN
-	1    5100 1300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4750 1400 5100 1400
-Wire Wire Line
-	5100 1400 5100 1300
-$Comp
-L power:GND #PWR034
-U 1 1 6013BE09
-P 5100 1950
-F 0 "#PWR034" H 5100 1700 50  0001 C CNN
-F 1 "GND" H 5105 1777 50  0000 C CNN
-F 2 "" H 5100 1950 50  0001 C CNN
-F 3 "" H 5100 1950 50  0001 C CNN
-	1    5100 1950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4750 1800 5100 1800
-Wire Wire Line
-	5100 1800 5100 1950
-Text Label 5150 1700 2    50   ~ 0
-PPS
-Wire Wire Line
-	4750 1700 5150 1700
 Text Label 5200 4900 2    50   ~ 0
 GPS_RX
 Text Label 5200 4800 2    50   ~ 0
@@ -1444,17 +1393,6 @@ Text Label 5000 5400 0    50   ~ 0
 button_up
 Wire Wire Line
 	2650 12650 2750 12650
-$Comp
-L Connector:TestPoint TP1
-U 1 1 6053DE3B
-P 5150 1700
-F 0 "TP1" V 5150 2300 50  0000 L CNN
-F 1 "TestPoint" V 5150 1900 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5350 1700 50  0001 C CNN
-F 3 "~" H 5350 1700 50  0001 C CNN
-	1    5150 1700
-	0    1    1    0   
-$EndComp
 Wire Notes Line
 	3950 2650 3950 600 
 Wire Notes Line
@@ -1463,8 +1401,6 @@ Wire Notes Line
 	8050 600  8050 2650
 Wire Wire Line
 	8850 1950 9250 1950
-Wire Wire Line
-	9000 1300 9000 1750
 Wire Wire Line
 	8850 1400 8850 1300
 Wire Wire Line
@@ -2120,4 +2056,90 @@ Text Label 5000 5600 0    50   ~ 0
 button_select
 Text Label 3150 3800 0    50   ~ 0
 button_extra
+$Comp
+L Connector:TestPoint TP2
+U 1 1 6091D5DB
+P 5750 3800
+F 0 "TP2" V 5750 4400 50  0000 L CNN
+F 1 "TestPoint" V 5750 4000 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 3800 50  0001 C CNN
+F 3 "~" H 5950 3800 50  0001 C CNN
+	1    5750 3800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4800 3800 5750 3800
+$Comp
+L Connector:TestPoint TP3
+U 1 1 60935B5B
+P 7150 1350
+F 0 "TP3" V 7150 1950 50  0000 L CNN
+F 1 "TestPoint" V 7150 1550 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 7350 1350 50  0001 C CNN
+F 3 "~" H 7350 1350 50  0001 C CNN
+	1    7150 1350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:TestPoint TP4
+U 1 1 60936179
+P 7150 1450
+F 0 "TP4" V 7150 2050 50  0000 L CNN
+F 1 "TestPoint" V 7150 1650 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 7350 1450 50  0001 C CNN
+F 3 "~" H 7350 1450 50  0001 C CNN
+	1    7150 1450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9000 1300 9000 1750
+Wire Wire Line
+	4850 1200 5000 1200
+Wire Wire Line
+	4850 1850 5250 1850
+Wire Wire Line
+	4850 1300 4850 1200
+Wire Wire Line
+	4850 1650 5000 1650
+$Comp
+L power:GND #PWR033
+U 1 1 6097549F
+P 4850 1300
+F 0 "#PWR033" H 4850 1050 50  0001 C CNN
+F 1 "GND" H 4855 1127 50  0000 C CNN
+F 2 "" H 4850 1300 50  0001 C CNN
+F 3 "" H 4850 1300 50  0001 C CNN
+	1    4850 1300
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 1750 5200 1650
+Wire Wire Line
+	4850 1750 5200 1750
+$Comp
+L power:+3.3V #PWR034
+U 1 1 609754AB
+P 5200 1650
+F 0 "#PWR034" H 5200 1500 50  0001 C CNN
+F 1 "+3.3V" H 5215 1823 50  0000 C CNN
+F 2 "" H 5200 1650 50  0001 C CNN
+F 3 "" H 5200 1650 50  0001 C CNN
+	1    5200 1650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4850 1950 5250 1950
+$Comp
+L Connector_Generic:Conn_01x04 J5
+U 1 1 609754B8
+P 4650 1850
+F 0 "J5" H 4850 1400 50  0000 C CNN
+F 1 "Conn_01x04" H 4800 1500 50  0000 C CNN
+F 2 "Connector:NS-Tech_Grove_1x04_P2mm_Vertical" H 4650 1850 50  0001 C CNN
+F 3 "~" H 4650 1850 50  0001 C CNN
+	1    4650 1850
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5000 1200 5000 1650
 $EndSCHEMATC
