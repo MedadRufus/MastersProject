@@ -1928,20 +1928,20 @@ $EndSheet
 Wire Notes Line
 	3950 1650 6050 1650
 Wire Wire Line
-	8800 1300 9500 1300
+	8800 1050 9500 1050
 Wire Wire Line
-	8800 1400 9500 1400
+	8800 1150 9500 1150
 $Sheet
-S 8200 1200 600  250 
+S 8200 950  600  250 
 U 60BA371C
 F0 "misc adc inputs" 50
 F1 "grove_connector.sch" 50
-F2 "grove_pin_1" I R 8800 1400 50 
-F3 "grove_pin_2" I R 8800 1300 50 
+F2 "grove_pin_1" I R 8800 1150 50 
+F3 "grove_pin_2" I R 8800 1050 50 
 $EndSheet
-Text Label 9500 1300 2    50   ~ 0
+Text Label 9500 1050 2    50   ~ 0
 misc_adc_raw_1
-Text Label 9500 1400 2    50   ~ 0
+Text Label 9500 1150 2    50   ~ 0
 misc_adc_raw_2
 $Comp
 L power:+5V #PWR032
@@ -2128,10 +2128,10 @@ Wire Wire Line
 Wire Wire Line
 	2450 9200 2500 9200
 $Comp
-L custom_symbols:XP_Power_STH U?
+L custom_symbols:XP_Power_STH U6
 U 1 1 60D68665
 P 2500 8400
-F 0 "U?" H 2500 8465 50  0000 C CNN
+F 0 "U6" H 2500 8465 50  0000 C CNN
 F 1 "XP_Power_STH" H 2500 8374 50  0000 C CNN
 F 2 "custom_footprints:STH0548S3V3" H 2500 8400 50  0001 C CNN
 F 3 "" H 2500 8400 50  0001 C CNN
@@ -2139,10 +2139,10 @@ F 3 "" H 2500 8400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0105
 U 1 1 60E01756
 P 3300 9300
-F 0 "#PWR?" H 3300 9050 50  0001 C CNN
+F 0 "#PWR0105" H 3300 9050 50  0001 C CNN
 F 1 "GND" H 3305 9127 50  0000 C CNN
 F 2 "" H 3300 9300 50  0001 C CNN
 F 3 "" H 3300 9300 50  0001 C CNN
@@ -2153,10 +2153,10 @@ Connection ~ 2500 9200
 Wire Wire Line
 	2500 9200 2550 9200
 $Comp
-L Device:R R?
+L Device:R R25
 U 1 1 60E0D84F
 P 3300 9150
-F 0 "R?" H 3370 9196 50  0000 L CNN
+F 0 "R25" H 3370 9196 50  0000 L CNN
 F 1 "R" H 3370 9105 50  0000 L CNN
 F 2 "" V 3230 9150 50  0001 C CNN
 F 3 "~" H 3300 9150 50  0001 C CNN
@@ -2164,10 +2164,10 @@ F 3 "~" H 3300 9150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R24
 U 1 1 60E0E529
 P 3300 8850
-F 0 "R?" H 3230 8804 50  0000 R CNN
+F 0 "R24" H 3230 8804 50  0000 R CNN
 F 1 "R" H 3230 8895 50  0000 R CNN
 F 2 "" V 3230 8850 50  0001 C CNN
 F 3 "~" H 3300 8850 50  0001 C CNN
@@ -2200,14 +2200,61 @@ Wire Wire Line
 Wire Wire Line
 	8350 6600 8550 6600
 $Comp
-L power:+3.3V #PWR?
+L power:+3.3V #PWR0106
 U 1 1 60F54529
 P 7600 6600
-F 0 "#PWR?" H 7600 6450 50  0001 C CNN
+F 0 "#PWR0106" H 7600 6450 50  0001 C CNN
 F 1 "+3.3V" H 7615 6773 50  0000 C CNN
 F 2 "" H 7600 6600 50  0001 C CNN
 F 3 "" H 7600 6600 50  0001 C CNN
 	1    7600 6600
+	1    0    0    -1  
+$EndComp
+Wire Notes Line
+	8050 1700 9650 1700
+Text Notes 8150 750  0    50   ~ 0
+Connector for misc adc inputs(Grove)
+$Comp
+L Connector_Generic:Conn_01x02 J8
+U 1 1 60F93E76
+P 8850 2150
+F 0 "J8" H 8930 2142 50  0000 L CNN
+F 1 "Conn_01x02" H 8930 2051 50  0000 L CNN
+F 2 "" H 8850 2150 50  0001 C CNN
+F 3 "~" H 8850 2150 50  0001 C CNN
+	1    8850 2150
+	1    0    0    -1  
+$EndComp
+Text Notes 8150 1850 0    50   ~ 0
+E bike batt power input
+$Comp
+L custom_symbols:VBATT #PWR090
+U 1 1 60F966C2
+P 8400 2100
+F 0 "#PWR090" H 8400 1950 50  0001 C CNN
+F 1 "VBATT" H 8415 2273 50  0000 C CNN
+F 2 "" H 8400 2100 50  0001 C CNN
+F 3 "" H 8400 2100 50  0001 C CNN
+	1    8400 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8400 2100 8400 2150
+Wire Wire Line
+	8400 2150 8650 2150
+Wire Wire Line
+	8650 2250 8400 2250
+Wire Wire Line
+	8400 2250 8400 2350
+$Comp
+L power:GND #PWR091
+U 1 1 60FB0CB3
+P 8400 2350
+F 0 "#PWR091" H 8400 2100 50  0001 C CNN
+F 1 "GND" V 8400 2150 50  0000 C CNN
+F 2 "" H 8400 2350 50  0001 C CNN
+F 3 "" H 8400 2350 50  0001 C CNN
+	1    8400 2350
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
