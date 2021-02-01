@@ -236,3 +236,7 @@ fp-info-cache
 # Exported BOM files
 *.xml
 *.csv
+
+
+# OUtput files for drill
+Bike logger/pcb/output/*
