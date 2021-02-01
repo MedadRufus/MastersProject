@@ -483,8 +483,6 @@ F 3 "~" H 11600 5400 50  0001 C CNN
 	1    11600 5400
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	11700 4250 12000 4250
 $Comp
 L power:GND #PWR0101
 U 1 1 602271B8
@@ -499,20 +497,9 @@ $EndComp
 Wire Wire Line
 	11700 5400 12000 5400
 Wire Wire Line
-	12000 4250 12000 4650
-Connection ~ 12000 5400
-Wire Wire Line
 	12000 5400 12000 5550
 Wire Wire Line
-	11700 5000 12000 5000
-Connection ~ 12000 5000
-Wire Wire Line
-	12000 5000 12000 5400
-Wire Wire Line
 	11700 4650 12000 4650
-Connection ~ 12000 4650
-Wire Wire Line
-	12000 4650 12000 5000
 Wire Notes Line
 	10950 5800 10950 3800
 Text Notes 11050 3900 0    50   ~ 0
@@ -2229,4 +2216,9 @@ Wire Wire Line
 	12150 2100 12150 1900
 NoConn ~ 5950 9500
 NoConn ~ 5950 9600
+Wire Wire Line
+	12000 4650 12000 5400
+Connection ~ 12000 5400
+NoConn ~ 11700 5000
+NoConn ~ 11700 4250
 $EndSCHEMATC
