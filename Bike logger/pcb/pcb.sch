@@ -67,7 +67,7 @@ Wire Notes Line
 	9750 11150 9750 8150
 Wire Notes Line
 	9750 8150 4050 8150
-Text Notes 8000 8350 0    50   ~ 0
+Text Notes 7250 8350 0    50   ~ 0
 Pressure/temperature/humidity
 Wire Notes Line
 	7050 8200 7050 11150
@@ -405,8 +405,6 @@ Wire Wire Line
 	1700 1350 1200 1350
 Text Notes 800  2550 0    50   ~ 0
 Wired according to: \nhttps://community.st.com/s/contentdocument/0690X00000604T2QAI
-Text Notes 4450 6850 0    50   ~ 0
-TODO: verify the miso/mosi connections on MCU
 Wire Wire Line
 	1050 1750 1050 2150
 $Comp
@@ -515,12 +513,6 @@ Wire Wire Line
 Connection ~ 12000 4650
 Wire Wire Line
 	12000 4650 12000 5000
-Wire Notes Line
-	10950 3800 13650 3800
-Wire Notes Line
-	13650 3800 13650 5800
-Wire Notes Line
-	13650 5800 10950 5800
 Wire Notes Line
 	10950 5800 10950 3800
 Text Notes 11050 3900 0    50   ~ 0
@@ -691,17 +683,6 @@ Wire Wire Line
 	5750 5500 4800 5500
 Wire Wire Line
 	5750 5600 4800 5600
-$Comp
-L Connector:TestPoint TP15
-U 1 1 60282CD2
-P 5750 5700
-F 0 "TP15" V 5750 6300 50  0000 L CNN
-F 1 "TestPoint" V 5750 5900 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 5700 50  0001 C CNN
-F 3 "~" H 5950 5700 50  0001 C CNN
-	1    5750 5700
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	5750 5700 4800 5700
 $Comp
@@ -800,124 +781,25 @@ Text Notes 13200 9350 0    50   ~ 0
 Ref: https://learn.adafruit.com/assets/41630
 Text Notes 10550 8700 0    50   ~ 0
 Ref: https://learn.adafruit.com/assets/41630
-Wire Wire Line
-	15400 1900 15400 2300
-Wire Wire Line
-	15100 1900 15100 2300
-Text Label 15400 2300 1    50   ~ 0
-SCL1
-Text Label 15100 2300 1    50   ~ 0
-SDA1
-$Comp
-L Device:R R7
-U 1 1 6016D596
-P 15100 1750
-F 0 "R7" H 15170 1796 50  0000 L CNN
-F 1 "4.7k" H 15170 1705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 15030 1750 50  0001 C CNN
-F 3 "~" H 15100 1750 50  0001 C CNN
-	1    15100 1750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R8
-U 1 1 6016E102
-P 15400 1750
-F 0 "R8" H 15470 1796 50  0000 L CNN
-F 1 "4.7k" H 15470 1705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 15330 1750 50  0001 C CNN
-F 3 "~" H 15400 1750 50  0001 C CNN
-	1    15400 1750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR040
-U 1 1 6017645E
-P 15250 1300
-F 0 "#PWR040" H 15250 1150 50  0001 C CNN
-F 1 "+3.3V" H 15265 1473 50  0000 C CNN
-F 2 "" H 15250 1300 50  0001 C CNN
-F 3 "" H 15250 1300 50  0001 C CNN
-	1    15250 1300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	15100 1600 15100 1300
-Wire Wire Line
-	15100 1300 15250 1300
-Wire Wire Line
-	15250 1300 15400 1300
-Wire Wire Line
-	15400 1300 15400 1600
-Connection ~ 15250 1300
-Wire Notes Line
-	14700 3050 15700 3050
-Wire Notes Line
-	15700 950  14700 950 
-Text Notes 14800 1050 0    50   ~ 0
-Pullup I2C1
-Text Label 5050 5900 2    50   ~ 0
+Text Label 5100 5100 2    50   ~ 0
 SDA2
-Text Label 5050 5800 2    50   ~ 0
+Text Label 5100 5000 2    50   ~ 0
 SCL2
 Wire Wire Line
-	15400 4000 15400 4400
-Wire Wire Line
-	15100 4000 15100 4400
-Text Label 15400 4400 1    50   ~ 0
-SCL2
-Text Label 15100 4400 1    50   ~ 0
-SDA2
-$Comp
-L Device:R R9
-U 1 1 601C8D39
-P 15100 3850
-F 0 "R9" H 15170 3896 50  0000 L CNN
-F 1 "4.7k" H 15170 3805 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 15030 3850 50  0001 C CNN
-F 3 "~" H 15100 3850 50  0001 C CNN
-	1    15100 3850
-	1    0    0    -1  
-$EndComp
+	15450 4850 15450 5250
 $Comp
 L Device:R R10
 U 1 1 601C8D43
-P 15400 3850
-F 0 "R10" H 15470 3896 50  0000 L CNN
-F 1 "4.7k" H 15470 3805 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 15330 3850 50  0001 C CNN
-F 3 "~" H 15400 3850 50  0001 C CNN
-	1    15400 3850
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR041
-U 1 1 601C8D4D
-P 15250 3400
-F 0 "#PWR041" H 15250 3250 50  0001 C CNN
-F 1 "+3.3V" H 15265 3573 50  0000 C CNN
-F 2 "" H 15250 3400 50  0001 C CNN
-F 3 "" H 15250 3400 50  0001 C CNN
-	1    15250 3400
+P 15450 4700
+F 0 "R10" H 15520 4746 50  0000 L CNN
+F 1 "4.7k" H 15520 4655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 15380 4700 50  0001 C CNN
+F 3 "~" H 15450 4700 50  0001 C CNN
+	1    15450 4700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	15100 3700 15100 3400
-Wire Wire Line
-	15100 3400 15250 3400
-Wire Wire Line
-	15250 3400 15400 3400
-Wire Wire Line
-	15400 3400 15400 3700
-Connection ~ 15250 3400
-Wire Notes Line
-	14700 5250 15700 5250
-Text Notes 14800 3150 0    50   ~ 0
-Pullup I2C2
-Wire Notes Line
-	14700 950  14700 5250
-Wire Notes Line
-	15700 950  15700 5250
+	15450 4250 15450 4550
 Wire Wire Line
 	4800 5800 5750 5800
 Wire Wire Line
@@ -1099,6 +981,9 @@ F 0 "J3" H 12970 7747 50  0000 R CNN
 F 1 "USB_B_Micro" H 12970 7838 50  0000 R CNN
 F 2 "Connector_USB:USB_Micro-B_Molex-105017-0001" H 13350 7800 50  0001 C CNN
 F 3 "~" H 13350 7800 50  0001 C CNN
+F 4 "1" H 13200 7850 50  0001 C CNN "min_qty"
+F 5 "0.8484" H 13200 7850 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/molex/105017-0001/usb-conn-2-0-micro-usb-type-b/dp/2293836?st=molex-105017-0001" H 13200 7850 50  0001 C CNN "purchase_link"
 	1    13200 7850
 	1    0    0    1   
 $EndComp
@@ -1241,8 +1126,6 @@ Text Label 5700 5800 2    50   ~ 0
 misc_adc_1
 Text Label 5700 5900 2    50   ~ 0
 misc_adc_2
-Text Notes 14800 4850 0    50   ~ 0
-Must not be \npopulated if I2C2\npins are used as ADC
 Text Label 2250 7400 2    50   ~ 0
 misc_adc_raw_2
 Wire Wire Line
@@ -1267,7 +1150,7 @@ Wire Notes Line
 	2300 2800 2300 7700
 Wire Notes Line
 	600  2800 600  7700
-Text Label 5000 5400 0    50   ~ 0
+Text Label 5750 5400 2    50   ~ 0
 button_up
 Wire Wire Line
 	2650 12650 2750 12650
@@ -1285,7 +1168,7 @@ Text Label 5500 2350 2    50   ~ 0
 SCL1
 Text Label 5500 2250 2    50   ~ 0
 SDA1
-Text Notes 6850 8100 0    50   ~ 0
+Text Notes 6850 8100 0    50   ~ 10
 Sensors
 Text Notes 6550 550  0    50   ~ 0
 Connectors
@@ -1395,7 +1278,7 @@ Wire Notes Line
 Wire Wire Line
 	10700 2000 11800 2000
 Text Label 13050 2100 2    50   ~ 0
-SCL1
+SCL2
 Text Notes 9750 800  0    50   ~ 0
 Connector for External I2C devices(Grove)
 Text Notes 9800 2550 0    50   ~ 0
@@ -1495,10 +1378,6 @@ Wire Wire Line
 	13050 2100 12850 2100
 Wire Notes Line
 	13250 600  13250 2650
-Wire Notes Line
-	3950 2650 13250 2650
-Wire Notes Line
-	3950 600  13250 600 
 $Comp
 L power:+3.3V #PWR0102
 U 1 1 6077D383
@@ -1613,7 +1492,7 @@ F 3 "~" H 12150 1200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 13050 1050 2    50   ~ 0
-SDA1
+SDA2
 NoConn ~ 1700 2150
 NoConn ~ 1700 2050
 $Comp
@@ -1805,9 +1684,9 @@ Wire Notes Line
 	600  9550 3850 9550
 Text Notes 1950 9750 0    50   ~ 0
 ORing to switch between regulated +5V and \nUSB VBUS. Then generate 3.3V bus.
-Text Label 5000 5500 0    50   ~ 0
+Text Label 5750 5500 2    50   ~ 0
 button_down
-Text Label 5000 5600 0    50   ~ 0
+Text Label 5750 5600 2    50   ~ 0
 button_select
 Text Label 3150 3800 0    50   ~ 0
 button_extra
@@ -2039,14 +1918,14 @@ F 3 "" H 7150 1550 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Connector_Generic:Conn_01x08 J2
+L Connector_Generic:Conn_01x04 J2
 U 1 1 600A1449
-P 7350 1650
-F 0 "J2" H 7430 1642 50  0000 L CNN
-F 1 "Conn_01x08" H 7430 1551 50  0000 L CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 7350 1650 50  0001 C CNN
-F 3 "~" H 7350 1650 50  0001 C CNN
-	1    7350 1650
+P 7350 1450
+F 0 "J2" H 7430 1442 50  0000 L CNN
+F 1 "Conn_01x04" H 7430 1351 50  0000 L CNN
+F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO_236-104_1x04_P5.00mm_45Degree" H 7350 1450 50  0001 C CNN
+F 3 "~" H 7350 1450 50  0001 C CNN
+	1    7350 1450
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2091,7 +1970,7 @@ U 1 1 60D28495
 P 8200 6600
 F 0 "D10" H 8193 6345 50  0000 C CNN
 F 1 "LED" H 8193 6436 50  0000 C CNN
-F 2 "" H 8200 6600 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 8200 6600 50  0001 C CNN
 F 3 "~" H 8200 6600 50  0001 C CNN
 	1    8200 6600
 	-1   0    0    1   
@@ -2102,12 +1981,12 @@ U 1 1 60D2940A
 P 7900 6600
 F 0 "R23" V 7693 6600 50  0000 C CNN
 F 1 "R" V 7784 6600 50  0000 C CNN
-F 2 "" V 7830 6600 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 7830 6600 50  0001 C CNN
 F 3 "~" H 7900 6600 50  0001 C CNN
 	1    7900 6600
 	0    1    1    0   
 $EndComp
-Text Label 5000 5100 0    50   ~ 0
+Text Label 5750 5700 2    50   ~ 0
 LED
 Text Label 8550 6600 2    50   ~ 0
 LED
@@ -2135,6 +2014,9 @@ F 0 "U6" H 2500 8465 50  0000 C CNN
 F 1 "XP_Power_STH" H 2500 8374 50  0000 C CNN
 F 2 "custom_footprints:STH0548S3V3" H 2500 8400 50  0001 C CNN
 F 3 "" H 2500 8400 50  0001 C CNN
+F 4 "1" H 2500 8400 50  0001 C CNN "min_qty"
+F 5 "8.94" H 2500 8400 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/xp-power/sth0548s05/dc-dc-converter-5v-0-5a/dp/3212470" H 2500 8400 50  0001 C CNN "purchase_link"
 	1    2500 8400
 	1    0    0    -1  
 $EndComp
@@ -2158,7 +2040,7 @@ U 1 1 60E0D84F
 P 3300 9150
 F 0 "R25" H 3370 9196 50  0000 L CNN
 F 1 "R" H 3370 9105 50  0000 L CNN
-F 2 "" V 3230 9150 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3230 9150 50  0001 C CNN
 F 3 "~" H 3300 9150 50  0001 C CNN
 	1    3300 9150
 	1    0    0    -1  
@@ -2169,7 +2051,7 @@ U 1 1 60E0E529
 P 3300 8850
 F 0 "R24" H 3230 8804 50  0000 R CNN
 F 1 "R" H 3230 8895 50  0000 R CNN
-F 2 "" V 3230 8850 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3230 8850 50  0001 C CNN
 F 3 "~" H 3300 8850 50  0001 C CNN
 	1    3300 8850
 	-1   0    0    1   
@@ -2257,4 +2139,120 @@ F 3 "" H 8400 2350 50  0001 C CNN
 	1    8400 2350
 	1    0    0    -1  
 $EndComp
+$Comp
+L Connector_Generic:Conn_01x04 J9
+U 1 1 60FB896F
+P 7350 1850
+F 0 "J9" H 7430 1842 50  0000 L CNN
+F 1 "Conn_01x04" H 7430 1751 50  0000 L CNN
+F 2 "TerminalBlock_WAGO:TerminalBlock_WAGO_236-104_1x04_P5.00mm_45Degree" H 7350 1850 50  0001 C CNN
+F 3 "~" H 7350 1850 50  0001 C CNN
+	1    7350 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14500 4250 14800 4250
+Wire Wire Line
+	15150 4250 15450 4250
+Wire Wire Line
+	14950 4250 15150 4250
+Connection ~ 14950 4250
+Connection ~ 15150 4250
+Connection ~ 14800 4250
+Wire Wire Line
+	14800 4250 14950 4250
+Wire Wire Line
+	14500 4850 14500 5250
+Text Label 14800 5250 1    50   ~ 0
+SCL1
+Text Label 14500 5250 1    50   ~ 0
+SDA1
+$Comp
+L Device:R R7
+U 1 1 6016D596
+P 14500 4700
+F 0 "R7" H 14570 4746 50  0000 L CNN
+F 1 "4.7k" H 14570 4655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 14430 4700 50  0001 C CNN
+F 3 "~" H 14500 4700 50  0001 C CNN
+	1    14500 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR040
+U 1 1 6017645E
+P 14950 4250
+F 0 "#PWR040" H 14950 4100 50  0001 C CNN
+F 1 "+3.3V" H 14965 4423 50  0000 C CNN
+F 2 "" H 14950 4250 50  0001 C CNN
+F 3 "" H 14950 4250 50  0001 C CNN
+	1    14950 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14500 4550 14500 4250
+Text Notes 14850 4000 0    50   ~ 0
+Pullup I2C
+Wire Wire Line
+	15150 4550 15150 4250
+$Comp
+L Device:R R9
+U 1 1 601C8D39
+P 15150 4700
+F 0 "R9" H 15220 4746 50  0000 L CNN
+F 1 "4.7k" H 15220 4655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 15080 4700 50  0001 C CNN
+F 3 "~" H 15150 4700 50  0001 C CNN
+	1    15150 4700
+	1    0    0    -1  
+$EndComp
+Text Label 15150 5250 1    50   ~ 0
+SDA2
+Text Label 15450 5250 1    50   ~ 0
+SCL2
+Wire Wire Line
+	15150 4850 15150 5250
+Wire Wire Line
+	14800 4250 14800 4550
+$Comp
+L Device:R R8
+U 1 1 6016E102
+P 14800 4700
+F 0 "R8" H 14870 4746 50  0000 L CNN
+F 1 "4.7k" H 14870 4655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 14730 4700 50  0001 C CNN
+F 3 "~" H 14800 4700 50  0001 C CNN
+	1    14800 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14800 4850 14800 5250
+Wire Notes Line
+	15300 600  15300 2650
+Wire Notes Line
+	3950 2650 15300 2650
+Wire Notes Line
+	3950 600  15300 600 
+Text Notes 9750 900  0    50   ~ 0
+Uses I2C2
+Text Notes 4300 2000 0    50   ~ 0
+Uses I2C1
+Text Notes 4350 8550 0    50   ~ 0
+Uses I2C1
+Text Notes 7250 8450 0    50   ~ 0
+Uses I2C1
+Wire Notes Line
+	10950 3800 12200 3800
+Wire Notes Line
+	12200 3800 12200 5800
+Wire Notes Line
+	12200 5800 10950 5800
+Wire Notes Line
+	14300 3750 14300 5350
+Wire Notes Line
+	14300 5350 15700 5350
+Wire Notes Line
+	15700 5350 15700 3750
+Wire Notes Line
+	15700 3750 14300 3750
 $EndSCHEMATC
