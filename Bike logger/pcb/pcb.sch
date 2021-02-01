@@ -687,30 +687,8 @@ F 3 "~" H 5950 4700 50  0001 C CNN
 	1    5750 4700
 	0    1    1    0   
 $EndComp
-$Comp
-L Connector:TestPoint TP13
-U 1 1 60282CBC
-P 5750 5500
-F 0 "TP13" V 5750 6100 50  0000 L CNN
-F 1 "TestPoint" V 5750 5700 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 5500 50  0001 C CNN
-F 3 "~" H 5950 5500 50  0001 C CNN
-	1    5750 5500
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	5750 5500 4800 5500
-$Comp
-L Connector:TestPoint TP14
-U 1 1 60282CC7
-P 5750 5600
-F 0 "TP14" V 5750 6200 50  0000 L CNN
-F 1 "TestPoint" V 5750 5800 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 5600 50  0001 C CNN
-F 3 "~" H 5950 5600 50  0001 C CNN
-	1    5750 5600
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	5750 5600 4800 5600
 $Comp
@@ -964,17 +942,6 @@ F 1 "TestPoint" V 5750 5200 50  0000 L CNN
 F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 5000 50  0001 C CNN
 F 3 "~" H 5950 5000 50  0001 C CNN
 	1    5750 5000
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP26
-U 1 1 60224D56
-P 5750 5400
-F 0 "TP26" V 5750 6000 50  0000 L CNN
-F 1 "TestPoint" V 5750 5600 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 5400 50  0001 C CNN
-F 3 "~" H 5950 5400 50  0001 C CNN
-	1    5750 5400
 	0    1    1    0   
 $EndComp
 $Comp
@@ -2121,52 +2088,31 @@ $EndComp
 $Comp
 L Device:LED D10
 U 1 1 60D28495
-P 8250 6600
-F 0 "D10" H 8243 6345 50  0000 C CNN
-F 1 "LED" H 8243 6436 50  0000 C CNN
-F 2 "" H 8250 6600 50  0001 C CNN
-F 3 "~" H 8250 6600 50  0001 C CNN
-	1    8250 6600
+P 8200 6600
+F 0 "D10" H 8193 6345 50  0000 C CNN
+F 1 "LED" H 8193 6436 50  0000 C CNN
+F 2 "" H 8200 6600 50  0001 C CNN
+F 3 "~" H 8200 6600 50  0001 C CNN
+	1    8200 6600
 	-1   0    0    1   
 $EndComp
 $Comp
 L Device:R R23
 U 1 1 60D2940A
-P 7950 6600
-F 0 "R23" V 7743 6600 50  0000 C CNN
-F 1 "R" V 7834 6600 50  0000 C CNN
-F 2 "" V 7880 6600 50  0001 C CNN
-F 3 "~" H 7950 6600 50  0001 C CNN
-	1    7950 6600
+P 7900 6600
+F 0 "R23" V 7693 6600 50  0000 C CNN
+F 1 "R" V 7784 6600 50  0000 C CNN
+F 2 "" V 7830 6600 50  0001 C CNN
+F 3 "~" H 7900 6600 50  0001 C CNN
+	1    7900 6600
 	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR090
-U 1 1 60D2A1A1
-P 8400 6600
-AR Path="/60D2A1A1" Ref="#PWR090"  Part="1" 
-AR Path="/60156738/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/601BF9C2/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/601E52DF/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/6018BFA2/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/6040F615/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/6042797A/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/6045D11E/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/60465E6A/60D2A1A1" Ref="#PWR?"  Part="1" 
-AR Path="/6049D147/60D2A1A1" Ref="#PWR?"  Part="1" 
-F 0 "#PWR090" H 8400 6350 50  0001 C CNN
-F 1 "GND" H 8405 6427 50  0000 C CNN
-F 2 "" H 8400 6600 50  0001 C CNN
-F 3 "" H 8400 6600 50  0001 C CNN
-	1    8400 6600
-	1    0    0    -1  
 $EndComp
 Text Label 5000 5100 0    50   ~ 0
 LED
-Text Label 7650 6600 0    50   ~ 0
+Text Label 8550 6600 2    50   ~ 0
 LED
 Wire Wire Line
-	7800 6600 7650 6600
+	7750 6600 7600 6600
 Wire Notes Line
 	7500 6150 7500 6950
 Wire Notes Line
@@ -2251,4 +2197,17 @@ Connection ~ 3300 8650
 Connection ~ 3550 8650
 Wire Wire Line
 	3550 8650 3550 8500
+Wire Wire Line
+	8350 6600 8550 6600
+$Comp
+L power:+3.3V #PWR?
+U 1 1 60F54529
+P 7600 6600
+F 0 "#PWR?" H 7600 6450 50  0001 C CNN
+F 1 "+3.3V" H 7615 6773 50  0000 C CNN
+F 2 "" H 7600 6600 50  0001 C CNN
+F 3 "" H 7600 6600 50  0001 C CNN
+	1    7600 6600
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
