@@ -1193,7 +1193,7 @@ U 1 1 60187E4E
 P 1200 9000
 F 0 "C12" H 1085 8954 50  0000 R CNN
 F 1 "10uF 100V" H 1085 9045 50  0000 R CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 1238 8850 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_6.3x7.7" H 1238 8850 50  0001 C CNN
 F 3 "~" H 1200 9000 50  0001 C CNN
 	1    1200 9000
 	-1   0    0    1   
@@ -1690,17 +1690,6 @@ Text Label 5750 5600 2    50   ~ 0
 button_select
 Text Label 3150 3800 0    50   ~ 0
 button_reset
-$Comp
-L Connector:TestPoint TP2
-U 1 1 6091D5DB
-P 5750 3800
-F 0 "TP2" V 5750 4400 50  0000 L CNN
-F 1 "TestPoint" V 5750 4000 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 5950 3800 50  0001 C CNN
-F 3 "~" H 5950 3800 50  0001 C CNN
-	1    5750 3800
-	0    1    1    0   
-$EndComp
 $Comp
 L Connector:TestPoint TP1
 U 1 1 609DDD43
