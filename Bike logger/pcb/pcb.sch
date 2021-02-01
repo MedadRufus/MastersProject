@@ -5,8 +5,8 @@ EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 15
-Title "Design of E bike datalogger"
-Date "2021-01-21"
+Title "E bike blackbox"
+Date "2021-02-01"
 Rev "v0.1"
 Comp ""
 Comment1 "Ref: https://randomnerdtutorials.com/esp32-adc-analog-read-arduino-ide/"
