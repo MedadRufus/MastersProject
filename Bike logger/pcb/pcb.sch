@@ -1280,7 +1280,7 @@ Wire Notes Line
 	600  8000 3850 8000
 Wire Wire Line
 	10700 2000 11800 2000
-Text Label 13050 2100 2    50   ~ 0
+Text Label 12150 1900 1    50   ~ 0
 SCL2
 Text Notes 9750 800  0    50   ~ 0
 Connector for External I2C devices(Grove)
@@ -1308,33 +1308,10 @@ F 3 "~" H 12150 2250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 12150 2100
-Wire Wire Line
-	12150 2100 12650 2100
-$Comp
-L Diode:BAT54S D9
-U 1 1 606F9F00
-P 12650 2100
-AR Path="/606F9F00" Ref="D9"  Part="1" 
-AR Path="/60156738/606F9F00" Ref="D?"  Part="1" 
-AR Path="/601BF9C2/606F9F00" Ref="D?"  Part="1" 
-AR Path="/601E52DF/606F9F00" Ref="D?"  Part="1" 
-AR Path="/6018BFA2/606F9F00" Ref="D?"  Part="1" 
-AR Path="/6040F615/606F9F00" Ref="D?"  Part="1" 
-AR Path="/6042797A/606F9F00" Ref="D?"  Part="1" 
-AR Path="/6045D11E/606F9F00" Ref="D?"  Part="1" 
-AR Path="/60465E6A/606F9F00" Ref="D?"  Part="1" 
-AR Path="/6049D147/606F9F00" Ref="D?"  Part="1" 
-F 0 "D9" V 12696 2188 50  0000 L CNN
-F 1 "BAT54S" V 12605 2188 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 12725 2225 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12530 2100 50  0001 C CNN
-	1    12650 2100
-	0    -1   -1   0   
-$EndComp
 $Comp
 L power:GND #PWR067
 U 1 1 606F9F06
-P 12650 2400
+P 12850 2400
 AR Path="/606F9F06" Ref="#PWR067"  Part="1" 
 AR Path="/60156738/606F9F06" Ref="#PWR?"  Part="1" 
 AR Path="/601BF9C2/606F9F06" Ref="#PWR?"  Part="1" 
@@ -1345,11 +1322,11 @@ AR Path="/6042797A/606F9F06" Ref="#PWR?"  Part="1"
 AR Path="/6045D11E/606F9F06" Ref="#PWR?"  Part="1" 
 AR Path="/60465E6A/606F9F06" Ref="#PWR?"  Part="1" 
 AR Path="/6049D147/606F9F06" Ref="#PWR?"  Part="1" 
-F 0 "#PWR067" H 12650 2150 50  0001 C CNN
-F 1 "GND" H 12655 2227 50  0000 C CNN
-F 2 "" H 12650 2400 50  0001 C CNN
-F 3 "" H 12650 2400 50  0001 C CNN
-	1    12650 2400
+F 0 "#PWR067" H 12850 2150 50  0001 C CNN
+F 1 "GND" H 12855 2227 50  0000 C CNN
+F 2 "" H 12850 2400 50  0001 C CNN
+F 3 "" H 12850 2400 50  0001 C CNN
+	1    12850 2400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1377,19 +1354,17 @@ Wire Wire Line
 	10700 2100 12150 2100
 Wire Wire Line
 	11800 2000 11800 1050
-Wire Wire Line
-	13050 2100 12850 2100
 Wire Notes Line
 	13250 600  13250 2650
 $Comp
 L power:+3.3V #PWR0102
 U 1 1 6077D383
-P 12650 1800
-F 0 "#PWR0102" H 12650 1650 50  0001 C CNN
-F 1 "+3.3V" H 12665 1973 50  0000 C CNN
-F 2 "" H 12650 1800 50  0001 C CNN
-F 3 "" H 12650 1800 50  0001 C CNN
-	1    12650 1800
+P 12850 1800
+F 0 "#PWR0102" H 12850 1650 50  0001 C CNN
+F 1 "+3.3V" H 12865 1973 50  0000 C CNN
+F 2 "" H 12850 1800 50  0001 C CNN
+F 3 "" H 12850 1800 50  0001 C CNN
+	1    12850 1800
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1403,13 +1378,6 @@ F 3 "" H 12650 750 50  0001 C CNN
 	1    12650 750 
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	13050 1050 12850 1050
-Wire Wire Line
-	12150 1050 12650 1050
-Connection ~ 12150 1050
-Wire Wire Line
-	11800 1050 12150 1050
 $Comp
 L power:GND #PWR064
 U 1 1 6070F09F
@@ -1452,49 +1420,7 @@ F 3 "" H 12650 1350 50  0001 C CNN
 	1    12650 1350
 	1    0    0    -1  
 $EndComp
-$Comp
-L Diode:BAT54S D8
-U 1 1 6070F08A
-P 12650 1050
-AR Path="/6070F08A" Ref="D8"  Part="1" 
-AR Path="/60156738/6070F08A" Ref="D?"  Part="1" 
-AR Path="/601BF9C2/6070F08A" Ref="D?"  Part="1" 
-AR Path="/601E52DF/6070F08A" Ref="D?"  Part="1" 
-AR Path="/6018BFA2/6070F08A" Ref="D?"  Part="1" 
-AR Path="/6040F615/6070F08A" Ref="D?"  Part="1" 
-AR Path="/6042797A/6070F08A" Ref="D?"  Part="1" 
-AR Path="/6045D11E/6070F08A" Ref="D?"  Part="1" 
-AR Path="/60465E6A/6070F08A" Ref="D?"  Part="1" 
-AR Path="/6049D147/6070F08A" Ref="D?"  Part="1" 
-F 0 "D8" V 12696 1138 50  0000 L CNN
-F 1 "BAT54S" V 12605 1138 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 12725 1175 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12530 1050 50  0001 C CNN
-	1    12650 1050
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:C C10
-U 1 1 6070F07E
-P 12150 1200
-AR Path="/6070F07E" Ref="C10"  Part="1" 
-AR Path="/60156738/6070F07E" Ref="C?"  Part="1" 
-AR Path="/601BF9C2/6070F07E" Ref="C?"  Part="1" 
-AR Path="/601E52DF/6070F07E" Ref="C?"  Part="1" 
-AR Path="/6018BFA2/6070F07E" Ref="C?"  Part="1" 
-AR Path="/6040F615/6070F07E" Ref="C?"  Part="1" 
-AR Path="/6042797A/6070F07E" Ref="C?"  Part="1" 
-AR Path="/6045D11E/6070F07E" Ref="C?"  Part="1" 
-AR Path="/60465E6A/6070F07E" Ref="C?"  Part="1" 
-AR Path="/6049D147/6070F07E" Ref="C?"  Part="1" 
-F 0 "C10" H 12265 1246 50  0000 L CNN
-F 1 "100nF" H 12265 1155 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 12188 1050 50  0001 C CNN
-F 3 "~" H 12150 1200 50  0001 C CNN
-	1    12150 1200
-	1    0    0    -1  
-$EndComp
-Text Label 13050 1050 2    50   ~ 0
+Text Label 12150 850  1    50   ~ 0
 SDA2
 NoConn ~ 1700 2150
 NoConn ~ 1700 2050
@@ -2249,4 +2175,78 @@ F 3 "~" H 8850 2250 50  0001 C CNN
 	1    8850 2250
 	1    0    0    -1  
 $EndComp
+Connection ~ 12150 1050
+Wire Wire Line
+	11800 1050 12150 1050
+$Comp
+L Device:C C10
+U 1 1 6070F07E
+P 12150 1200
+AR Path="/6070F07E" Ref="C10"  Part="1" 
+AR Path="/60156738/6070F07E" Ref="C?"  Part="1" 
+AR Path="/601BF9C2/6070F07E" Ref="C?"  Part="1" 
+AR Path="/601E52DF/6070F07E" Ref="C?"  Part="1" 
+AR Path="/6018BFA2/6070F07E" Ref="C?"  Part="1" 
+AR Path="/6040F615/6070F07E" Ref="C?"  Part="1" 
+AR Path="/6042797A/6070F07E" Ref="C?"  Part="1" 
+AR Path="/6045D11E/6070F07E" Ref="C?"  Part="1" 
+AR Path="/60465E6A/6070F07E" Ref="C?"  Part="1" 
+AR Path="/6049D147/6070F07E" Ref="C?"  Part="1" 
+F 0 "C10" H 12265 1246 50  0000 L CNN
+F 1 "100nF" H 12265 1155 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 12188 1050 50  0001 C CNN
+F 3 "~" H 12150 1200 50  0001 C CNN
+	1    12150 1200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Diode:BAT54S D9
+U 1 1 606F9F00
+P 12850 2100
+AR Path="/606F9F00" Ref="D9"  Part="1" 
+AR Path="/60156738/606F9F00" Ref="D?"  Part="1" 
+AR Path="/601BF9C2/606F9F00" Ref="D?"  Part="1" 
+AR Path="/601E52DF/606F9F00" Ref="D?"  Part="1" 
+AR Path="/6018BFA2/606F9F00" Ref="D?"  Part="1" 
+AR Path="/6040F615/606F9F00" Ref="D?"  Part="1" 
+AR Path="/6042797A/606F9F00" Ref="D?"  Part="1" 
+AR Path="/6045D11E/606F9F00" Ref="D?"  Part="1" 
+AR Path="/60465E6A/606F9F00" Ref="D?"  Part="1" 
+AR Path="/6049D147/606F9F00" Ref="D?"  Part="1" 
+F 0 "D9" V 12896 2188 50  0000 L CNN
+F 1 "BAT54S" V 12805 2188 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 12925 2225 50  0001 L CNN
+F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12730 2100 50  0001 C CNN
+	1    12850 2100
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	12150 2100 12650 2100
+$Comp
+L Diode:BAT54S D8
+U 1 1 6070F08A
+P 12650 1050
+AR Path="/6070F08A" Ref="D8"  Part="1" 
+AR Path="/60156738/6070F08A" Ref="D?"  Part="1" 
+AR Path="/601BF9C2/6070F08A" Ref="D?"  Part="1" 
+AR Path="/601E52DF/6070F08A" Ref="D?"  Part="1" 
+AR Path="/6018BFA2/6070F08A" Ref="D?"  Part="1" 
+AR Path="/6040F615/6070F08A" Ref="D?"  Part="1" 
+AR Path="/6042797A/6070F08A" Ref="D?"  Part="1" 
+AR Path="/6045D11E/6070F08A" Ref="D?"  Part="1" 
+AR Path="/60465E6A/6070F08A" Ref="D?"  Part="1" 
+AR Path="/6049D147/6070F08A" Ref="D?"  Part="1" 
+F 0 "D8" V 12696 1138 50  0000 L CNN
+F 1 "BAT54S" V 12605 1138 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 12725 1175 50  0001 L CNN
+F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12530 1050 50  0001 C CNN
+	1    12650 1050
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	12150 1050 12450 1050
+Wire Wire Line
+	12150 850  12150 1050
+Wire Wire Line
+	12150 2100 12150 1900
 $EndSCHEMATC
