@@ -747,28 +747,6 @@ F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&D
 	1    8500 9500
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:TestPoint TP20
-U 1 1 603578CE
-P 5950 9500
-F 0 "TP20" V 5950 10100 50  0000 L CNN
-F 1 "TestPoint" V 5950 9700 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6150 9500 50  0001 C CNN
-F 3 "~" H 6150 9500 50  0001 C CNN
-	1    5950 9500
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:TestPoint TP21
-U 1 1 603578D9
-P 5950 9600
-F 0 "TP21" V 5950 10200 50  0000 L CNN
-F 1 "TestPoint" V 5950 9800 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.0x1.0mm" H 6150 9600 50  0001 C CNN
-F 3 "~" H 6150 9600 50  0001 C CNN
-	1    5950 9600
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	7200 2150 6450 2150
 Text Label 6450 2050 0    50   ~ 0
@@ -2249,4 +2227,6 @@ Wire Wire Line
 	12150 850  12150 1050
 Wire Wire Line
 	12150 2100 12150 1900
+NoConn ~ 5950 9500
+NoConn ~ 5950 9600
 $EndSCHEMATC
