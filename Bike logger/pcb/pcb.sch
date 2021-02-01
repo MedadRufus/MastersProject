@@ -445,7 +445,7 @@ U 1 1 60208D6F
 P 11600 4250
 F 0 "H1" V 11837 4253 50  0000 C CNN
 F 1 "MountingHole_Pad" V 11746 4253 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 4250 50  0001 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 4250 50  0001 C CNN
 F 3 "~" H 11600 4250 50  0001 C CNN
 	1    11600 4250
 	0    -1   -1   0   
@@ -456,7 +456,7 @@ U 1 1 6021C578
 P 11600 4650
 F 0 "H2" V 11837 4653 50  0000 C CNN
 F 1 "MountingHole_Pad" V 11746 4653 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 4650 50  0001 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 4650 50  0001 C CNN
 F 3 "~" H 11600 4650 50  0001 C CNN
 	1    11600 4650
 	0    -1   -1   0   
@@ -467,7 +467,7 @@ U 1 1 6021C836
 P 11600 5000
 F 0 "H3" V 11837 5003 50  0000 C CNN
 F 1 "MountingHole_Pad" V 11746 5003 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 5000 50  0001 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 5000 50  0001 C CNN
 F 3 "~" H 11600 5000 50  0001 C CNN
 	1    11600 5000
 	0    -1   -1   0   
@@ -478,7 +478,7 @@ U 1 1 6021CA96
 P 11600 5400
 F 0 "H4" V 11837 5403 50  0000 C CNN
 F 1 "MountingHole_Pad" V 11746 5403 50  0000 C CNN
-F 2 "MountingHole:MountingHole_2.7mm_M2.5" H 11600 5400 50  0001 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 5400 50  0001 C CNN
 F 3 "~" H 11600 5400 50  0001 C CNN
 	1    11600 5400
 	0    -1   -1   0   

@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 14 15
+Sheet 12 15
 Title ""
 Date ""
 Rev ""
@@ -68,7 +68,7 @@ AR Path="/60B6A54A/60ACA7CD" Ref="J5"  Part="1"
 AR Path="/60B80021/60ACA7CD" Ref="J6"  Part="1" 
 AR Path="/60BA371C/60ACA7CD" Ref="J7"  Part="1" 
 AR Path="/6109851E/60ACA7CD" Ref="J?"  Part="1" 
-F 0 "J6" H 3950 2550 50  0000 C CNN
+F 0 "J4" H 3950 2550 50  0000 C CNN
 F 1 "Conn_01x04" H 3900 2650 50  0000 C CNN
 F 2 "Connector:NS-Tech_Grove_1x04_P2mm_Vertical" H 3750 3000 50  0001 C CNN
 F 3 "~" H 3750 3000 50  0001 C CNN
@@ -87,7 +87,7 @@ AR Path="/60B6A54A/60ACA7D4" Ref="C23"  Part="1"
 AR Path="/60B80021/60ACA7D4" Ref="C24"  Part="1" 
 AR Path="/60BA371C/60ACA7D4" Ref="C25"  Part="1" 
 AR Path="/6109851E/60ACA7D4" Ref="C?"  Part="1" 
-F 0 "C24" H 4765 3246 50  0000 L CNN
+F 0 "C22" H 4765 3246 50  0000 L CNN
 F 1 "100nF" H 4765 3155 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 4688 3050 50  0001 C CNN
 F 3 "~" H 4650 3200 50  0001 C CNN
@@ -120,4 +120,5 @@ Text HLabel 3950 3100 2    50   Input ~ 0
 grove_pin_1
 Text HLabel 3950 3000 2    50   Input ~ 0
 grove_pin_2
+NoConn ~ 5800 4250
 $EndSCHEMATC
