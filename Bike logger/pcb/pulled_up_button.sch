@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 11
+Sheet 6 15
 Title ""
 Date ""
 Rev ""
@@ -124,7 +124,7 @@ AR Path="/6035EFCE/60913F70" Ref="C17"  Part="1"
 AR Path="/60374312/60913F70" Ref="C19"  Part="1" 
 AR Path="/6037BC78/60913F70" Ref="C20"  Part="1" 
 F 0 "C20" H 4915 3896 50  0000 L CNN
-F 1 "C" H 4915 3805 50  0000 L CNN
+F 1 "100nF" H 4915 3805 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 4838 3700 50  0001 C CNN
 F 3 "~" H 4800 3850 50  0001 C CNN
 	1    4800 3850
