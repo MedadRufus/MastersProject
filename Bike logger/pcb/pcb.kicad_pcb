@@ -368,7 +368,7 @@
   )
 
   (module Capacitor_SMD:C_0402_1005Metric (layer F.Cu) (tedit 5B301BBE) (tstamp 60166F48)
-    (at 186.7916 93.7768)
+    (at 186.8932 94.996)
     (descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
     (path /6040F615/60179E2C)
@@ -511,7 +511,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 601675C8)
-    (at 186.7686 92.7608)
+    (at 186.8702 93.98)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /6040F615/60179E1C)
@@ -579,7 +579,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 601675B9)
-    (at 186.7408 91.7448 180)
+    (at 186.8424 92.964 180)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /6040F615/60179E16)
@@ -647,7 +647,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 601675E6)
-    (at 181.0004 91.5924)
+    (at 181.102 92.8116)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /6042797A/60179E1C)
@@ -763,7 +763,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23 (layer F.Cu) (tedit 5A02FF57) (tstamp 601670CA)
-    (at 184.0484 92.6592)
+    (at 184.15 93.8784)
     (descr "SOT-23, Standard")
     (tags SOT-23)
     (path /6040F615/60179E35)
@@ -845,7 +845,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23 (layer F.Cu) (tedit 5A02FF57) (tstamp 601670DF)
-    (at 178.2318 92.71)
+    (at 178.3334 93.9292)
     (descr "SOT-23, Standard")
     (tags SOT-23)
     (path /6042797A/60179E35)
@@ -1798,7 +1798,7 @@
   )
 
   (module Capacitor_SMD:C_0402_1005Metric (layer F.Cu) (tedit 5B301BBE) (tstamp 60166FB9)
-    (at 181.0004 92.6084)
+    (at 181.102 93.8276)
     (descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
     (path /6042797A/60179E2C)
@@ -1832,7 +1832,7 @@
   )
 
   (module Capacitor_SMD:C_0402_1005Metric (layer F.Cu) (tedit 5B301BBE) (tstamp 6014ABC1)
-    (at 192.8368 92.7608)
+    (at 192.9384 93.98)
     (descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
     (path /601BF9C2/60179E2C)
@@ -1900,7 +1900,7 @@
   )
 
   (module Capacitor_SMD:C_0402_1005Metric (layer F.Cu) (tedit 5B301BBE) (tstamp 6014AB3F)
-    (at 199.5932 92.8624)
+    (at 199.6948 94.0816)
     (descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
     (path /60156738/60179E2C)
@@ -2420,7 +2420,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 601675D7)
-    (at 180.9726 93.5736 180)
+    (at 181.0742 94.7928 180)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /6042797A/60179E16)
@@ -3370,7 +3370,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 6014AFA5)
-    (at 192.8368 93.7768)
+    (at 192.9384 94.996)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /601BF9C2/60179E1C)
@@ -3404,7 +3404,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 6014AF96)
-    (at 192.8368 91.7448 180)
+    (at 192.9384 92.964 180)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /601BF9C2/60179E16)
@@ -3438,7 +3438,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 6014AF4F)
-    (at 199.5932 93.8784)
+    (at 199.6948 95.0976)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /60156738/60179E1C)
@@ -3472,7 +3472,7 @@
   )
 
   (module Resistor_SMD:R_0402_1005Metric (layer F.Cu) (tedit 5B301BBD) (tstamp 6014AF40)
-    (at 199.5932 91.8464 180)
+    (at 199.6948 93.0656 180)
     (descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags resistor)
     (path /60156738/60179E16)
@@ -3506,7 +3506,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23 (layer F.Cu) (tedit 5A02FF57) (tstamp 6014AC2B)
-    (at 189.976 92.71)
+    (at 190.0776 93.9292)
     (descr "SOT-23, Standard")
     (tags SOT-23)
     (path /601BF9C2/60179E35)
@@ -3547,7 +3547,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23 (layer F.Cu) (tedit 5A02FF57) (tstamp 6014AC16)
-    (at 196.9008 92.8624)
+    (at 197.0024 94.0816)
     (descr "SOT-23, Standard")
     (tags SOT-23)
     (path /60156738/60179E35)
