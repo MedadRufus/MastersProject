@@ -1195,6 +1195,9 @@ F 0 "C12" H 1085 8954 50  0000 R CNN
 F 1 "10uF 100V" H 1085 9045 50  0000 R CNN
 F 2 "Capacitor_SMD:CP_Elec_6.3x7.7" H 1238 8850 50  0001 C CNN
 F 3 "~" H 1200 9000 50  0001 C CNN
+F 4 "1" H 1200 9000 50  0001 C CNN "min_qty"
+F 5 "0.2004" H 1200 9000 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/kemet/edk106m100a9haa/cap-10-f-100v-radial-smd-reel/dp/2068705" H 1200 9000 50  0001 C CNN "purchase_link"
 	1    1200 9000
 	-1   0    0    1   
 $EndComp
