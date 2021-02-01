@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 15
+Sheet 3 15
 Title ""
 Date ""
 Rev ""
@@ -28,7 +28,7 @@ AR Path="/6042797A/60179E16" Ref="R17"  Part="1"
 AR Path="/6045D11E/60179E16" Ref="R?"  Part="1" 
 AR Path="/60465E6A/60179E16" Ref="R19"  Part="1" 
 AR Path="/6049D147/60179E16" Ref="R21"  Part="1" 
-F 0 "R1" H 6020 2996 50  0000 L CNN
+F 0 "R5" H 6020 2996 50  0000 L CNN
 F 1 "R" H 6020 2905 50  0000 L CNN
 F 2 "Resistor_SMD:R_0402_1005Metric" V 5880 2950 50  0001 C CNN
 F 3 "~" H 5950 2950 50  0001 C CNN
@@ -49,7 +49,7 @@ AR Path="/6042797A/60179E1C" Ref="R18"  Part="1"
 AR Path="/6045D11E/60179E1C" Ref="R?"  Part="1" 
 AR Path="/60465E6A/60179E1C" Ref="R20"  Part="1" 
 AR Path="/6049D147/60179E1C" Ref="R22"  Part="1" 
-F 0 "R2" H 6020 3296 50  0000 L CNN
+F 0 "R6" H 6020 3296 50  0000 L CNN
 F 1 "R" H 6020 3205 50  0000 L CNN
 F 2 "Resistor_SMD:R_0402_1005Metric" V 5880 3250 50  0001 C CNN
 F 3 "~" H 5950 3250 50  0001 C CNN
@@ -92,7 +92,7 @@ AR Path="/6042797A/60179E2C" Ref="C7"  Part="1"
 AR Path="/6045D11E/60179E2C" Ref="C?"  Part="1" 
 AR Path="/60465E6A/60179E2C" Ref="C8"  Part="1" 
 AR Path="/6049D147/60179E2C" Ref="C9"  Part="1" 
-F 0 "C1" H 6415 3296 50  0000 L CNN
+F 0 "C6" H 6415 3296 50  0000 L CNN
 F 1 "100nF" H 6415 3205 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 6338 3100 50  0001 C CNN
 F 3 "~" H 6300 3250 50  0001 C CNN
@@ -101,73 +101,7 @@ F 3 "~" H 6300 3250 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5950 3100 6300 3100
-Connection ~ 6300 3100
-Wire Wire Line
-	6300 3100 6800 3100
-$Comp
-L Diode:BAT54S D?
-U 1 1 60179E35
-P 6800 3100
-AR Path="/60179E35" Ref="D?"  Part="1" 
-AR Path="/60156738/60179E35" Ref="D1"  Part="1" 
-AR Path="/601BF9C2/60179E35" Ref="D2"  Part="1" 
-AR Path="/601E52DF/60179E35" Ref="D?"  Part="1" 
-AR Path="/6018BFA2/60179E35" Ref="D?"  Part="1" 
-AR Path="/6040F615/60179E35" Ref="D4"  Part="1" 
-AR Path="/6042797A/60179E35" Ref="D5"  Part="1" 
-AR Path="/6045D11E/60179E35" Ref="D?"  Part="1" 
-AR Path="/60465E6A/60179E35" Ref="D6"  Part="1" 
-AR Path="/6049D147/60179E35" Ref="D7"  Part="1" 
-F 0 "D1" V 6846 3188 50  0000 L CNN
-F 1 "BAT54S" V 6755 3188 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 6875 3225 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 6680 3100 50  0001 C CNN
-	1    6800 3100
-	0    -1   -1   0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 60179E3B
-P 6800 3400
-AR Path="/60179E3B" Ref="#PWR?"  Part="1" 
-AR Path="/60156738/60179E3B" Ref="#PWR023"  Part="1" 
-AR Path="/601BF9C2/60179E3B" Ref="#PWR027"  Part="1" 
-AR Path="/601E52DF/60179E3B" Ref="#PWR?"  Part="1" 
-AR Path="/6018BFA2/60179E3B" Ref="#PWR?"  Part="1" 
-AR Path="/6040F615/60179E3B" Ref="#PWR049"  Part="1" 
-AR Path="/6042797A/60179E3B" Ref="#PWR053"  Part="1" 
-AR Path="/6045D11E/60179E3B" Ref="#PWR?"  Part="1" 
-AR Path="/60465E6A/60179E3B" Ref="#PWR057"  Part="1" 
-AR Path="/6049D147/60179E3B" Ref="#PWR061"  Part="1" 
-F 0 "#PWR061" H 6800 3150 50  0001 C CNN
-F 1 "GND" H 6805 3227 50  0000 C CNN
-F 2 "" H 6800 3400 50  0001 C CNN
-F 3 "" H 6800 3400 50  0001 C CNN
-	1    6800 3400
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR?
-U 1 1 60179E41
-P 6800 2800
-AR Path="/60179E41" Ref="#PWR?"  Part="1" 
-AR Path="/60156738/60179E41" Ref="#PWR022"  Part="1" 
-AR Path="/601BF9C2/60179E41" Ref="#PWR026"  Part="1" 
-AR Path="/601E52DF/60179E41" Ref="#PWR?"  Part="1" 
-AR Path="/6018BFA2/60179E41" Ref="#PWR?"  Part="1" 
-AR Path="/6040F615/60179E41" Ref="#PWR048"  Part="1" 
-AR Path="/6042797A/60179E41" Ref="#PWR052"  Part="1" 
-AR Path="/6045D11E/60179E41" Ref="#PWR?"  Part="1" 
-AR Path="/60465E6A/60179E41" Ref="#PWR056"  Part="1" 
-AR Path="/6049D147/60179E41" Ref="#PWR060"  Part="1" 
-F 0 "#PWR060" H 6800 2650 50  0001 C CNN
-F 1 "+3.3V" H 6815 2973 50  0000 C CNN
-F 2 "" H 6800 2800 50  0001 C CNN
-F 3 "" H 6800 2800 50  0001 C CNN
-	1    6800 2800
-	1    0    0    -1  
-$EndComp
-Text HLabel 7000 3100 2    50   Input ~ 0
+Text HLabel 7200 2450 2    50   Input ~ 0
 protected_adc_input
 $Comp
 L power:GND #PWR?
@@ -198,4 +132,77 @@ Wire Wire Line
 	5950 2500 5950 2800
 Text Notes 5850 2200 0    50   ~ 0
 Scale and protect ADC input
+Connection ~ 6300 3100
+$Comp
+L power:+3.3V #PWR?
+U 1 1 60179E41
+P 7550 2800
+AR Path="/60179E41" Ref="#PWR?"  Part="1" 
+AR Path="/60156738/60179E41" Ref="#PWR022"  Part="1" 
+AR Path="/601BF9C2/60179E41" Ref="#PWR026"  Part="1" 
+AR Path="/601E52DF/60179E41" Ref="#PWR?"  Part="1" 
+AR Path="/6018BFA2/60179E41" Ref="#PWR?"  Part="1" 
+AR Path="/6040F615/60179E41" Ref="#PWR048"  Part="1" 
+AR Path="/6042797A/60179E41" Ref="#PWR052"  Part="1" 
+AR Path="/6045D11E/60179E41" Ref="#PWR?"  Part="1" 
+AR Path="/60465E6A/60179E41" Ref="#PWR056"  Part="1" 
+AR Path="/6049D147/60179E41" Ref="#PWR060"  Part="1" 
+F 0 "#PWR060" H 7550 2650 50  0001 C CNN
+F 1 "+3.3V" H 7565 2973 50  0000 C CNN
+F 2 "" H 7550 2800 50  0001 C CNN
+F 3 "" H 7550 2800 50  0001 C CNN
+	1    7550 2800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 60179E3B
+P 7550 3400
+AR Path="/60179E3B" Ref="#PWR?"  Part="1" 
+AR Path="/60156738/60179E3B" Ref="#PWR023"  Part="1" 
+AR Path="/601BF9C2/60179E3B" Ref="#PWR027"  Part="1" 
+AR Path="/601E52DF/60179E3B" Ref="#PWR?"  Part="1" 
+AR Path="/6018BFA2/60179E3B" Ref="#PWR?"  Part="1" 
+AR Path="/6040F615/60179E3B" Ref="#PWR049"  Part="1" 
+AR Path="/6042797A/60179E3B" Ref="#PWR053"  Part="1" 
+AR Path="/6045D11E/60179E3B" Ref="#PWR?"  Part="1" 
+AR Path="/60465E6A/60179E3B" Ref="#PWR057"  Part="1" 
+AR Path="/6049D147/60179E3B" Ref="#PWR061"  Part="1" 
+F 0 "#PWR061" H 7550 3150 50  0001 C CNN
+F 1 "GND" H 7555 3227 50  0000 C CNN
+F 2 "" H 7550 3400 50  0001 C CNN
+F 3 "" H 7550 3400 50  0001 C CNN
+	1    7550 3400
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Diode:BAT54S D?
+U 1 1 60179E35
+P 7550 3100
+AR Path="/60179E35" Ref="D?"  Part="1" 
+AR Path="/60156738/60179E35" Ref="D1"  Part="1" 
+AR Path="/601BF9C2/60179E35" Ref="D2"  Part="1" 
+AR Path="/601E52DF/60179E35" Ref="D?"  Part="1" 
+AR Path="/6018BFA2/60179E35" Ref="D?"  Part="1" 
+AR Path="/6040F615/60179E35" Ref="D4"  Part="1" 
+AR Path="/6042797A/60179E35" Ref="D5"  Part="1" 
+AR Path="/6045D11E/60179E35" Ref="D?"  Part="1" 
+AR Path="/60465E6A/60179E35" Ref="D6"  Part="1" 
+AR Path="/6049D147/60179E35" Ref="D7"  Part="1" 
+F 0 "D2" V 7596 3188 50  0000 L CNN
+F 1 "BAT54S" V 7505 3188 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 7625 3225 50  0001 L CNN
+F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 7430 3100 50  0001 C CNN
+	1    7550 3100
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	6300 3100 7050 3100
+Wire Wire Line
+	7200 2450 7050 2450
+Wire Wire Line
+	7050 2450 7050 3100
+Connection ~ 7050 3100
+Wire Wire Line
+	7050 3100 7350 3100
 $EndSCHEMATC
