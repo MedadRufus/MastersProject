@@ -2247,10 +2247,10 @@ Wire Notes Line
 Wire Notes Line
 	15300 600  15300 2650
 $Comp
-L Connector_Generic:Conn_01x04 J?
+L Connector_Generic:Conn_01x04 J8
 U 1 1 6112CCC8
 P 8850 2250
-F 0 "J?" H 8930 2242 50  0000 L CNN
+F 0 "J8" H 8930 2242 50  0000 L CNN
 F 1 "Conn_01x04" H 8930 2151 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 8850 2250 50  0001 C CNN
 F 3 "~" H 8850 2250 50  0001 C CNN
