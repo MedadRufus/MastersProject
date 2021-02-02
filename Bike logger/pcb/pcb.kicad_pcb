@@ -4963,7 +4963,6 @@
   (segment (start 192.959 97.963) (end 193.0908 98.0948) (width 0.25) (layer F.Cu) (net 7))
   (segment (start 192.816703 98.0948) (end 192.814501 98.097002) (width 0.25) (layer B.Cu) (net 7))
   (segment (start 193.0908 98.0948) (end 192.816703 98.0948) (width 0.25) (layer B.Cu) (net 7))
-  (via (at 190.1754 98.425) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 7))
   (segment (start 226.97983 96.035832) (end 224.8408 93.896802) (width 0.25) (layer F.Cu) (net 7))
   (segment (start 228.346 96.37) (end 228.011832 96.035832) (width 0.25) (layer F.Cu) (net 7))
   (segment (start 228.011832 96.035832) (end 226.97983 96.035832) (width 0.25) (layer F.Cu) (net 7))
