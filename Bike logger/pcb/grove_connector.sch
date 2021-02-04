@@ -121,4 +121,6 @@ grove_pin_1
 Text HLabel 3950 3000 2    50   Input ~ 0
 grove_pin_2
 NoConn ~ 5800 4250
+Text Notes 3650 2000 0    50   ~ 0
+Boilerplate Grove bonnector connections
 $EndSCHEMATC
