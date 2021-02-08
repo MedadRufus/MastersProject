@@ -137,6 +137,8 @@ F 0 "C4" H 14985 6554 50  0000 R CNN
 F 1 "10uF" H 14985 6645 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 15138 6450 50  0001 C CNN
 F 3 "~" H 15100 6600 50  0001 C CNN
+F 4 "0.1644" H 15100 6600 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/kemet/c0603c106m9pactu/cap-10-f-6-3v-20-x5r-0603/dp/1288201?st=10uf%200603" H 15100 6600 50  0001 C CNN "purchase_link"
 	1    15100 6600
 	-1   0    0    1   
 $EndComp
@@ -198,6 +200,8 @@ F 0 "C5" H 8865 8846 50  0000 L CNN
 F 1 "1uF" H 8865 8755 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 8788 8650 50  0001 C CNN
 F 3 "~" H 8750 8800 50  0001 C CNN
+F 4 "0.0902" H 8750 8800 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/06033d105kat2a/cap-1-f-25v-10-x5r-0603/dp/1658868?st=1uf%200603" H 8750 8800 50  0001 C CNN "purchase_link"
 	1    8750 8800
 	1    0    0    -1  
 $EndComp
@@ -380,6 +384,7 @@ F 0 "U5" H 14000 6550 50  0000 C CNN
 F 1 "CP2104" H 14000 6750 50  0000 C CNN
 F 2 "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm" H 14900 6900 50  0001 L CNN
 F 3 "https://www.silabs.com/documents/public/data-sheets/cp2104.pdf" H 14200 9100 50  0001 C CNN
+F 4 "https://uk.farnell.com/silicon-labs/cp2104-f03-gmr/usb-to-uart-bridge-40-to-85deg/dp/2930581?st=cp2104" H 14750 7850 50  0001 C CNN "purchase_link"
 	1    14750 7850
 	1    0    0    -1  
 $EndComp
@@ -548,6 +553,8 @@ F 0 "C2" H 5715 8946 50  0000 L CNN
 F 1 "100nF" H 5715 8855 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 5638 8750 50  0001 C CNN
 F 3 "~" H 5600 8900 50  0001 C CNN
+F 4 "0.0271" H 5600 8900 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 5600 8900 50  0001 C CNN "purchase_link"
 	1    5600 8900
 	1    0    0    -1  
 $EndComp
@@ -581,6 +588,8 @@ F 0 "U4" H 5994 9846 50  0000 L CNN
 F 1 "LSM6DS3" H 5994 9755 50  0000 L CNN
 F 2 "Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y" H 4950 9100 50  0001 L CNN
 F 3 "www.st.com/resource/en/datasheet/lsm6ds3.pdf" H 5450 9150 50  0001 C CNN
+F 4 "4.8" H 5350 9800 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/stmicroelectronics/lsm6dsotr/mems-mod-3-axis-gyroscope-accelerometer/dp/2980917?st=lsm6d" H 5350 9800 50  0001 C CNN "purchase_link"
 	1    5350 9800
 	1    0    0    -1  
 $EndComp
@@ -731,6 +740,9 @@ F 0 "U3" H 8830 9546 50  0000 L CNN
 F 1 "MS8607-02BA" H 8830 9455 50  0000 L CNN
 F 2 "Package_LGA:LGA-8_3x5mm_P1.25mm" H 8500 9500 50  0001 C CNN
 F 3 "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Data+Sheet%7FMS8607-02BA01%7FB3%7Fpdf%7FEnglish%7FENG_DS_MS8607-02BA01_B3.pdf%7FCAT-BLPS0018" H 8500 9500 50  0001 C CNN
+F 4 "1" H 8500 9500 50  0001 C CNN "min_qty"
+F 5 "6.564" H 8500 9500 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/sensor-solutions-te-connectivity/ms860702ba01-50/pressure-sensor-10mbar-29psi-qfn/dp/2748850?st=ms8607" H 8500 9500 50  0001 C CNN "purchase_link"
 	1    8500 9500
 	1    0    0    -1  
 $EndComp
@@ -1174,6 +1186,8 @@ F 0 "C11" H 3435 8954 50  0000 R CNN
 F 1 "10uF" H 3435 9045 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3588 8850 50  0001 C CNN
 F 3 "~" H 3550 9000 50  0001 C CNN
+F 4 "0.1644" H 3550 9000 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/kemet/c0603c106m9pactu/cap-10-f-6-3v-20-x5r-0603/dp/1288201?st=10uf%200603" H 3550 9000 50  0001 C CNN "purchase_link"
 	1    3550 9000
 	-1   0    0    1   
 $EndComp
@@ -1269,6 +1283,8 @@ F 0 "C13" H 12265 2296 50  0000 L CNN
 F 1 "100nF" H 12265 2205 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 12188 2100 50  0001 C CNN
 F 3 "~" H 12150 2250 50  0001 C CNN
+F 4 "0.0271" H 12150 2250 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 12150 2250 50  0001 C CNN "purchase_link"
 	1    12150 2250
 	1    0    0    -1  
 $EndComp
@@ -1431,6 +1447,8 @@ F 0 "C14" H 1285 10504 50  0000 R CNN
 F 1 "1uF" H 1285 10595 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1438 10400 50  0001 C CNN
 F 3 "~" H 1400 10550 50  0001 C CNN
+F 4 "0.0902" H 1400 10550 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/06033d105kat2a/cap-1-f-25v-10-x5r-0603/dp/1658868?st=1uf%200603" H 1400 10550 50  0001 C CNN "purchase_link"
 	1    1400 10550
 	-1   0    0    1   
 $EndComp
@@ -1484,6 +1502,9 @@ F 0 "D3" H 1300 10275 50  0000 C CNN
 F 1 "BAT54C" H 1300 10184 50  0000 C CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 1375 10175 50  0001 L CNN
 F 3 "http://www.diodes.com/_files/datasheets/ds11005.pdf" H 1220 10050 50  0001 C CNN
+F 4 "5" H 1300 10050 50  0001 C CNN "min_qty"
+F 5 "0.128" H 1300 10050 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/nexperia/bat54c-215/diode-schottky-30v-sot23/dp/1081192?st=bat54c" H 1300 10050 50  0001 C CNN "purchase_link"
 	1    1300 10050
 	1    0    0    -1  
 $EndComp
@@ -1518,6 +1539,8 @@ F 0 "C15" H 1735 10504 50  0000 R CNN
 F 1 "1uF" H 1735 10595 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1888 10400 50  0001 C CNN
 F 3 "~" H 1850 10550 50  0001 C CNN
+F 4 "0.0902" H 1850 10550 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/06033d105kat2a/cap-1-f-25v-10-x5r-0603/dp/1658868?st=1uf%200603" H 1850 10550 50  0001 C CNN "purchase_link"
 	1    1850 10550
 	-1   0    0    1   
 $EndComp
@@ -1547,6 +1570,8 @@ F 0 "C16" H 3085 10504 50  0000 R CNN
 F 1 "1uF" H 3085 10595 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3238 10400 50  0001 C CNN
 F 3 "~" H 3200 10550 50  0001 C CNN
+F 4 "0.0902" H 3200 10550 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/06033d105kat2a/cap-1-f-25v-10-x5r-0603/dp/1658868?st=1uf%200603" H 3200 10550 50  0001 C CNN "purchase_link"
 	1    3200 10550
 	-1   0    0    1   
 $EndComp
@@ -1630,6 +1655,8 @@ F 0 "C21" H 765 1446 50  0000 L CNN
 F 1 "100nF" H 765 1355 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 688 1250 50  0001 C CNN
 F 3 "~" H 650 1400 50  0001 C CNN
+F 4 "0.0271" H 650 1400 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 650 1400 50  0001 C CNN "purchase_link"
 	1    650  1400
 	1    0    0    -1  
 $EndComp
@@ -1808,6 +1835,9 @@ F 0 "J2" H 7430 1192 50  0000 L CNN
 F 1 "Conn_01x04" H 7430 1101 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 7350 1200 50  0001 C CNN
 F 3 "~" H 7350 1200 50  0001 C CNN
+F 4 "1" H 7350 1200 50  0001 C CNN "min_qty"
+F 5 "2.46" H 7350 1200 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 7350 1200 50  0001 C CNN "purchase_link"
 	1    7350 1200
 	1    0    0    -1  
 $EndComp
@@ -1830,6 +1860,8 @@ F 0 "C26" H 15385 6554 50  0000 R CNN
 F 1 "100nF" H 15385 6645 50  0000 R CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 15538 6450 50  0001 C CNN
 F 3 "~" H 15500 6600 50  0001 C CNN
+F 4 "0.0271" H 15500 6600 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 15500 6600 50  0001 C CNN "purchase_link"
 	1    15500 6600
 	-1   0    0    1   
 $EndComp
@@ -2017,6 +2049,9 @@ F 0 "J9" H 7480 2142 50  0000 L CNN
 F 1 "Conn_01x04" H 7480 2051 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 7400 2150 50  0001 C CNN
 F 3 "~" H 7400 2150 50  0001 C CNN
+F 4 "1" H 7400 2150 50  0001 C CNN "min_qty"
+F 5 "2.46" H 7400 2150 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 7400 2150 50  0001 C CNN "purchase_link"
 	1    7400 2150
 	1    0    0    -1  
 $EndComp
@@ -2135,6 +2170,9 @@ F 0 "J8" H 8930 2242 50  0000 L CNN
 F 1 "Conn_01x04" H 8930 2151 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 8850 2250 50  0001 C CNN
 F 3 "~" H 8850 2250 50  0001 C CNN
+F 4 "1" H 8850 2250 50  0001 C CNN "min_qty"
+F 5 "2.46" H 8850 2250 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 8850 2250 50  0001 C CNN "purchase_link"
 	1    8850 2250
 	1    0    0    -1  
 $EndComp
@@ -2159,6 +2197,8 @@ F 0 "C10" H 12265 1246 50  0000 L CNN
 F 1 "100nF" H 12265 1155 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 12188 1050 50  0001 C CNN
 F 3 "~" H 12150 1200 50  0001 C CNN
+F 4 "0.0271" H 12150 1200 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 12150 1200 50  0001 C CNN "purchase_link"
 	1    12150 1200
 	1    0    0    -1  
 $EndComp
@@ -2180,6 +2220,9 @@ F 0 "D9" V 12896 2188 50  0000 L CNN
 F 1 "BAT54S" V 12805 2188 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 12925 2225 50  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12730 2100 50  0001 C CNN
+F 4 "5" H 12850 2100 50  0001 C CNN "min_qty"
+F 5 "0.1332" H 12850 2100 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/nexperia/bat54s-215/diode-schoty-dual-30v-0-2a-sot23/dp/1081194?st=bat54s" H 12850 2100 50  0001 C CNN "purchase_link"
 	1    12850 2100
 	0    1    -1   0   
 $EndComp
@@ -2203,6 +2246,9 @@ F 0 "D8" V 12696 1138 50  0000 L CNN
 F 1 "BAT54S" V 12605 1138 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 12725 1175 50  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 12530 1050 50  0001 C CNN
+F 4 "5" H 12650 1050 50  0001 C CNN "min_qty"
+F 5 "0.1332" H 12650 1050 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/nexperia/bat54s-215/diode-schoty-dual-30v-0-2a-sot23/dp/1081194?st=bat54s" H 12650 1050 50  0001 C CNN "purchase_link"
 	1    12650 1050
 	0    1    -1   0   
 $EndComp

@@ -96,6 +96,8 @@ F 0 "C9" H 6415 3296 50  0000 L CNN
 F 1 "100nF" H 6415 3205 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 6338 3100 50  0001 C CNN
 F 3 "~" H 6300 3250 50  0001 C CNN
+F 4 "0.0271" H 6300 3250 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 6300 3250 50  0001 C CNN "purchase_link"
 	1    6300 3250
 	1    0    0    -1  
 $EndComp
@@ -193,6 +195,9 @@ F 0 "D7" V 7596 3188 50  0000 L CNN
 F 1 "BAT54S" V 7505 3188 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-23" H 7625 3225 50  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 7430 3100 50  0001 C CNN
+F 4 "5" H 7550 3100 50  0001 C CNN "min_qty"
+F 5 "0.1332" H 7550 3100 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/nexperia/bat54s-215/diode-schoty-dual-30v-0-2a-sot23/dp/1081194?st=bat54s" H 7550 3100 50  0001 C CNN "purchase_link"
 	1    7550 3100
 	0    1    -1   0   
 $EndComp

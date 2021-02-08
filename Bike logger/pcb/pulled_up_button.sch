@@ -127,6 +127,8 @@ F 0 "C17" H 4915 3896 50  0000 L CNN
 F 1 "100nF" H 4915 3805 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 4838 3700 50  0001 C CNN
 F 3 "~" H 4800 3850 50  0001 C CNN
+F 4 "0.0271" H 4800 3850 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 4800 3850 50  0001 C CNN "purchase_link"
 	1    4800 3850
 	1    0    0    -1  
 $EndComp
