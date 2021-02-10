@@ -240,3 +240,8 @@ fp-info-cache
 
 # OUtput files for drill
 Bike logger/pcb/output/*
+data_analysis_tools_for_gfbs_data/plot.html
+data_analysis_tools_for_gfbs_data/plot_acc.html
+data_analysis_tools_for_gfbs_data/plot_slope.html
+Visualisations/plot.html
+data_analysis_tools_for_gfbs_data/.mapbox_token
