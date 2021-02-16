@@ -1834,10 +1834,10 @@ P 7350 1200
 F 0 "J2" H 7430 1192 50  0000 L CNN
 F 1 "Conn_01x04" H 7430 1101 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 7350 1200 50  0001 C CNN
-F 3 "~" H 7350 1200 50  0001 C CNN
+F 3 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 7350 1200 50  0001 C CNN
 F 4 "1" H 7350 1200 50  0001 C CNN "min_qty"
-F 5 "2.46" H 7350 1200 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 7350 1200 50  0001 C CNN "purchase_link"
+F 5 "0.94" H 7350 1200 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 7350 1200 50  0001 C CNN "purchase_link"
 	1    7350 1200
 	1    0    0    -1  
 $EndComp
@@ -2048,10 +2048,10 @@ P 7400 2150
 F 0 "J9" H 7480 2142 50  0000 L CNN
 F 1 "Conn_01x04" H 7480 2051 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 7400 2150 50  0001 C CNN
-F 3 "~" H 7400 2150 50  0001 C CNN
+F 3 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 7400 2150 50  0001 C CNN
 F 4 "1" H 7400 2150 50  0001 C CNN "min_qty"
-F 5 "2.46" H 7400 2150 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 7400 2150 50  0001 C CNN "purchase_link"
+F 5 "0.94" H 7400 2150 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 7400 2150 50  0001 C CNN "purchase_link"
 	1    7400 2150
 	1    0    0    -1  
 $EndComp
@@ -2169,10 +2169,10 @@ P 8850 2250
 F 0 "J8" H 8930 2242 50  0000 L CNN
 F 1 "Conn_01x04" H 8930 2151 50  0000 L CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" H 8850 2250 50  0001 C CNN
-F 3 "~" H 8850 2250 50  0001 C CNN
+F 3 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 8850 2250 50  0001 C CNN
 F 4 "1" H 8850 2250 50  0001 C CNN "min_qty"
-F 5 "2.46" H 8850 2250 50  0001 C CNN "price"
-F 6 "https://uk.farnell.com/phoenix-contact/1715747/terminal-block-wire-to-brd-4pos/dp/3041542?st=mkds-1,5-4" H 8850 2250 50  0001 C CNN "purchase_link"
+F 5 "0.94" H 8850 2250 50  0001 C CNN "price"
+F 6 "https://uk.farnell.com/camdenboss/ctbp0108-2/tb-wire-to-brd-2way-12awg/dp/3228564" H 8850 2250 50  0001 C CNN "purchase_link"
 	1    8850 2250
 	1    0    0    -1  
 $EndComp
