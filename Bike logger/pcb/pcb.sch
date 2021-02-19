@@ -588,8 +588,8 @@ F 0 "U4" H 5994 9846 50  0000 L CNN
 F 1 "LSM6DS3" H 5994 9755 50  0000 L CNN
 F 2 "Package_LGA:LGA-14_3x2.5mm_P0.5mm_LayoutBorder3x4y" H 4950 9100 50  0001 L CNN
 F 3 "www.st.com/resource/en/datasheet/lsm6ds3.pdf" H 5450 9150 50  0001 C CNN
-F 4 "4.8" H 5350 9800 50  0001 C CNN "price"
-F 5 "https://uk.farnell.com/stmicroelectronics/lsm6dsotr/mems-mod-3-axis-gyroscope-accelerometer/dp/2980917?st=lsm6d" H 5350 9800 50  0001 C CNN "purchase_link"
+F 4 "3.348" H 5350 9800 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/stmicroelectronics/lsm6dsmtr/mems-3d-accelero-gyroscope-lga/dp/2664522?st=lsm%20lga-14" H 5350 9800 50  0001 C CNN "purchase_link"
 	1    5350 9800
 	1    0    0    -1  
 $EndComp
