@@ -69,7 +69,12 @@ void loop() {
 /* ============================ functions ============================= */
 /* ==================================================================== */
 
-
+/* 
+ *  Blinks the inbuilt LED every second.
+ *  Must be called regularly in the main loop.
+ *  Brilliant work by marco_c
+ *  https://arduinoplusplus.wordpress.com/2019/07/06/finite-state-machine-programming-basics-part-1/
+ */
 void blink_led(bool reset)
 {
   const uint32_t LED_DELAY = 1000;
