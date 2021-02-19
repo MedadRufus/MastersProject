@@ -55,55 +55,46 @@ void blink_led(bool reset = false);
 **
 ******************************************************************************/
 
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-}
-
-void loop() {
-
-  blink_led();
-}
-
-
 /* ==================================================================== */
 /* ============================ functions ============================= */
 /* ==================================================================== */
+#include <StateMachine.h>
 
-/* 
- *  Blinks the inbuilt LED every second.
- *  Must be called regularly in the main loop.
- *  Brilliant work by marco_c
- *  https://arduinoplusplus.wordpress.com/2019/07/06/finite-state-machine-programming-basics-part-1/
- */
-void blink_led(bool reset)
+StateMachine blinker1(1000, true);
+StateMachine blinker2(1010, true);
+StateMachine blinker3(1020, true);
+
+const int led1 = LED_BUILTIN;
+const int led2 = 5;
+const int led3 = 3;
+
+bool state1 = false;   // false is OFF, true is ON
+bool state2 = false;   // false is OFF, true is ON
+bool state3 = false;   // false is OFF, true is ON
+
+void setup() 
 {
-  const uint32_t LED_DELAY = 1000;
-  static enum { LED_TOGGLE, WAIT_DELAY } state = LED_TOGGLE;
-  static uint32_t timeLastTransition = 0;
+  pinMode(led1, OUTPUT);
+  digitalWrite(led1, state1 ? HIGH : LOW);
+  pinMode(led2, OUTPUT);
+  digitalWrite(led2, state2 ? HIGH : LOW);
+  pinMode(led3, OUTPUT);
+  digitalWrite(led3, state3 ? HIGH : LOW);
+}
 
-  if (reset)
-  {
-    state = LED_TOGGLE;
-    digitalWrite(LED_BUILTIN, LOW);
+
+void loop() 
+{
+  if (blinker1.update()) {
+    state1 = !state1;
+    digitalWrite(led1, state1 ? HIGH : LOW);
   }
-
-  switch (state)
-  {
-    case LED_TOGGLE:   // toggle the LED
-      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-      timeLastTransition = millis();
-      state = WAIT_DELAY;
-      break;
-
-    case WAIT_DELAY:   // wait for the delay period
-      if (millis() - timeLastTransition >= LED_DELAY)
-      {
-        state = LED_TOGGLE;
-      }
-      break;
-
-    default:
-      state = LED_TOGGLE;
-      break;
+  if (blinker2.update()) {
+    state2 = !state2;
+    digitalWrite(led2, state2 ? HIGH : LOW);
+  }
+  if (blinker3.update()) {
+    state3 = !state3;
+    digitalWrite(led3, state3 ? HIGH : LOW);
   }
 }
