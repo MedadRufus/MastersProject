@@ -65,8 +65,6 @@ F 3 "" H 3400 2150 50  0001 C CNN
 $EndComp
 Wire Notes Line
 	9750 11150 9750 8150
-Wire Notes Line
-	9750 8150 4050 8150
 Text Notes 7250 8350 0    50   ~ 0
 Pressure/temperature/humidity
 Wire Notes Line
@@ -447,67 +445,67 @@ Wire Wire Line
 $Comp
 L Mechanical:MountingHole_Pad H1
 U 1 1 60208D6F
-P 11600 4250
-F 0 "H1" V 11837 4253 50  0000 C CNN
-F 1 "MountingHole_Pad" V 11746 4253 50  0000 C CNN
-F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 4250 50  0001 C CNN
-F 3 "~" H 11600 4250 50  0001 C CNN
-	1    11600 4250
+P 10550 3450
+F 0 "H1" V 10787 3453 50  0000 C CNN
+F 1 "MountingHole_Pad" V 10696 3453 50  0000 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 10550 3450 50  0001 C CNN
+F 3 "~" H 10550 3450 50  0001 C CNN
+	1    10550 3450
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Mechanical:MountingHole_Pad H2
 U 1 1 6021C578
-P 11600 4650
-F 0 "H2" V 11837 4653 50  0000 C CNN
-F 1 "MountingHole_Pad" V 11746 4653 50  0000 C CNN
-F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 4650 50  0001 C CNN
-F 3 "~" H 11600 4650 50  0001 C CNN
-	1    11600 4650
+P 10550 3850
+F 0 "H2" V 10787 3853 50  0000 C CNN
+F 1 "MountingHole_Pad" V 10696 3853 50  0000 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 10550 3850 50  0001 C CNN
+F 3 "~" H 10550 3850 50  0001 C CNN
+	1    10550 3850
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Mechanical:MountingHole_Pad H3
 U 1 1 6021C836
-P 11600 5000
-F 0 "H3" V 11837 5003 50  0000 C CNN
-F 1 "MountingHole_Pad" V 11746 5003 50  0000 C CNN
-F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 5000 50  0001 C CNN
-F 3 "~" H 11600 5000 50  0001 C CNN
-	1    11600 5000
+P 10550 4200
+F 0 "H3" V 10787 4203 50  0000 C CNN
+F 1 "MountingHole_Pad" V 10696 4203 50  0000 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 10550 4200 50  0001 C CNN
+F 3 "~" H 10550 4200 50  0001 C CNN
+	1    10550 4200
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Mechanical:MountingHole_Pad H4
 U 1 1 6021CA96
-P 11600 5400
-F 0 "H4" V 11837 5403 50  0000 C CNN
-F 1 "MountingHole_Pad" V 11746 5403 50  0000 C CNN
-F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 11600 5400 50  0001 C CNN
-F 3 "~" H 11600 5400 50  0001 C CNN
-	1    11600 5400
+P 10550 4600
+F 0 "H4" V 10787 4603 50  0000 C CNN
+F 1 "MountingHole_Pad" V 10696 4603 50  0000 C CNN
+F 2 "custom_footprints:MountingHole_2.7mm_M2.5_custom" H 10550 4600 50  0001 C CNN
+F 3 "~" H 10550 4600 50  0001 C CNN
+	1    10550 4600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:GND #PWR0101
 U 1 1 602271B8
-P 12000 5550
-F 0 "#PWR0101" H 12000 5300 50  0001 C CNN
-F 1 "GND" H 12005 5377 50  0000 C CNN
-F 2 "" H 12000 5550 50  0001 C CNN
-F 3 "" H 12000 5550 50  0001 C CNN
-	1    12000 5550
+P 10950 4750
+F 0 "#PWR0101" H 10950 4500 50  0001 C CNN
+F 1 "GND" H 10955 4577 50  0000 C CNN
+F 2 "" H 10950 4750 50  0001 C CNN
+F 3 "" H 10950 4750 50  0001 C CNN
+	1    10950 4750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	11700 5400 12000 5400
+	10650 4600 10950 4600
 Wire Wire Line
-	12000 5400 12000 5550
+	10950 4600 10950 4750
 Wire Wire Line
-	11700 4650 12000 4650
+	10650 3850 10950 3850
 Wire Notes Line
-	10950 5800 10950 3800
-Text Notes 11050 3900 0    50   ~ 0
+	9900 5000 9900 3000
+Text Notes 10000 3100 0    50   ~ 0
 Mounting Holes
 $Comp
 L power:GND #PWR011
@@ -529,49 +527,8 @@ Wire Wire Line
 Wire Wire Line
 	5450 10450 5400 10450
 Connection ~ 5400 10450
-$Comp
-L power:+3.3V #PWR010
-U 1 1 60287440
-P 5350 8750
-F 0 "#PWR010" H 5350 8600 50  0001 C CNN
-F 1 "+3.3V" H 5365 8923 50  0000 C CNN
-F 2 "" H 5350 8750 50  0001 C CNN
-F 3 "" H 5350 8750 50  0001 C CNN
-	1    5350 8750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5350 8750 5350 9200
-Connection ~ 5350 8750
-Wire Wire Line
-	5600 8750 5350 8750
-$Comp
-L Device:C C2
-U 1 1 6028744D
-P 5600 8900
-F 0 "C2" H 5715 8946 50  0000 L CNN
-F 1 "100nF" H 5715 8855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 5638 8750 50  0001 C CNN
-F 3 "~" H 5600 8900 50  0001 C CNN
-F 4 "0.0271" H 5600 8900 50  0001 C CNN "price"
-F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 5600 8900 50  0001 C CNN "purchase_link"
-	1    5600 8900
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR017
-U 1 1 60287457
-P 5600 9050
-F 0 "#PWR017" H 5600 8800 50  0001 C CNN
-F 1 "GND" H 5605 8877 50  0000 C CNN
-F 2 "" H 5600 9050 50  0001 C CNN
-F 3 "" H 5600 9050 50  0001 C CNN
-	1    5600 9050
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5350 9200 5450 9200
-Connection ~ 5350 9200
 Wire Wire Line
 	4750 10000 4350 10000
 Wire Wire Line
@@ -597,8 +554,6 @@ NoConn ~ 4750 9500
 NoConn ~ 4750 9600
 NoConn ~ 4750 9700
 NoConn ~ 4750 10100
-Text Notes 4350 8450 0    50   ~ 0
-Acclerometer/gyro
 $Sheet
 S 700  4250 900  300 
 U 60156738
@@ -1145,8 +1100,6 @@ Text Label 5500 2350 2    50   ~ 0
 SCL1
 Text Label 5500 2250 2    50   ~ 0
 SDA1
-Text Notes 6850 8100 0    50   ~ 10
-Sensors
 Text Notes 6550 550  0    50   ~ 0
 Connectors
 $Comp
@@ -1241,8 +1194,6 @@ Wire Wire Line
 	3550 8850 3550 8650
 Wire Notes Line
 	6950 7850 6950 2800
-Wire Notes Line
-	2450 7850 6950 7850
 Wire Notes Line
 	15950 5900 15950 9500
 Wire Notes Line
@@ -1910,8 +1861,6 @@ Wire Wire Line
 Wire Notes Line
 	7500 6150 7500 6950
 Wire Notes Line
-	7500 6950 8600 6950
-Wire Notes Line
 	8600 6950 8600 6150
 Wire Notes Line
 	8600 6150 7500 6150
@@ -2141,11 +2090,11 @@ Uses I2C1
 Text Notes 7250 8450 0    50   ~ 0
 Uses I2C1
 Wire Notes Line
-	10950 3800 12200 3800
+	9900 3000 11150 3000
 Wire Notes Line
-	12200 3800 12200 5800
+	11150 3000 11150 5000
 Wire Notes Line
-	12200 5800 10950 5800
+	11150 5000 9900 5000
 Wire Notes Line
 	14300 3750 14300 5350
 Wire Notes Line
@@ -2261,12 +2210,67 @@ Wire Wire Line
 NoConn ~ 5950 9500
 NoConn ~ 5950 9600
 Wire Wire Line
-	12000 4650 12000 5400
-Connection ~ 12000 5400
-NoConn ~ 11700 5000
-NoConn ~ 11700 4250
+	10950 3850 10950 4600
+Connection ~ 10950 4600
+NoConn ~ 10650 4200
+NoConn ~ 10650 3450
 Wire Wire Line
 	8650 2600 8650 2450
 Wire Wire Line
 	8200 2600 8650 2600
+Text Notes 700  7950 0    50   ~ 10
+Power supply
+Wire Notes Line
+	7500 6950 8600 6950
+Connection ~ 5350 9200
+Wire Notes Line
+	2450 7850 6950 7850
+Text Notes 6850 8100 0    50   ~ 10
+Sensors
+Text Notes 4350 8450 0    50   ~ 0
+Acclerometer/gyro
+$Comp
+L power:GND #PWR017
+U 1 1 60287457
+P 5600 9050
+F 0 "#PWR017" H 5600 8800 50  0001 C CNN
+F 1 "GND" H 5605 8877 50  0000 C CNN
+F 2 "" H 5600 9050 50  0001 C CNN
+F 3 "" H 5600 9050 50  0001 C CNN
+	1    5600 9050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C2
+U 1 1 6028744D
+P 5600 8900
+F 0 "C2" H 5715 8946 50  0000 L CNN
+F 1 "100nF" H 5715 8855 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5638 8750 50  0001 C CNN
+F 3 "~" H 5600 8900 50  0001 C CNN
+F 4 "0.0271" H 5600 8900 50  0001 C CNN "price"
+F 5 "https://uk.farnell.com/avx/0402yc104kat2a/cap-0-1-f-16v-10-x7r-0402/dp/1833861" H 5600 8900 50  0001 C CNN "purchase_link"
+	1    5600 8900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 8750 5350 8750
+Connection ~ 5350 8750
+Wire Wire Line
+	5350 8750 5350 9200
+$Comp
+L power:+3.3V #PWR010
+U 1 1 60287440
+P 5350 8750
+F 0 "#PWR010" H 5350 8600 50  0001 C CNN
+F 1 "+3.3V" H 5365 8923 50  0000 C CNN
+F 2 "" H 5350 8750 50  0001 C CNN
+F 3 "" H 5350 8750 50  0001 C CNN
+	1    5350 8750
+	1    0    0    -1  
+$EndComp
+Wire Notes Line
+	9750 8150 4050 8150
+Text Notes 10200 5850 0    50   ~ 10
+Programming
 $EndSCHEMATC
