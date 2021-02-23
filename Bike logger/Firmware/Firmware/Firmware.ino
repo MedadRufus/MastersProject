@@ -60,7 +60,7 @@ struct SensorData
     uint32_t altitude;
     uint32_t velocity;
     uint32_t sats;
-  
+
     /* Acceleration/Gyroscope */
     float acc_x;
     float acc_y;
@@ -69,18 +69,18 @@ struct SensorData
     float gyro_y;
     float gyro_z;
     float imu_temperature;
-  
+
     /* Current voltage */
     int32_t current_discharge;
     int32_t voltage_discharge;
     int32_t current_charge;
     int32_t voltage_charge;
-  
+
     /* Temperature/pressure/humidity */
     float temperature;
     float pressure;
     float humidity;
-  
+
     /* Other physical inputs */
     int32_t pedal_rpm;
     bool brake_state;
@@ -112,7 +112,7 @@ void setup()
 {
   pinMode(led1, OUTPUT);
   digitalWrite(led1, state1 ? HIGH : LOW);
-  Wire.begin(21,22); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(115200);
   Serial.println("=======================================================");
@@ -148,7 +148,7 @@ void loop()
   if (poll_baro.update()) {
     update_baro_data();
   }
-  
+
   if (poll_gps.update()) {
   }
 
@@ -187,8 +187,8 @@ void update_baro_data()
 }
 
 /* Update the sensor data struct with imu values
- *  
- */
+
+*/
 void update_imu_data()
 {
   //Get all parameters
@@ -203,12 +203,12 @@ void update_imu_data()
   sensor_data.imu_temperature = myIMU.readTempC();
 
   print_imu_values();
-  
+
 }
 
 /* Inefficient way of printing out imu values, since we
- *  are reading the values all over again
- */
+    are reading the values all over again
+*/
 void print_imu_values()
 {
   Serial.print("x_gyro:");
