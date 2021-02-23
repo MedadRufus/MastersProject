@@ -62,11 +62,9 @@ void TaskAnalogReadA3( void *pvParameters );
 void setup() {
   
   // initialize serial communication at 115200 bits per second:
-  Serial.begin(115200);
-
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
-  Serial.begin(115200);
+  Serial.begin(2000000);
   Serial.println("=======================================================");
   Serial.println("================ Ebike BlackBox =======================");
   Serial.println("============== By Medad Rufus Newman ==================");
