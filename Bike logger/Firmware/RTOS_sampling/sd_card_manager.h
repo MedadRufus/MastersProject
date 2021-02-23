@@ -4,6 +4,8 @@
 class SD_Manager {       // The class
   public:             // Access specifier
     SD_Manager(void);
+       
+    void SD_Manager_init();
     void listDir(fs::FS &fs, const char * dirname, uint8_t levels);
     void createDir(fs::FS &fs, const char * path);
     void readFile(fs::FS &fs, const char * path);
