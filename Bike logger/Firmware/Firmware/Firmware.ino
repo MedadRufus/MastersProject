@@ -116,7 +116,11 @@ void setup()
   Wire.begin(21,22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(115200);
-  Serial.println("Processor came out of reset.\n");
+  Serial.println("=======================================================");
+  Serial.println("================ Ebike BlackBox =======================");
+  Serial.println("============== By Medad Rufus Newman ==================");
+  Serial.println("======= with assistance from Richard Ibbotson =========");
+  Serial.println("=======================================================");
 
   //Call .begin() to configure the IMU
   myIMU.begin();
