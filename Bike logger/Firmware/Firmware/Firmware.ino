@@ -113,6 +113,7 @@ void setup()
 {
   pinMode(led1, OUTPUT);
   digitalWrite(led1, state1 ? HIGH : LOW);
+  Wire.begin(21,22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(115200);
   Serial.println("Processor came out of reset.\n");
@@ -143,6 +144,10 @@ void loop()
   }
 }
 
+
+/* Update the sensor data struct with baro values
+ *  
+ */
 void update_imu_data()
 {
   //Get all parameters
@@ -155,4 +160,56 @@ void update_imu_data()
   sensor_data.gyro_z = myIMU.readFloatGyroZ();
 
   sensor_data.imu_temperature = myIMU.readTempC();
+
+  print_imu_values();
+  
+}
+
+/* Update the sensor data struct with imu values
+ *  
+ */
+void update_imu_data()
+{
+  //Get all parameters
+  sensor_data.acc_x = myIMU.readFloatAccelX();
+  sensor_data.acc_y = myIMU.readFloatAccelY();
+  sensor_data.acc_z = myIMU.readFloatAccelZ();
+
+  sensor_data.gyro_x = myIMU.readFloatGyroX();
+  sensor_data.gyro_y = myIMU.readFloatGyroY();
+  sensor_data.gyro_z = myIMU.readFloatGyroZ();
+
+  sensor_data.imu_temperature = myIMU.readTempC();
+
+  print_imu_values();
+  
+}
+
+/* Inefficient way of printing out imu values, since we
+ *  are reading the values all over again
+ */
+void print_imu_values()
+{
+  Serial.print("x_gyro:");
+  Serial.print(myIMU.readFloatGyroX(), 4);
+  Serial.print(",");
+  Serial.print("y_gyro:");
+  Serial.print(myIMU.readFloatGyroY(), 4);
+  Serial.print(",");
+  Serial.print("z_gyro ");
+  Serial.println(myIMU.readFloatGyroZ(), 4);
+
+
+  Serial.print("x_acc:");
+  Serial.print(myIMU.readFloatAccelX(), 4);
+  Serial.print(",");
+  Serial.print("y_acc:");
+  Serial.print(myIMU.readFloatAccelY(), 4);
+  Serial.print(",");
+  Serial.print("z_acc:");
+  Serial.println(myIMU.readFloatAccelZ(), 4);
+
+
+  Serial.print("Degrees_C:");
+  Serial.println(myIMU.readTempC(), 4);
 }
