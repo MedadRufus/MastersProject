@@ -70,9 +70,9 @@ python -m espefuse set_flash_voltage 3.3V -p COM6
 You should be done now!
 
 
-References: 
-[https://www.esp32.com/viewtopic.php?t=5970](https://www.esp32.com/viewtopic.php?t=5970)
-[https://forum.micropython.org/viewtopic.php?t=4387#p25381](https://forum.micropython.org/viewtopic.php?t=4387#p25381)
+References:  
+[https://www.esp32.com/viewtopic.php?t=5970](https://www.esp32.com/viewtopic.php?t=5970)  
+[https://forum.micropython.org/viewtopic.php?t=4387#p25381](https://forum.micropython.org/viewtopic.php?t=4387#p25381)  
 
 
 
