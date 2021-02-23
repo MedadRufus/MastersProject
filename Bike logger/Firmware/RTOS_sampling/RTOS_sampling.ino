@@ -1,6 +1,7 @@
 #include "ms8607.h"
 #include "Wire.h"
 #include "SparkFunLSM6DS3.h"
+#include "sd_card_manager.h"
 
 
 #if CONFIG_FREERTOS_UNICORE
@@ -52,6 +53,7 @@ struct SensorData
 SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
+SD_Manager sd_manager;
 
 
 // define two tasks for Blink & AnalogRead
