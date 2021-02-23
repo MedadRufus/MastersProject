@@ -87,7 +87,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
-    ,  1024  // Stack size
+    ,  10024  // Stack size
     ,  NULL
     ,  1  // Priority
     ,  NULL
@@ -97,7 +97,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
-    ,  1024  // Stack size
+    ,  10024  // Stack size
     ,  NULL
     ,  1  // Priority
     ,  NULL
@@ -125,11 +125,13 @@ void TaskReadBaro(void *pvParameters)
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
-
+  sd_manager.SD_Manager_init();
 
   for (;;) // A Task shall never return or exit.
   {
     update_baro_data();
+    sd_manager.appendFileSimple("/baro.csv", "hello!\n");
+
     vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
   }
 }
@@ -146,6 +148,8 @@ void TaskReadImu(void *pvParameters)
   for (;;) // A Task shall never return or exit.
   {
     update_imu_data();
+    sd_manager.appendFileSimple("/imu.csv", "Budgie!\n");
+
     vTaskDelay(10);  // one tick delay (15ms) in between reads for stability
   }
 }
