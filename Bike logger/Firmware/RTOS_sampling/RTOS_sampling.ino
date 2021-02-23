@@ -189,6 +189,11 @@ void update_baro_data()
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
       &sensor_data.humidity);
 
+  print_baro_values();
+}
+
+void print_baro_values()
+{
   Serial.print("Tempeature = ");
   Serial.print(sensor_data.temperature);
   Serial.print((char)176);
