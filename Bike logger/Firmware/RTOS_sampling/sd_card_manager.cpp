@@ -56,7 +56,7 @@ void SD_Manager::SD_Manager_init()
   }
 
   uint64_t cardSize = SD.cardSize() / (1024 * 1024);
-  Serial.printf("SD Card Size: %lluMB\n", cardSize);s
+  Serial.printf("SD Card Size: %lluMB\n", cardSize);
 }
 
 void SD_Manager::listDir(fs::FS &fs, const char * dirname, uint8_t levels) {
