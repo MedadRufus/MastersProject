@@ -18,6 +18,8 @@
 #include "SparkFunLSM6DS3.h"
 #include "Wire.h"
 #include "SPI.h"
+#include "ms8607.h"
+
 
 
 /* ==================================================================== */
@@ -44,6 +46,7 @@ StateMachine write_to_sd(1, true);
 const int led1 = LED_PIN;
 bool state1 = false;   // false is OFF, true is ON
 
+static ms8607 m_ms8607;
 
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 
@@ -120,6 +123,14 @@ void setup()
 
   //Call .begin() to configure the IMU
   myIMU.begin();
+
+  m_ms8607.begin();
+  if (m_ms8607.is_connected() == true) {
+    m_ms8607.reset();
+  }
+
+  boolean connected = m_ms8607.is_connected();
+  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 }
 
 
@@ -150,23 +161,29 @@ void loop()
 
 
 /* Update the sensor data struct with baro values
- *  
- */
-void update_imu_data()
+
+*/
+void update_baro_data()
 {
   //Get all parameters
-  sensor_data.acc_x = myIMU.readFloatAccelX();
-  sensor_data.acc_y = myIMU.readFloatAccelY();
-  sensor_data.acc_z = myIMU.readFloatAccelZ();
+  m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
+      &sensor_data.humidity);
 
-  sensor_data.gyro_x = myIMU.readFloatGyroX();
-  sensor_data.gyro_y = myIMU.readFloatGyroY();
-  sensor_data.gyro_z = myIMU.readFloatGyroZ();
+  Serial.print("Tempeature = ");
+  Serial.print(sensor_data.temperature);
+  Serial.print((char)176);
+  Serial.println(" C");
 
-  sensor_data.imu_temperature = myIMU.readTempC();
+  Serial.print("Pressure = ");
+  Serial.print(sensor_data.pressure);
+  Serial.println(" hPa");
 
-  print_imu_values();
-  
+  Serial.print("Humidity = ");
+  Serial.print(sensor_data.humidity);
+  Serial.println(" %RH");
+
+  Serial.println("");
+
 }
 
 /* Update the sensor data struct with imu values
