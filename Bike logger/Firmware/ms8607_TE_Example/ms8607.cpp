@@ -117,8 +117,8 @@ ms8607::ms8607(void)
 /**
  * \brief Perform initial configuration. Has to be called once.
  */
-void ms8607::begin(TwoWire &wirePort) {
-  Wire.begin(21,22);
+void ms8607::begin() {
+  Wire.begin();
 }
 
 /**

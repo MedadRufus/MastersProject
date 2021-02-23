@@ -1,9 +1,12 @@
 #include "ms8607.h"
+#include "Wire.h"
 
 static ms8607 m_ms8607;
 
 
 void setup() {
+  Wire.begin(21,22);
+
   Serial.begin(115200);
 
   Serial.println("==== TE Connectivity ====");
@@ -31,15 +34,15 @@ void loop() {
     Serial.print("Tempeature = ");
     Serial.print(temperature);
     Serial.print((char)176);
-    Serial.println("C");
+    Serial.println(" C");
 
     Serial.print("Pressure = ");
     Serial.print(pressure);
-    Serial.println("hPa");
+    Serial.println(" hPa");
 
     Serial.print("Humidity = ");
     Serial.print(humidity);
-    Serial.println("%RH");
+    Serial.println(" %RH");
 
     Serial.println("");
   } else {
