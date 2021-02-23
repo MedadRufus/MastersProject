@@ -1,5 +1,6 @@
 #include "ms8607.h"
 #include "Wire.h"
+#include "SparkFunLSM6DS3.h"
 
 
 #if CONFIG_FREERTOS_UNICORE
@@ -50,6 +51,7 @@ struct SensorData
 
 SensorData sensor_data;
 static ms8607 m_ms8607;
+LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 
 
 // define two tasks for Blink & AnalogRead
@@ -93,6 +95,15 @@ void setup() {
     ,  NULL 
     ,  ARDUINO_RUNNING_CORE);
 
+
+  xTaskCreatePinnedToCore(
+    TaskReadImu
+    ,  "TaskReadImu"
+    ,  1024  // Stack size
+    ,  NULL
+    ,  1  // Priority
+    ,  NULL 
+    ,  ARDUINO_RUNNING_CORE);
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
 
@@ -122,6 +133,22 @@ void TaskReadBaro(void *pvParameters)
   {
     update_baro_data();
     vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
+  }
+}
+
+
+void TaskReadImu(void *pvParameters)
+{
+  (void) pvParameters;
+
+  //Call .begin() to configure the IMU
+  myIMU.begin();
+
+
+  for (;;) // A Task shall never return or exit.
+  {
+    update_imu_data();
+    vTaskDelay(10);  // one tick delay (15ms) in between reads for stability
   }
 }
 
@@ -177,4 +204,55 @@ void update_baro_data()
 
   Serial.println("");
 
+}
+
+
+
+
+/* Update the sensor data struct with imu values
+
+*/
+void update_imu_data()
+{
+  //Get all parameters
+  sensor_data.acc_x = myIMU.readFloatAccelX();
+  sensor_data.acc_y = myIMU.readFloatAccelY();
+  sensor_data.acc_z = myIMU.readFloatAccelZ();
+
+  sensor_data.gyro_x = myIMU.readFloatGyroX();
+  sensor_data.gyro_y = myIMU.readFloatGyroY();
+  sensor_data.gyro_z = myIMU.readFloatGyroZ();
+
+  sensor_data.imu_temperature = myIMU.readTempC();
+
+  print_imu_values();
+
+}
+
+/* Print out all IMU values
+*/
+void print_imu_values()
+{
+  Serial.print("x_gyro:");
+  Serial.print(sensor_data.gyro_x, 4);
+  Serial.print(",");
+  Serial.print("y_gyro:");
+  Serial.print(sensor_data.gyro_y, 4);
+  Serial.print(",");
+  Serial.print("z_gyro ");
+  Serial.println(sensor_data.gyro_z, 4);
+
+
+  Serial.print("x_acc:");
+  Serial.print(sensor_data.acc_x, 4);
+  Serial.print(",");
+  Serial.print("y_acc:");
+  Serial.print(sensor_data.acc_y, 4);
+  Serial.print(",");
+  Serial.print("z_acc:");
+  Serial.println(sensor_data.acc_z, 4);
+
+
+  Serial.print("Degrees_C:");
+  Serial.println(myIMU.readTempC(), 4);
 }
