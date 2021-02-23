@@ -184,8 +184,7 @@ void TaskBlink(void *pvParameters)  // This is a task.
 void update_baro_data()
 {
   //Get all parameters
-  m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
-      &sensor_data.humidity);
+  m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
 
   print_baro_values();
 }
@@ -242,7 +241,7 @@ void print_imu_values()
   Serial.print("y_gyro:");
   Serial.print(sensor_data.gyro_y, 4);
   Serial.print(",");
-  Serial.print("z_gyro ");
+  Serial.print("z_gyro:");
   Serial.println(sensor_data.gyro_z, 4);
 
 
