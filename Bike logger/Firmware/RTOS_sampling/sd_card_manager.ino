@@ -182,7 +182,6 @@ void testFileIO(fs::FS &fs, const char * path){
 void run_sd_card_tests(){
     spiSD.begin(14, 12, 13, 15); //SCK,MISO,MOSI,SS //HSPI1
 
-    Serial.begin(115200);
     Serial.println("SD card Tests");
 
     if(!SD.begin( SD_CS, spiSD )){
