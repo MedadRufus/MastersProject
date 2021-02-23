@@ -26,7 +26,7 @@
 
 /* #define and enum statements go here */
 
-#define LED_BUILTIN 33
+#define LED_PIN 27
 
 /* ==================================================================== */
 /* ======================== global variables ========================== */
@@ -40,7 +40,7 @@ StateMachine poll_gps(1000, true);
 StateMachine poll_IN226(1, true);
 StateMachine write_to_sd(1, true);
 
-const int led1 = LED_BUILTIN;
+const int led1 = LED_PIN;
 bool state1 = false;   // false is OFF, true is ON
 
 
