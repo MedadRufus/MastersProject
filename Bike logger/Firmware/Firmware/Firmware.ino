@@ -36,6 +36,7 @@
 
 StateMachine blinker1(100, true);
 StateMachine poll_imu(10, true);
+StateMachine poll_baro(10, true);
 StateMachine poll_gps(1000, true);
 StateMachine poll_IN226(1, true);
 StateMachine write_to_sd(1, true);
@@ -133,6 +134,10 @@ void loop()
     update_imu_data();
   }
 
+  if (poll_baro.update()) {
+    update_baro_data();
+  }
+  
   if (poll_gps.update()) {
   }
 
