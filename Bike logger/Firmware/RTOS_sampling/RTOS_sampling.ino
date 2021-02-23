@@ -76,7 +76,7 @@ void setup() {
 
 
   
-  // Now set up two tasks to run independently.
+  // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
     TaskBlink
     ,  "TaskBlink"   // A name just for humans
