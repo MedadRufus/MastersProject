@@ -62,8 +62,7 @@ void TaskAnalogReadA3( void *pvParameters );
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  
-  // initialize serial communication at 115200 bits per second:
+
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(2000000);
@@ -75,7 +74,6 @@ void setup() {
 
 
 
-  
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
     TaskBlink
@@ -83,7 +81,7 @@ void setup() {
     ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL 
+    ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -92,7 +90,7 @@ void setup() {
     ,  1024  // Stack size
     ,  NULL
     ,  1  // Priority
-    ,  NULL 
+    ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
 
@@ -102,7 +100,7 @@ void setup() {
     ,  1024  // Stack size
     ,  NULL
     ,  1  // Priority
-    ,  NULL 
+    ,  NULL
     ,  ARDUINO_RUNNING_CORE);
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
@@ -156,13 +154,13 @@ void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
 
-/*
-  Blink
-  Turns on an LED on for one second, then off for one second, repeatedly.
-    
-  If you want to know what pin the on-board LED is connected to on your ESP32 model, check
-  the Technical Specs of your board.
-*/
+  /*
+    Blink
+    Turns on an LED on for one second, then off for one second, repeatedly.
+
+    If you want to know what pin the on-board LED is connected to on your ESP32 model, check
+    the Technical Specs of your board.
+  */
 
   // initialize digital LED_BUILTIN on pin 13 as an output.
   pinMode(LED_BUILTIN, OUTPUT);
