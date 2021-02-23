@@ -1,3 +1,7 @@
+#include "ms8607.h"
+#include "Wire.h"
+
+
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
 #else
@@ -5,6 +9,48 @@
 #endif
 
 #define LED_BUILTIN 27
+
+
+
+struct SensorData
+{
+  public:
+    /* GPS related */
+    uint32_t longitude;
+    uint32_t latitude;
+    uint32_t altitude;
+    uint32_t velocity;
+    uint32_t sats;
+
+    /* Acceleration/Gyroscope */
+    float acc_x;
+    float acc_y;
+    float acc_z;
+    float gyro_x;
+    float gyro_y;
+    float gyro_z;
+    float imu_temperature;
+
+    /* Current voltage */
+    int32_t current_discharge;
+    int32_t voltage_discharge;
+    int32_t current_charge;
+    int32_t voltage_charge;
+
+    /* Temperature/pressure/humidity */
+    float temperature;
+    float pressure;
+    float humidity;
+
+    /* Other physical inputs */
+    int32_t pedal_rpm;
+    bool brake_state;
+    int32_t motor_speed;
+};
+
+SensorData sensor_data;
+static ms8607 m_ms8607;
+
 
 // define two tasks for Blink & AnalogRead
 void TaskBlink( void *pvParameters );
@@ -15,6 +61,18 @@ void setup() {
   
   // initialize serial communication at 115200 bits per second:
   Serial.begin(115200);
+
+  Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
+
+  Serial.begin(115200);
+  Serial.println("=======================================================");
+  Serial.println("================ Ebike BlackBox =======================");
+  Serial.println("============== By Medad Rufus Newman ==================");
+  Serial.println("======= with assistance from Richard Ibbotson =========");
+  Serial.println("=======================================================");
+
+
+
   
   // Now set up two tasks to run independently.
   xTaskCreatePinnedToCore(
@@ -27,8 +85,8 @@ void setup() {
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskAnalogReadA3
-    ,  "AnalogReadA3"
+    TaskReadBaro
+    ,  "TaskReadBaro"
     ,  1024  // Stack size
     ,  NULL
     ,  1  // Priority
@@ -46,6 +104,26 @@ void loop()
 /*--------------------------------------------------*/
 /*---------------------- Tasks ---------------------*/
 /*--------------------------------------------------*/
+
+void TaskReadBaro(void *pvParameters)
+{
+  (void) pvParameters;
+
+  m_ms8607.begin();
+  if (m_ms8607.is_connected() == true) {
+    m_ms8607.reset();
+  }
+
+  boolean connected = m_ms8607.is_connected();
+  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+
+
+  for (;;) // A Task shall never return or exit.
+  {
+    update_baro_data();
+    vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
+  }
+}
 
 void TaskBlink(void *pvParameters)  // This is a task.
 {
@@ -71,25 +149,32 @@ void TaskBlink(void *pvParameters)  // This is a task.
   }
 }
 
-void TaskAnalogReadA3(void *pvParameters)  // This is a task.
-{
-  (void) pvParameters;
-  
-/*
-  AnalogReadSerial
-  Reads an analog input on pin A3, prints the result to the serial monitor.
-  Graphical representation is available using serial plotter (Tools > Serial Plotter menu)
-  Attach the center pin of a potentiometer to pin A3, and the outside pins to +5V and ground.
 
-  This example code is in the public domain.
+
+
+
+/* Update the sensor data struct with baro values
+
 */
+void update_baro_data()
+{
+  //Get all parameters
+  m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
+      &sensor_data.humidity);
 
-  for (;;)
-  {
-    // read the input on analog pin A3:
-    int sensorValueA3 = analogRead(A3);
-    // print out the value you read:
-    Serial.println(sensorValueA3);
-    vTaskDelay(10);  // one tick delay (15ms) in between reads for stability
-  }
+  Serial.print("Tempeature = ");
+  Serial.print(sensor_data.temperature);
+  Serial.print((char)176);
+  Serial.println(" C");
+
+  Serial.print("Pressure = ");
+  Serial.print(sensor_data.pressure);
+  Serial.println(" hPa");
+
+  Serial.print("Humidity = ");
+  Serial.print(sensor_data.humidity);
+  Serial.println(" %RH");
+
+  Serial.println("");
+
 }
