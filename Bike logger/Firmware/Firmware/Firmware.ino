@@ -1,5 +1,5 @@
 /*********************************************************************
-** @source __ApplicationName__
+** @source Ebike Blackbox datalogger
 **
 ** Main code for the Ebike logger
 **
