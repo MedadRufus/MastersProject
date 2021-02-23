@@ -259,5 +259,5 @@ void print_imu_values()
 
 
   Serial.print("Degrees_C:");
-  Serial.println(myIMU.readTempC(), 4);
+  Serial.println(sensor_data.imu_temperature, 4);
 }
