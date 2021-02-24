@@ -151,7 +151,7 @@ void TaskReadImu(void *pvParameters)
     update_imu_data();
     sd_manager.appendFileSimple("/imu.csv", "Budgie!\n");
 
-    vTaskDelay(10);  // one tick delay (15ms) in between reads for stability
+    vTaskDelay(1);  // one tick delay (15ms) in between reads for stability
   }
 }
 
