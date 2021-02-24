@@ -50,7 +50,6 @@ Distributed as-is; no warranty is given.
 
 #include "SparkFunLSM6DS3.h"
 #include "Wire.h"
-#include "SPI.h"
 
 LSM6DS3 myIMU;
 
