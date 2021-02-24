@@ -110,7 +110,7 @@ void setup() {
   ** and for a 0.1Ohm resistor, and since no specific device is given as the 3rd parameter all   **
   ** devices are initially set to these values.                                                  **
   ************************************************************************************************/
-  Wire.begin(19,18);
+  Wire.begin(21,22);
   devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
   while (devicesFound == 0) {
     Serial.println(F("No INA device found, retrying in 10 seconds..."));
@@ -153,7 +153,7 @@ void loop() {
     Serial.print(sprintfBuffer);
   }  // for-next each INA device loop
   Serial.println();
-  delay(10000);  // Wait 10 seconds before next reading
+  delay(1000);  // Wait 10 seconds before next reading
   Serial.print(F("Loop iteration "));
   Serial.print(++loopCounter);
   Serial.print(F("\n\n"));
