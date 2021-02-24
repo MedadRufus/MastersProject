@@ -335,7 +335,7 @@ enum ms8607_status ms8607::hsensor_reset(void) {
     return status;
 
   hsensor_conversion_time = HSENSOR_CONVERSION_TIME_12b;
-  vTaskDelay(HSENSOR_RESET_TIME);
+  vTaskDelay(pdMS_TO_TICKS(HSENSOR_RESET_TIME));
 
   return ms8607_status_ok;
 }
@@ -529,7 +529,7 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
     Wire.write(HSENSOR_READ_HUMIDITY_WO_HOLD_COMMAND);
     i2c_status = Wire.endTransmission();
     // delay depending on resolution
-    vTaskDelay(hsensor_conversion_time);
+    vTaskDelay(pdMS_TO_TICKS(hsensor_conversion_time));
   }
   Wire.requestFrom((uint8_t)HSENSOR_ADDR, 3U);
   for (i = 0; i < 3; i++) {
@@ -821,7 +821,7 @@ enum ms8607_status ms8607::psensor_conversion_and_read_adc(uint8_t cmd,
   i2c_status = Wire.endTransmission();
 
   // 20ms wait for conversion
-  vTaskDelay(psensor_conversion_time[(cmd & PSENSOR_CONVERSION_OSR_MASK) / 2]);
+  vTaskDelay(pdMS_TO_TICKS(psensor_conversion_time[(cmd & PSENSOR_CONVERSION_OSR_MASK) / 2]));
 
   // Send the read command
   Wire.beginTransmission((uint8_t)PSENSOR_ADDR);
