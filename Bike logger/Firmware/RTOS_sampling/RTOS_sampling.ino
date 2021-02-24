@@ -131,7 +131,11 @@ void TaskReadBaro(void *pvParameters)
   for (;;) // A Task shall never return or exit.
   {
     update_baro_data();
-    sd_manager.appendFileSimple("/baro.csv", "hello!\n");
+
+    /* Write baro data to file */
+    char buffer1 [50];
+    sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+    sd_manager.appendFileSimple("/baro.csv", buffer1);
 
     vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
   }
@@ -149,9 +153,19 @@ void TaskReadImu(void *pvParameters)
   for (;;) // A Task shall never return or exit.
   {
     update_imu_data();
-    sd_manager.appendFileSimple("/imu.csv", "Budgie!\n");
 
-    vTaskDelay(1);  // one tick delay (15ms) in between reads for stability
+    char buffer1 [100];    
+    sprintf (buffer1, "%f,%f,%f,%f,%f,%f\n", 
+            sensor_data.gyro_x,
+            sensor_data.gyro_y,
+            sensor_data.gyro_z,
+            sensor_data.acc_x,
+            sensor_data.acc_y,
+            sensor_data.acc_z);
+            
+    sd_manager.appendFileSimple("/imu.csv", buffer1);
+
+    vTaskDelay(10);  // one tick delay (15ms) in between reads for stability
   }
 }
 
