@@ -79,8 +79,8 @@ void setup( void ) {
   myIMU.settings.commMode = 1;
 
   //FIFO control settings
-  myIMU.settings.fifoThreshold = 100;  //Can be 0 to 4096 (16 bit bytes)
-  myIMU.settings.fifoSampleRate = 50;  //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoThreshold = 4095;  //Can be 0 to 4096 (16 bit bytes)
+  myIMU.settings.fifoSampleRate = 100;  //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
   myIMU.settings.fifoModeWord = 6;  //FIFO mode.
   //FIFO mode.  Can be:
   //  0 (Bypass mode, FIFO off)
