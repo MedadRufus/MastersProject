@@ -52,6 +52,7 @@ Distributed as-is; no warranty is given.
 #include "Wire.h"
 
 LSM6DS3 myIMU;
+long lastTime = 0; //Simple local timer.
 
 void setup( void ) {
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
@@ -118,45 +119,48 @@ void loop()
 {
   float temp;  //This is to hold read data
   uint16_t tempUnsigned;
-  
-  while( ( myIMU.fifoGetStatus() & 0x8000 ) == 0 ) {};  //Wait for watermark
- 
-  //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
-  //the channels must be synchronized to a known position for the data to align
-  //properly.  Emptying the fifo is one way of doing this (this example)
-  while( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-  temp = myIMU.calcGyro(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print(",");
+  /* Poll the LSM6DS every second */
+  if (millis() - lastTime > 1000)
+  {
+    lastTime = millis(); //Update the timer
 
-  temp = myIMU.calcGyro(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print(",");
+    //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
+    //the channels must be synchronized to a known position for the data to align
+    //properly.  Emptying the fifo is one way of doing this (this example)
+    while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-  temp = myIMU.calcGyro(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print(",");
+      temp = myIMU.calcGyro(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print(",");
 
-  temp = myIMU.calcAccel(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print(",");
+      temp = myIMU.calcGyro(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print(",");
 
-  temp = myIMU.calcAccel(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print(",");
+      temp = myIMU.calcGyro(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print(",");
 
-  temp = myIMU.calcAccel(myIMU.fifoRead());
-  Serial.print(temp);
-  Serial.print("\n");
-  
-  delay(10); //Wait for the serial buffer to clear (~50 bytes worth of time @ 57600baud)
-  
+      temp = myIMU.calcAccel(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print(",");
+
+      temp = myIMU.calcAccel(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print(",");
+
+      temp = myIMU.calcAccel(myIMU.fifoRead());
+      Serial.print(temp);
+      Serial.print("\n");
+
+      //tempUnsigned = myIMU.fifoGetStatus();
+      //Serial.print("\nFifo Status 1 and 2 (16 bits): 0x");
+      //Serial.println(tempUnsigned, HEX);
+      //Serial.print("\n");
+
+    }
+
   }
-
-  tempUnsigned = myIMU.fifoGetStatus();
-  Serial.print("\nFifo Status 1 and 2 (16 bits): 0x");
-  Serial.println(tempUnsigned, HEX);
-  Serial.print("\n");  
 
 }
