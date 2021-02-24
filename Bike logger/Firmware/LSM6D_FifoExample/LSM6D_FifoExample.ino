@@ -1,51 +1,51 @@
 /******************************************************************************
-FifoExample.ino
-Example using the FIFO over SPI.
+  FifoExample.ino
+  Example using the FIFO over SPI.
 
-Marshall Taylor @ SparkFun Electronics
-May 20, 2015
-https://github.com/sparkfun/LSM6DS3_Breakout
-https://github.com/sparkfun/SparkFun_LSM6DS3_Arduino_Library
+  Marshall Taylor @ SparkFun Electronics
+  May 20, 2015
+  https://github.com/sparkfun/LSM6DS3_Breakout
+  https://github.com/sparkfun/SparkFun_LSM6DS3_Arduino_Library
 
-Description:
-The FIFO is configured to take readings at 50Hz.  When 100 samples have
-accumulated (when the "watermark" is reached), the sketch dumps the float values to the serial terminal.
+  Description:
+  The FIFO is configured to take readings at 50Hz.  When 100 samples have
+  accumulated (when the "watermark" is reached), the sketch dumps the float values to the serial terminal.
 
-The FIFO can sample much faster but the serial port isn't fast enough to get
-that data out before another 100 samples get queued up.  There is a 10ms delay
-placed after each line ("1.40,-4.41,-3.22,-0.01,0.01,0.99") so that the
-internal serial buffer is guaranteed to empty and not overflow.
+  The FIFO can sample much faster but the serial port isn't fast enough to get
+  that data out before another 100 samples get queued up.  There is a 10ms delay
+  placed after each line ("1.40,-4.41,-3.22,-0.01,0.01,0.99") so that the
+  internal serial buffer is guaranteed to empty and not overflow.
 
-Cranking the sample rate up to 800Hz will result in the FIFO dumping routine
-never getting the FIFO back down to zero.
+  Cranking the sample rate up to 800Hz will result in the FIFO dumping routine
+  never getting the FIFO back down to zero.
 
-Removing the 10ms delay allows the FIFO to be emptied, but then too much data
-gets placed in the serial write buffer and stability suffers.
+  Removing the 10ms delay allows the FIFO to be emptied, but then too much data
+  gets placed in the serial write buffer and stability suffers.
 
-Resources:
-Uses Wire.h for I2C operation
-Uses SPI.h for SPI operation
-Either can be omitted if not used
+  Resources:
+  Uses Wire.h for I2C operation
+  Uses SPI.h for SPI operation
+  Either can be omitted if not used
 
-Development environment specifics:
-Arduino IDE 1.6.4
-Teensy loader 1.23
+  Development environment specifics:
+  Arduino IDE 1.6.4
+  Teensy loader 1.23
 
-Hardware connections:
+  Hardware connections:
 ***CAUTION -- SPI pins can not be connected directly to 5V IO***
 
-Connect SDA/SDI line to pin 11 through a level shifter (MOSI)
-Connect SCL pin line to pin 13 through a level shifter (SCLK)
-Connect SDO/SA0 line to pin 12 through a level shifter (MISO)
-Connect CS to a free pin through a level shifter.  This example uses pin 10.
-Connect GND and ***3.3v*** power to the IMU.  The sensors are not 5v tolerant.
+  Connect SDA/SDI line to pin 11 through a level shifter (MOSI)
+  Connect SCL pin line to pin 13 through a level shifter (SCLK)
+  Connect SDO/SA0 line to pin 12 through a level shifter (MISO)
+  Connect CS to a free pin through a level shifter.  This example uses pin 10.
+  Connect GND and ***3.3v*** power to the IMU.  The sensors are not 5v tolerant.
 
-This code is released under the [MIT License](http://opensource.org/licenses/MIT).
+  This code is released under the [MIT License](http://opensource.org/licenses/MIT).
 
-Please review the LICENSE.md file included with this example. If you have any questions 
-or concerns with licensing, please contact techsupport@sparkfun.com.
+  Please review the LICENSE.md file included with this example. If you have any questions
+  or concerns with licensing, please contact techsupport@sparkfun.com.
 
-Distributed as-is; no warranty is given.
+  Distributed as-is; no warranty is given.
 ******************************************************************************/
 
 #include "SparkFunLSM6DS3.h"
@@ -54,9 +54,11 @@ Distributed as-is; no warranty is given.
 LSM6DS3 myIMU;
 long lastTime = 0; //Simple local timer.
 
+
+
 void setup( void ) {
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
-  Wire.setClock(400000); 
+  Wire.setClock(400000);
 
 
   //Over-ride default settings if desired
@@ -74,8 +76,8 @@ void setup( void ) {
   myIMU.settings.accelFifoEnabled = 1;  //Set to include accelerometer in the FIFO
   myIMU.settings.accelFifoDecimation = 1;  //set 1 for on /1
   myIMU.settings.tempEnabled = 1;
-  
-    //Non-basic mode settings
+
+  //Non-basic mode settings
   myIMU.settings.commMode = 1;
 
   //FIFO control settings
@@ -88,14 +90,14 @@ void setup( void ) {
   //  3 (Continuous during trigger)
   //  4 (Bypass until trigger)
   //  6 (Continous mode)
-  
+
 
   Serial.begin(2000000);  // start serial for output
   delay(1000); //relax...
   Serial.println("Processor came out of reset.\n");
-  
+
   //Call .begin() to configure the IMUs
-  if( myIMU.begin() != 0 )
+  if ( myIMU.begin() != 0 )
   {
     Serial.println("Problem starting the sensor with CS @ Pin 10.");
   }
@@ -103,15 +105,15 @@ void setup( void ) {
   {
     Serial.println("Sensor with CS @ Pin 10 started.");
   }
-  
+
   Serial.print("Configuring FIFO with no error checking...");
   myIMU.fifoBegin();
   Serial.print("Done!\n");
-  
+
   Serial.print("Clearing out the FIFO...");
   myIMU.fifoClear();
   Serial.print("Done!\n");
-  
+
 }
 
 
