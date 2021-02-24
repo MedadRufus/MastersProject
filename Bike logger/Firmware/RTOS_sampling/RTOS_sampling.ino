@@ -64,6 +64,7 @@ void TaskAnalogReadA3( void *pvParameters );
 void setup() {
 
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.setClock(400000); 
 
   Serial.begin(115200);
   Serial.println("=======================================================");
