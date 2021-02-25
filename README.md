@@ -26,7 +26,7 @@ The idea is to see how estimate battery discharge profiles to do accurate range 
 Hardware ideas:
 * Accleration/tilt from LSM9DS1. Tilt can be measured from sensor fusino on the mcu
 * Processor: ESP32
-* Current sensor: ACS758LCB-050B-PFF-T Allegro Microsystems, Linear Hall Effect Sensor, 5-Pin CB PFF
+* Current sensor: INA226, 500 kHz +/- 30% sample rate. Up to 36V.
 * GPS: Ublox with antenna
 
 
@@ -39,6 +39,20 @@ Hardware ideas:
 # Uses of sensor variables
 
 ![Picture2](https://user-images.githubusercontent.com/26815217/105344719-3760fa80-5bdb-11eb-9e97-bf75274aea7c.png)
+
+# Software development
+
+### Objectives
+
+- [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley
 
 
 # Software development
