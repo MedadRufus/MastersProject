@@ -60,7 +60,7 @@ void setup()
     Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
     if (myGNSS.begin(Serial1) == true) {
         Serial.println("GNSS: connected at 9600 baud, switching to 38400");
-        myGNSS.setSerialRate(38400);
+        myGNSS.factoryReset();
         delay(100);
     } else {
         myGNSS.factoryReset();
