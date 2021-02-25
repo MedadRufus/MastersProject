@@ -40,20 +40,6 @@ Hardware ideas:
 
 ![Picture2](https://user-images.githubusercontent.com/26815217/105344719-3760fa80-5bdb-11eb-9e97-bf75274aea7c.png)
 
-# Software development
-
-### Objectives
-
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
-- [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
-
 
 # Software development
 
