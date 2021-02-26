@@ -3,6 +3,7 @@
 #include "SparkFunLSM6DS3.h"
 #include "sd_card_manager.h"
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
+#include <INA.h>  // Zanshin INA Library
 
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
@@ -60,13 +61,27 @@ SFE_UBLOX_GNSS myGNSS;
 char buffer_gnss [400];
 
 
+const uint32_t SERIAL_SPEED{2000000};     ///< Use fast serial speed
+const uint32_t SHUNT_MICRO_OHM {
+  100000
+};  ///< Shunt resistance in Micro-Ohm, e.g. 100000 is 0.1 Ohm
+const uint16_t MAXIMUM_AMPS {
+  1
+};          ///< Max expected amps, clamped from 1A to a max of 1022A
+uint8_t        devicesFound{0};          ///< Number of INAs found
+INA_Class      INA;                      ///< INA class instantiation to use EEPROM
+// INA_Class      INA(0);                 ///< INA class instantiation to use EEPROM
+// INA_Class      INA(5);                 ///< INA class instantiation to use dynamic memory rather
+//   than EEPROM. Allocate storage for up to (n) devices
+
+
 // the setup function runs once when you press reset or power the board
 void setup() {
 
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
   Wire.setClock(400000);
 
-  Serial.begin(2000000);
+  Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
   Serial.println("================ Ebike BlackBox =======================");
   Serial.println("============== By Medad Rufus Newman ==================");
@@ -104,7 +119,16 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-  #if 0
+  xTaskCreatePinnedToCore(
+    TaskManageINA226
+    ,  "TaskManageINA226"
+    ,  10024  // Stack size
+    ,  NULL
+    ,  2  // Priority
+    ,  NULL
+    ,  ARDUINO_RUNNING_CORE);
+    
+#if 0
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
@@ -233,16 +257,40 @@ void TaskManageGPS(void *pvParameters)
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = 250;
 
-  
+
   // Initialise the xLastWakeTime variable with the current time.
   xLastWakeTime = xTaskGetTickCount ();
-  for( ;; )
+  for ( ;; )
   {
-      // Wait for the next cycle.
-      vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
-      // run task here.
-      update_gnss_data();
+    // run task here.
+    update_gnss_data();
+  }
+
+}
+
+
+void TaskManageINA226(void *pvParameters)
+{
+  (void) pvParameters;
+
+
+  init_ina226();
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 25;
+
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for ( ;; )
+  {
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+
+    // run task here.
+    poll_ina226();
   }
 
 }
@@ -414,3 +462,55 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   Serial.print(buffer_gnss);
   //sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
+
+
+void init_ina226()
+{
+  Serial.print(" - Searching & Initializing INA devices\n");
+  /************************************************************************************************
+  ** The INA.begin call initializes the device(s) found with an expected ±1 Amps maximum current **
+  ** and for a 0.1Ohm resistor, and since no specific device is given as the 3rd parameter all   **
+  ** devices are initially set to these values.                                                  **
+  ************************************************************************************************/
+  devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
+  while (devicesFound == 0) {
+    Serial.println(F("No INA device found, retrying in 10 seconds..."));
+    delay(10000);                                             // Wait 10 seconds before retrying
+    devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
+  }                                                           // while no devices detected
+  Serial.print(F(" - Detected "));
+  Serial.print(devicesFound);
+  Serial.println(F(" INA devices on the I2C bus"));
+  INA.setBusConversion(8500);             // Maximum conversion time 8.244ms
+  INA.setShuntConversion(8500);           // Maximum conversion time 8.244ms
+  INA.setAveraging(128);                  // Average each reading n-times
+  INA.setMode(INA_MODE_CONTINUOUS_BOTH);  // Bus/shunt measured continuously
+  INA.alertOnBusOverVoltage(true, 5000);  // Trigger alert if over 5V on bus
+}
+
+
+void poll_ina226() {
+  /*!
+   * @brief    Arduino method for the main program loop
+   * @details  This is the main program for the Arduino IDE, it is an infinite loop and keeps on
+   * repeating. In order to format the output use is made of the "sprintf()" function, but in the
+   * Arduino implementation it has no support for floating point output, so the "dtostrf()" function
+   * is used to convert the floating point numbers into formatted strings.
+   * @return   void
+   */
+  static uint16_t loopCounter = 0;     // Count the number of iterations
+  static char     sprintfBuffer[100];  // Buffer to format output
+  static char     busChar[8], shuntChar[10], busMAChar[10], busMWChar[10];  // Output buffers
+
+  for (uint8_t i = 0; i < devicesFound; i++)  // Loop through all devices
+  {
+    dtostrf(INA.getBusMilliVolts(i) / 1000.0, 7, 4, busChar);      // Convert floating point to char
+    dtostrf(INA.getShuntMicroVolts(i) / 1000.0, 9, 4, shuntChar);  // Convert floating point to char
+    dtostrf(INA.getBusMicroAmps(i) / 1000.0, 9, 4, busMAChar);     // Convert floating point to char
+    dtostrf(INA.getBusMicroWatts(i) / 1000.0, 9, 4, busMWChar);    // Convert floating point to char
+    sprintf(sprintfBuffer, "%2d %3d %s %sV %smV %smA %smW\n", i + 1, INA.getDeviceAddress(i),
+            INA.getDeviceName(i), busChar, shuntChar, busMAChar, busMWChar);
+    Serial.print(sprintfBuffer);
+  }  // for-next each INA device loop
+
+}  // method poll_ina226()
