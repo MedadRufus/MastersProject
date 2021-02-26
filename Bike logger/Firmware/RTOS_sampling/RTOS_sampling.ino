@@ -404,7 +404,6 @@ void init_imu()
 }
 
 /* Update the sensor data struct with imu values
-
 */
 void update_imu_data()
 {
@@ -506,7 +505,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
 
-
+/* Initialise the INA226 module */
 void init_ina226()
 {
   Serial.print(" - Searching & Initializing INA devices\n");
@@ -531,7 +530,7 @@ void init_ina226()
   INA.alertOnBusOverVoltage(true, 5000);  // Trigger alert if over 5V on bus
 }
 
-
+/* Poll the INA226 once */
 void poll_ina226() {
   /*!
    * @brief    Arduino method for the main program loop
@@ -556,4 +555,4 @@ void poll_ina226() {
     Serial.print(sprintfBuffer);
   }  // for-next each INA device loop
 
-}  // method poll_ina226()
+}
