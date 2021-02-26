@@ -94,7 +94,7 @@ SFE_UBLOX_GNSS myGNSS;
 char buffer_gnss [400];
 
 
-const uint32_t SERIAL_SPEED{2000000};     ///< Use fast serial speed
+const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
 const uint32_t SHUNT_MICRO_OHM = 100000;  ///< Shunt resistance in Micro-Ohm, e.g. 100000 is 0.1 Ohm
 const uint16_t MAXIMUM_AMPS =  1;          ///< Max expected amps, clamped from 1A to a max of 1022A
 uint8_t        devicesFound{0};          ///< Number of INAs found
