@@ -289,7 +289,7 @@ void update_imu_data()
               );
 
    Serial.print(buffer2);
-   //sd_manager.appendFileSimple("/imu.csv", buffer2);
+   sd_manager.appendFileSimple("/imu.csv", buffer2);
 
 
   }
