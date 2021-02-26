@@ -96,6 +96,7 @@ SensorData sensor_data;
 
 char buffer1 [50];
 char buffer2 [200];
+char buffer_gnss [200];
 
 
 /* ==================================================================== */
@@ -193,6 +194,18 @@ void update_gnss_data()
   sensor_data.altitude = myGNSS.getAltitude();
   sensor_data.sats = myGNSS.getSIV();
   sensor_data.velocity = myGNSS.getGroundSpeed();
+
+
+  sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
+           sensor_data.latitude,
+           sensor_data.longitude,
+           sensor_data.altitude,
+           sensor_data.sats,
+           sensor_data.velocity
+          );
+
+  Serial.print(buffer_gnss);
+  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
 
 /* Update the sensor data struct with baro values
