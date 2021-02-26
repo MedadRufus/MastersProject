@@ -174,7 +174,7 @@ void setup() {
     ,  2  // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
-    
+
 #if 0
   xTaskCreatePinnedToCore(
     TaskReadImu
@@ -251,10 +251,10 @@ void TaskReadImu(void *pvParameters)
   }
 }
 
-  /*
-    Blink
-    Turns on an LED on for BLINK_INTERVAL, then off for BLINK_INTERVAL, repeatedly.
-  */
+/*
+  Blink
+  Turns on an LED on for BLINK_INTERVAL, then off for BLINK_INTERVAL, repeatedly.
+*/
 void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
@@ -536,13 +536,13 @@ void init_ina226()
 /* Poll the INA226 once */
 void poll_ina226() {
   /*!
-   * @brief    Arduino method for the main program loop
-   * @details  This is the main program for the Arduino IDE, it is an infinite loop and keeps on
-   * repeating. In order to format the output use is made of the "sprintf()" function, but in the
-   * Arduino implementation it has no support for floating point output, so the "dtostrf()" function
-   * is used to convert the floating point numbers into formatted strings.
-   * @return   void
-   */
+     @brief    Arduino method for the main program loop
+     @details  This is the main program for the Arduino IDE, it is an infinite loop and keeps on
+     repeating. In order to format the output use is made of the "sprintf()" function, but in the
+     Arduino implementation it has no support for floating point output, so the "dtostrf()" function
+     is used to convert the floating point numbers into formatted strings.
+     @return   void
+  */
   static uint16_t loopCounter = 0;     // Count the number of iterations
   static char     sprintfBuffer[100];  // Buffer to format output
   static char     busChar[8], shuntChar[10], busMAChar[10], busMWChar[10];  // Output buffers
