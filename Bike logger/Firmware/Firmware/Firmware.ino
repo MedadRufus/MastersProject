@@ -96,7 +96,7 @@ SensorData sensor_data;
 
 char buffer1 [50];
 char buffer2 [200];
-char buffer_gnss [200];
+char buffer_gnss [400];
 
 
 /* ==================================================================== */
@@ -302,26 +302,20 @@ void update_imu_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-  sensor_data.latitude = ubxDataStruct.lat;
-  sensor_data.longitude = ubxDataStruct.lon;
-  sensor_data.altitude = ubxDataStruct.hMSL;
-  sensor_data.sats = ubxDataStruct.numSV;
-  sensor_data.velocity = ubxDataStruct.gSpeed;
 
-  Serial.printf("%02d,%02d,%02d,%03d,",
+  sprintf (buffer_gnss,"%02d,%02d,%02d,%03d,%d,%d,%d,%d,%d,%d,%d\n",
           ubxDataStruct.hour,
           ubxDataStruct.min,
           ubxDataStruct.sec,
-          ubxDataStruct.iTOW % 1000
+          ubxDataStruct.iTOW % 1000,
+          ubxDataStruct.lat,
+          ubxDataStruct.lon,
+          ubxDataStruct.hMSL,
+          ubxDataStruct.numSV,
+          ubxDataStruct.gSpeed,
+          ubxDataStruct.flags.bits.gnssFixOK,
+          ubxDataStruct.fixType
          );
-
-  sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
-           sensor_data.latitude,
-           sensor_data.longitude,
-           sensor_data.altitude,
-           sensor_data.sats,
-           sensor_data.velocity
-          );
 
   Serial.print(buffer_gnss);
   sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
