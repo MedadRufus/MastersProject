@@ -303,7 +303,7 @@ void update_imu_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 
-  sprintf (buffer_gnss,"%02d,%02d,%02d,%03d,%d,%d,%d,%d,%d,%d,%d\n",
+  sprintf (buffer_gnss,"%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
           ubxDataStruct.hour,
           ubxDataStruct.min,
           ubxDataStruct.sec,
