@@ -220,11 +220,7 @@ void TaskReadBaro(void *pvParameters)
     // run task here.
 
     update_baro_data();
-    /* Write baro data to file */
-    char buffer1 [50];
-    sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
-    Serial.print(buffer1);
-    sd_manager.appendFileSimple("/baro.csv", buffer1);
+
   }
 }
 
@@ -346,7 +342,11 @@ void update_baro_data()
 {
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
-
+  /* Write baro data to file */
+  char buffer1 [100];
+  sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+  Serial.print(buffer1);
+  sd_manager.appendFileSimple("/baro.csv", buffer1);
 }
 
 
@@ -408,8 +408,7 @@ void init_imu()
 void update_imu_data()
 {
 
-
-  sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
+  sprintf (buffer_imu, "imu: %f,%f,%f,%f,%f,%f\n",
            myIMU.readFloatAccelX(),
            myIMU.readFloatAccelY(),
            myIMU.readFloatAccelZ(),
@@ -437,7 +436,7 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 
-  sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+  sprintf (buffer_gnss, "gps: %02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
            ubxDataStruct.hour,
            ubxDataStruct.min,
            ubxDataStruct.sec,
@@ -491,7 +490,7 @@ void poll_ina226() {
      @return   void
   */
   static uint16_t loopCounter = 0;     // Count the number of iterations
-  static char     sprintfBuffer[100];  // Buffer to format output
+  static char     sprintfBuffer[150];  // Buffer to format output
   static char     busChar[8], shuntChar[10], busMAChar[10], busMWChar[10];  // Output buffers
 
   for (uint8_t i = 0; i < devicesFound; i++)  // Loop through all devices
@@ -500,7 +499,7 @@ void poll_ina226() {
     dtostrf(INA.getShuntMicroVolts(i) / 1000.0, 9, 4, shuntChar);  // Convert floating point to char
     dtostrf(INA.getBusMicroAmps(i) / 1000.0, 9, 4, busMAChar);     // Convert floating point to char
     dtostrf(INA.getBusMicroWatts(i) / 1000.0, 9, 4, busMWChar);    // Convert floating point to char
-    sprintf(sprintfBuffer, "%2d %3d %s %sV %smV %smA %smW\n", i + 1, INA.getDeviceAddress(i),
+    sprintf(sprintfBuffer, "dev_id:%2d, dev_add:%3d, dev_type:%s, voltage:%sV, shunt_v_drop:%smV, shunt_curr:%smA, power%smW\n", i + 1, INA.getDeviceAddress(i),
             INA.getDeviceName(i), busChar, shuntChar, busMAChar, busMWChar);
     Serial.print(sprintfBuffer);
   }  // for-next each INA device loop
