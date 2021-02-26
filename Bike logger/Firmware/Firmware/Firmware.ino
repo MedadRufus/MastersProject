@@ -193,17 +193,6 @@ void update_gnss_data()
 {
   myGNSS.checkUblox(); // Check for the arrival of new data and process it.
   myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
-
-  sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
-           sensor_data.latitude,
-           sensor_data.longitude,
-           sensor_data.altitude,
-           sensor_data.sats,
-           sensor_data.velocity
-          );
-
-  Serial.print(buffer_gnss);
-  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
 
 /* Update the sensor data struct with baro values
