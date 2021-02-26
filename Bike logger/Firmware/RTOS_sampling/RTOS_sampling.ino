@@ -37,6 +37,11 @@
 #define RXD2 17
 #define TXD2 16
 
+#define INA226_SAMPLE_INTERVAL 100
+#define GNSS_SAMPLE_INTERVAL 250
+#define BARO_SAMPLE_INTERVAL 1000
+#define BLINK_INTERVAL 100
+
 /* ==================================================================== */
 /* ======================== global variables ========================== */
 /* ==================================================================== */
@@ -206,7 +211,8 @@ void TaskReadBaro(void *pvParameters)
 
 
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = 100;
+  const TickType_t xFrequency = BARO_SAMPLE_INTERVAL;
+
 
 
   // Initialise the xLastWakeTime variable with the current time.
@@ -249,7 +255,7 @@ void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = 100;
+  const TickType_t xFrequency = BLINK_INTERVAL;
 
   /*
     Blink
@@ -294,7 +300,7 @@ void TaskManageGPS(void *pvParameters)
 
 
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = 250;
+  const TickType_t xFrequency = GNSS_SAMPLE_INTERVAL;
 
 
   // Initialise the xLastWakeTime variable with the current time.
@@ -318,7 +324,7 @@ void TaskManageINA226(void *pvParameters)
 
   init_ina226();
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = 25;
+  const TickType_t xFrequency = INA226_SAMPLE_INTERVAL;
 
 
   // Initialise the xLastWakeTime variable with the current time.
