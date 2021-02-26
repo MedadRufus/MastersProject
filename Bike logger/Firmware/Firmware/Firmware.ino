@@ -20,6 +20,7 @@
 #include "SPI.h"
 #include "ms8607.h"
 #include "sd_card_manager.h"
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h> //http://librarymanager/All#SparkFun_u-blox_GNSS
 
 
 
@@ -31,6 +32,9 @@
 
 #define LED_PIN 27
 
+#define RXD2 17
+#define TXD2 16
+
 /* ==================================================================== */
 /* ======================== global variables ========================== */
 /* ==================================================================== */
@@ -39,7 +43,7 @@
 
 StateMachine blinker1(100, true);
 StateMachine poll_imu(1000, true);
-StateMachine poll_baro(10, true);
+StateMachine poll_baro(1000, true);
 StateMachine poll_gps(500, true);
 StateMachine poll_IN226(10, true);
 StateMachine write_to_sd(10, true);
@@ -50,7 +54,7 @@ bool state1 = false;   // false is OFF, true is ON
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
-
+SFE_UBLOX_GNSS myGNSS;
 
 struct SensorData
 {
@@ -142,6 +146,16 @@ void setup()
   /* initiliase the SD card manager */
   sd_manager.SD_Manager_init();
 
+
+  /* Setup GNSS */
+  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
+  if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
+  {
+    Serial.println(F("u-blox GNSS not detected"));
+  }
+  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+
 }
 
 
@@ -161,6 +175,7 @@ void loop()
   }
 
   if (poll_gps.update()) {
+    update_gnss_data();
   }
 
   if (poll_IN226.update()) {
@@ -170,6 +185,15 @@ void loop()
   }
 }
 
+/* Update GNSS data */
+void update_gnss_data()
+{
+    sensor_data.latitude = myGNSS.getLatitude();
+    sensor_data.longitude = myGNSS.getLongitude();
+    sensor_data.altitude = myGNSS.getAltitude();
+    sensor_data.sats = myGNSS.getSIV();
+    sensor_data.velocity = myGNSS.getGroundSpeed();
+}
 
 /* Update the sensor data struct with baro values
 
