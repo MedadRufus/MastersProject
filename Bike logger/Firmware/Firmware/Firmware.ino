@@ -117,6 +117,7 @@ void setup()
   pinMode(led1, OUTPUT);
   digitalWrite(led1, state1 ? HIGH : LOW);
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.setClock(400000);
 
   Serial.begin(2000000);
   Serial.println("=======================================================");
