@@ -91,6 +91,7 @@ struct SensorData
 SensorData sensor_data;
 
 char buffer1 [50];
+char buffer2 [200];
 
 
 /* ==================================================================== */
@@ -253,29 +254,19 @@ void update_imu_data()
   //properly.  Emptying the fifo is one way of doing this (this example)
   while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
 
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
+    sprintf (buffer2, "%f,%f,%f,%f,%f,%f\n",
+              myIMU.calcGyro(myIMU.fifoRead()),
+              myIMU.calcGyro(myIMU.fifoRead()),
+              myIMU.calcGyro(myIMU.fifoRead()),
+              myIMU.calcAccel(myIMU.fifoRead()),
+              myIMU.calcAccel(myIMU.fifoRead()),
+              myIMU.calcAccel(myIMU.fifoRead())
+              );
 
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
+   Serial.print(buffer2);
+   //sd_manager.appendFileSimple("/imu.csv", buffer2);
 
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print("\n");
 
   }
 
