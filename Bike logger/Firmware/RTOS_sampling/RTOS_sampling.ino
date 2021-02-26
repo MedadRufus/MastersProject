@@ -40,6 +40,7 @@
 #define INA226_SAMPLE_INTERVAL 100
 #define GNSS_SAMPLE_INTERVAL 250
 #define BARO_SAMPLE_INTERVAL 1000
+#define IMU_SAMPLE_INTERVAL 100
 #define BLINK_INTERVAL 100
 
 /* ==================================================================== */
@@ -92,6 +93,7 @@ SFE_UBLOX_GNSS myGNSS;
 
 
 char buffer_gnss [400];
+char buffer_imu [200];
 
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
@@ -175,7 +177,7 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-#if 0
+
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
@@ -184,7 +186,7 @@ void setup() {
     ,  2   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
-#endif
+
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
 
@@ -238,16 +240,21 @@ void TaskReadImu(void *pvParameters)
 {
   (void) pvParameters;
 
-  //Call .begin() to configure the IMU
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = IMU_SAMPLE_INTERVAL;
+
   myIMU.begin();
   init_imu();
 
 
-  for (;;) // A Task shall never return or exit.
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for ( ;; )
   {
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
     update_imu_data();
 
-    vTaskDelay(1000);  // one tick delay (15ms) in between reads for stability
   }
 }
 
@@ -412,69 +419,19 @@ void update_imu_data()
 {
 
 
-  float temp;  //This is to hold read data
+  sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
+           myIMU.readFloatAccelX(),
+           myIMU.readFloatAccelY(),
+           myIMU.readFloatAccelZ(),
+           myIMU.readFloatGyroX(),
+           myIMU.readFloatGyroY(),
+           myIMU.readFloatGyroZ()
+          );
 
-  //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
-  //the channels must be synchronized to a known position for the data to align
-  //properly.  Emptying the fifo is one way of doing this (this example)
-  while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
-
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcGyro(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print(",");
-
-    temp = myIMU.calcAccel(myIMU.fifoRead());
-    Serial.print(temp);
-    Serial.print("\n");
-
-  }
-
-
+  Serial.print(buffer_imu);
+  sd_manager.appendFileSimple("/imu.csv", buffer_imu);
 }
 
-/* Print out all IMU values
-*/
-void print_imu_values()
-{
-  Serial.print("x_gyro:");
-  Serial.print(sensor_data.gyro_x, 4);
-  Serial.print(",");
-  Serial.print("y_gyro:");
-  Serial.print(sensor_data.gyro_y, 4);
-  Serial.print(",");
-  Serial.print("z_gyro:");
-  Serial.println(sensor_data.gyro_z, 4);
-
-
-  Serial.print("x_acc:");
-  Serial.print(sensor_data.acc_x, 4);
-  Serial.print(",");
-  Serial.print("y_acc:");
-  Serial.print(sensor_data.acc_y, 4);
-  Serial.print(",");
-  Serial.print("z_acc:");
-  Serial.println(sensor_data.acc_z, 4);
-
-
-  Serial.print("Imu Degrees_C:");
-  Serial.println(sensor_data.imu_temperature, 4);
-}
 
 
 /* Update GNSS data */
