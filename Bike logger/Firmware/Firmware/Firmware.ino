@@ -177,20 +177,7 @@ void update_baro_data()
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
       &sensor_data.humidity);
 
-  Serial.print("Tempeature = ");
-  Serial.print(sensor_data.temperature);
-  Serial.print((char)176);
-  Serial.println(" C");
 
-  Serial.print("Pressure = ");
-  Serial.print(sensor_data.pressure);
-  Serial.println(" hPa");
-
-  Serial.print("Humidity = ");
-  Serial.print(sensor_data.humidity);
-  Serial.println(" %RH");
-
-  Serial.println("");
     /* Write baro data to file */
   sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
   Serial.print(buffer1);
