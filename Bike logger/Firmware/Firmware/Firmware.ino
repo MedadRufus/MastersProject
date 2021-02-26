@@ -157,7 +157,7 @@ void setup()
   }
   myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
   myGNSS.setNavigationFrequency(2); //Produce two solutions per second
-  myGNSS.setAutoPVTcallback(&printPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
+  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
 
 }
 
@@ -308,10 +308,10 @@ void update_imu_data()
 }
 
 
-void printPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 /*  Callback: printPVTdata will be called when new NAV PVT data arrives
  *  See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
  */
+void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
   sensor_data.latitude = ubxDataStruct.lat;
   sensor_data.longitude = ubxDataStruct.lon;
