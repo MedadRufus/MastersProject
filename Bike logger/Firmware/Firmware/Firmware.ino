@@ -43,7 +43,7 @@
 
 StateMachine blinker1(100, true);
 StateMachine poll_imu(1000, true);
-StateMachine poll_baro(1000, true);
+StateMachine poll_baro(100, true);
 StateMachine poll_gps(500, true);
 StateMachine poll_IN226(10, true);
 StateMachine write_to_sd(10, true);
@@ -156,6 +156,8 @@ void setup()
     Serial.println(F("u-blox GNSS not detected"));
   }
   myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
+  myGNSS.setAutoPVTcallback(&printPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
 
 }
 
@@ -189,12 +191,8 @@ void loop()
 /* Update GNSS data */
 void update_gnss_data()
 {
-  sensor_data.latitude = myGNSS.getLatitude();
-  sensor_data.longitude = myGNSS.getLongitude();
-  sensor_data.altitude = myGNSS.getAltitude();
-  sensor_data.sats = myGNSS.getSIV();
-  sensor_data.velocity = myGNSS.getGroundSpeed();
-
+  myGNSS.checkUblox(); // Check for the arrival of new data and process it.
+  myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
 
   sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
            sensor_data.latitude,
@@ -307,4 +305,65 @@ void update_imu_data()
 
   }
 
+}
+
+
+// Callback: printPVTdata will be called when new NAV PVT data arrives
+// See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
+//         _____  You can use any name you like for the callback. Use the same name when you call setAutoPVTcallback
+//        /                  _____  This _must_ be UBX_NAV_PVT_data_t
+//        |                 /               _____ You can use any name you like for the struct
+//        |                 |              /
+//        |                 |              |
+void printPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
+{
+    Serial.println();
+
+    Serial.print(F("Time: ")); // Print the time
+    uint8_t hms = ubxDataStruct.hour; // Print the hours
+    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
+    Serial.print(hms);
+    Serial.print(F(":"));
+    hms = ubxDataStruct.min; // Print the minutes
+    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
+    Serial.print(hms);
+    Serial.print(F(":"));
+    hms = ubxDataStruct.sec; // Print the seconds
+    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
+    Serial.print(hms);
+    Serial.print(F("."));
+    unsigned long millisecs = ubxDataStruct.iTOW % 1000; // Print the milliseconds
+    if (millisecs < 100) Serial.print(F("0")); // Print the trailing zeros correctly
+    if (millisecs < 10) Serial.print(F("0"));
+    Serial.print(millisecs);
+
+    long latitude = ubxDataStruct.lat; // Print the latitude
+    Serial.print(F(" Lat: "));
+    Serial.print(latitude);
+
+    long longitude = ubxDataStruct.lon; // Print the longitude
+    Serial.print(F(" Long: "));
+    Serial.print(longitude);
+    Serial.print(F(" (degrees * 10^-7)"));
+
+    long altitude = ubxDataStruct.hMSL; // Print the height above mean sea level
+    Serial.print(F(" Altitude: "));
+    Serial.print(altitude);
+    Serial.print(F(" (mm)"));
+
+    int sats = ubxDataStruct.numSV; // Print the height above mean sea level
+    Serial.print(F(" SIV: "));
+    Serial.print(sats);
+    Serial.print(F(" "));
+
+    int fix_ok = ubxDataStruct.flags.bits.gnssFixOK; // Print the height above mean sea level
+    Serial.print(F(" FIX OK: "));
+    Serial.print(fix_ok);
+    Serial.print(F(" "));
+
+
+    int fix_type = ubxDataStruct.fixType; // Print the height above mean sea level
+    Serial.print(F(" FIX Type: "));
+    Serial.print(fix_type);
+    Serial.println(F(" "));
 }
