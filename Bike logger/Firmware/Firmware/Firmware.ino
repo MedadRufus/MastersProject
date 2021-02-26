@@ -308,6 +308,13 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   sensor_data.sats = ubxDataStruct.numSV;
   sensor_data.velocity = ubxDataStruct.gSpeed;
 
+  Serial.printf("%02d,%02d,%02d,%03d,",
+          ubxDataStruct.hour,
+          ubxDataStruct.min,
+          ubxDataStruct.sec,
+          ubxDataStruct.iTOW % 1000
+         );
+
   sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
            sensor_data.latitude,
            sensor_data.longitude,
