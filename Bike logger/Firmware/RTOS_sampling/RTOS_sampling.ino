@@ -110,7 +110,7 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-  
+
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
@@ -138,7 +138,7 @@ void setup() {
     ,  2   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
-   #endif
+#endif
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
 
@@ -164,26 +164,25 @@ void TaskReadBaro(void *pvParameters)
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 
 
-  
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = 100;
 
-  
+
   // Initialise the xLastWakeTime variable with the current time.
   xLastWakeTime = xTaskGetTickCount ();
-  for( ;; )
+  for ( ;; )
   {
-      // Wait for the next cycle.
-      vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
-      // run task here.
+    // run task here.
 
-      update_baro_data();
-      /* Write baro data to file */
-      char buffer1 [50];
-      sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
-      Serial.print(buffer1);
-      sd_manager.appendFileSimple("/baro.csv", buffer1);
+    update_baro_data();
+    /* Write baro data to file */
+    char buffer1 [50];
+    sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+    Serial.print(buffer1);
+    sd_manager.appendFileSimple("/baro.csv", buffer1);
   }
 }
 
@@ -223,15 +222,15 @@ void TaskBlink(void *pvParameters)  // This is a task.
   // initialize digital LED_BUILTIN on pin 13 as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
-  
+
   // Initialise the xLastWakeTime variable with the current time.
   xLastWakeTime = xTaskGetTickCount ();
-  for( ;; )
+  for ( ;; )
   {
-      // Wait for the next cycle.
-      vTaskDelayUntil( &xLastWakeTime, xFrequency );
-      led_state = !led_state;
-      digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    led_state = !led_state;
+    digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
   }
 
 }
@@ -241,7 +240,7 @@ void TaskManageGPS(void *pvParameters)
 {
   (void) pvParameters;
 
-    /* Setup GNSS */
+  /* Setup GNSS */
   Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
   //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
   if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
@@ -367,7 +366,7 @@ void update_imu_data()
 
 
   float temp;  //This is to hold read data
-  
+
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
   //properly.  Emptying the fifo is one way of doing this (this example)
@@ -444,19 +443,19 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 
-  sprintf (buffer_gnss,"%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
-          ubxDataStruct.hour,
-          ubxDataStruct.min,
-          ubxDataStruct.sec,
-          ubxDataStruct.iTOW % 1000,
-          ubxDataStruct.lat,
-          ubxDataStruct.lon,
-          ubxDataStruct.hMSL,
-          ubxDataStruct.numSV,
-          ubxDataStruct.gSpeed,
-          ubxDataStruct.flags.bits.gnssFixOK,
-          ubxDataStruct.fixType
-         );
+  sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+           ubxDataStruct.hour,
+           ubxDataStruct.min,
+           ubxDataStruct.sec,
+           ubxDataStruct.iTOW % 1000,
+           ubxDataStruct.lat,
+           ubxDataStruct.lon,
+           ubxDataStruct.hMSL,
+           ubxDataStruct.numSV,
+           ubxDataStruct.gSpeed,
+           ubxDataStruct.flags.bits.gnssFixOK,
+           ubxDataStruct.fixType
+          );
 
   Serial.print(buffer_gnss);
   //sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
