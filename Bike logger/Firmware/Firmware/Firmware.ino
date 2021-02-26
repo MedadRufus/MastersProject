@@ -134,7 +134,7 @@ void setup()
   /* Initialise the IMU */
   init_imu();
 
-  
+
   m_ms8607.begin();
   if (m_ms8607.is_connected() == true) {
     m_ms8607.reset();
@@ -188,11 +188,11 @@ void loop()
 /* Update GNSS data */
 void update_gnss_data()
 {
-    sensor_data.latitude = myGNSS.getLatitude();
-    sensor_data.longitude = myGNSS.getLongitude();
-    sensor_data.altitude = myGNSS.getAltitude();
-    sensor_data.sats = myGNSS.getSIV();
-    sensor_data.velocity = myGNSS.getGroundSpeed();
+  sensor_data.latitude = myGNSS.getLatitude();
+  sensor_data.longitude = myGNSS.getLongitude();
+  sensor_data.altitude = myGNSS.getAltitude();
+  sensor_data.sats = myGNSS.getSIV();
+  sensor_data.velocity = myGNSS.getGroundSpeed();
 }
 
 /* Update the sensor data struct with baro values
@@ -205,7 +205,7 @@ void update_baro_data()
       &sensor_data.humidity);
 
 
-    /* Write baro data to file */
+  /* Write baro data to file */
   sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
   Serial.print(buffer1);
   sd_manager.appendFileSimple("/baro.csv", buffer1);
@@ -272,7 +272,7 @@ void init_imu()
 void update_imu_data()
 {
   float temp;  //This is to hold read data
-  
+
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
   //properly.  Emptying the fifo is one way of doing this (this example)
@@ -280,16 +280,16 @@ void update_imu_data()
 
 
     sprintf (buffer2, "%f,%f,%f,%f,%f,%f\n",
-              myIMU.calcGyro(myIMU.fifoRead()),
-              myIMU.calcGyro(myIMU.fifoRead()),
-              myIMU.calcGyro(myIMU.fifoRead()),
-              myIMU.calcAccel(myIMU.fifoRead()),
-              myIMU.calcAccel(myIMU.fifoRead()),
-              myIMU.calcAccel(myIMU.fifoRead())
-              );
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead())
+            );
 
-   Serial.print(buffer2);
-   sd_manager.appendFileSimple("/imu.csv", buffer2);
+    Serial.print(buffer2);
+    sd_manager.appendFileSimple("/imu.csv", buffer2);
 
 
   }
