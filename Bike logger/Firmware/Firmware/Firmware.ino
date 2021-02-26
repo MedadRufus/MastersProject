@@ -118,7 +118,7 @@ void setup()
   digitalWrite(led1, state1 ? HIGH : LOW);
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
-  Serial.begin(115200);
+  Serial.begin(2000000);
   Serial.println("=======================================================");
   Serial.println("================ Ebike BlackBox =======================");
   Serial.println("============== By Medad Rufus Newman ==================");
