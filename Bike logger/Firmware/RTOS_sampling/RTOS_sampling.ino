@@ -244,7 +244,6 @@ void TaskReadImu(void *pvParameters)
   const TickType_t xFrequency = IMU_SAMPLE_INTERVAL;
 
   myIMU.begin();
-  init_imu();
 
 
   // Initialise the xLastWakeTime variable with the current time.
