@@ -19,6 +19,7 @@
 #include "Wire.h"
 #include "SPI.h"
 #include "ms8607.h"
+#include "sd_card_manager.h"
 
 
 
