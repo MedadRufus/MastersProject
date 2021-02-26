@@ -1,3 +1,19 @@
+/*********************************************************************
+** @source Ebike Blackbox datalogger
+**
+** Main code for the Ebike logger
+**
+** @author Copyright (C) 2021  Medad Rufus Newman
+** @version v0.1
+********************************************************************/
+
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
+
+/* Inclusion of system and local header files goes here */
 #include "ms8607.h"
 #include "Wire.h"
 #include "SparkFunLSM6DS3.h"
@@ -5,6 +21,12 @@
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 #include <INA.h>  // Zanshin INA Library
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* #define and enum statements go here */
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
 #else
@@ -14,6 +36,12 @@
 #define LED_BUILTIN 27
 #define RXD2 17
 #define TXD2 16
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
+
+/* Global variables definitions go here */
 
 struct SensorData
 {
@@ -74,8 +102,25 @@ INA_Class      INA;                      ///< INA class instantiation to use EEP
 // INA_Class      INA(5);                 ///< INA class instantiation to use dynamic memory rather
 //   than EEPROM. Allocate storage for up to (n) devices
 
+/* ==================================================================== */
+/* ============================== data ================================ */
+/* ==================================================================== */
 
-// the setup function runs once when you press reset or power the board
+/* Definition of datatypes go here */
+
+
+
+/* ==================================================================== */
+/* ==================== function prototypes =========================== */
+/* ==================================================================== */
+
+/* Function prototypes for public (external) functions go here */
+
+
+/* ==================================================================== */
+/* ============================ functions ============================= */
+/* ==================================================================== */
+
 void setup() {
 
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
@@ -292,6 +337,10 @@ void TaskManageINA226(void *pvParameters)
   }
 
 }
+
+/*--------------------------------------------------*/
+/*--------------- Other Functions ------------------*/
+/*--------------------------------------------------*/
 
 
 /* Update the sensor data struct with baro values
