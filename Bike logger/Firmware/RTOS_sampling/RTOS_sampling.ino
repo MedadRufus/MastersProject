@@ -37,10 +37,10 @@
 #define RXD2 17
 #define TXD2 16
 
-#define INA226_SAMPLE_INTERVAL 100
+#define INA226_SAMPLE_INTERVAL 510
 #define GNSS_SAMPLE_INTERVAL 250
-#define BARO_SAMPLE_INTERVAL 1000
-#define IMU_SAMPLE_INTERVAL 100
+#define BARO_SAMPLE_INTERVAL 480
+#define IMU_SAMPLE_INTERVAL 260
 #define BLINK_INTERVAL 100
 
 /* ==================================================================== */
