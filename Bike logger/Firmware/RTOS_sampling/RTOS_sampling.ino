@@ -137,7 +137,7 @@ void setup() {
   Serial.println("=======================================================");
 
   sd_manager.SD_Manager_init();
-
+  init_all_sensors();
 
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
@@ -203,13 +203,6 @@ void TaskReadBaro(void *pvParameters)
 {
   (void) pvParameters;
 
-  m_ms8607.begin();
-  if (m_ms8607.is_connected() == true) {
-    m_ms8607.reset();
-  }
-
-  boolean connected = m_ms8607.is_connected();
-  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 
 
   TickType_t xLastWakeTime;
@@ -243,7 +236,6 @@ void TaskReadImu(void *pvParameters)
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = IMU_SAMPLE_INTERVAL;
 
-  myIMU.begin();
 
 
   // Initialise the xLastWakeTime variable with the current time.
@@ -325,7 +317,6 @@ void TaskManageINA226(void *pvParameters)
   (void) pvParameters;
 
 
-  init_ina226();
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = INA226_SAMPLE_INTERVAL;
 
@@ -513,5 +504,25 @@ void poll_ina226() {
             INA.getDeviceName(i), busChar, shuntChar, busMAChar, busMWChar);
     Serial.print(sprintfBuffer);
   }  // for-next each INA device loop
+
+}
+
+
+void init_all_sensors()
+{
+  /* INIT baro sensor */
+  m_ms8607.begin();
+  if (m_ms8607.is_connected() == true) {
+    m_ms8607.reset();
+  }
+
+  boolean connected = m_ms8607.is_connected();
+  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+
+  /* INIT IMU */
+  myIMU.begin();
+
+  /* INIT INA226 */
+  init_ina226();
 
 }
