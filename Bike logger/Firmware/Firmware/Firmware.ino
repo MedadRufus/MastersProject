@@ -37,11 +37,11 @@
 /* Global variables definitions go here */
 
 StateMachine blinker1(100, true);
-StateMachine poll_imu(10, true);
+StateMachine poll_imu(1000, true);
 StateMachine poll_baro(10, true);
-StateMachine poll_gps(1000, true);
-StateMachine poll_IN226(1, true);
-StateMachine write_to_sd(1, true);
+StateMachine poll_gps(500, true);
+StateMachine poll_IN226(10, true);
+StateMachine write_to_sd(10, true);
 
 const int led1 = LED_PIN;
 bool state1 = false;   // false is OFF, true is ON
