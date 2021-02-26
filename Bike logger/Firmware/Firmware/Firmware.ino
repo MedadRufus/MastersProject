@@ -167,7 +167,7 @@ void loop()
   }
 
   if (poll_imu.update()) {
-    update_imu_data();
+    //update_imu_data();
   }
 
   if (poll_baro.update()) {
