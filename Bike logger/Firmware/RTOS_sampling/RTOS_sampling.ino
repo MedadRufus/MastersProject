@@ -94,7 +94,7 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-  #if 0
+  
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
@@ -104,7 +104,7 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-
+  #if 0
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
@@ -137,18 +137,30 @@ void TaskReadBaro(void *pvParameters)
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+  
   sd_manager.SD_Manager_init();
 
-  for (;;) // A Task shall never return or exit.
+
+  
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 100;
+
+  
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for( ;; )
   {
-    update_baro_data();
+      // Wait for the next cycle.
+      vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
-    /* Write baro data to file */
-    char buffer1 [50];
-    sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
-    sd_manager.appendFileSimple("/baro.csv", buffer1);
+      // run task here.
 
-    vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
+      update_baro_data();
+      /* Write baro data to file */
+      char buffer1 [50];
+      sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+      Serial.print(buffer1);
+      sd_manager.appendFileSimple("/baro.csv", buffer1);
   }
 }
 
@@ -244,27 +256,8 @@ void update_baro_data()
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
 
-  //print_baro_values();
 }
 
-void print_baro_values()
-{
-  Serial.print("Tempeature = ");
-  Serial.print(sensor_data.temperature);
-  Serial.print((char)176);
-  Serial.println(" C");
-
-  Serial.print("Pressure = ");
-  Serial.print(sensor_data.pressure);
-  Serial.println(" hPa");
-
-  Serial.print("Humidity = ");
-  Serial.print(sensor_data.humidity);
-  Serial.println(" %RH");
-
-  Serial.println("");
-
-}
 
 
 void init_imu()
