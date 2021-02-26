@@ -126,9 +126,10 @@ void setup()
   Serial.println("======= with assistance from Richard Ibbotson =========");
   Serial.println("=======================================================");
 
-  //Call .begin() to configure the IMU
-  myIMU.begin();
+  /* Initialise the IMU */
+  init_imu();
 
+  
   m_ms8607.begin();
   if (m_ms8607.is_connected() == true) {
     m_ms8607.reset();
@@ -186,51 +187,96 @@ void update_baro_data()
 
 }
 
+
+void init_imu()
+{
+
+  //Over-ride default settings if desired
+  myIMU.settings.gyroEnabled = 1;  //Can be 0 or 1
+  myIMU.settings.gyroRange = 2000;   //Max deg/s.  Can be: 125, 245, 500, 1000, 2000
+  myIMU.settings.gyroSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666
+  myIMU.settings.gyroBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.gyroFifoEnabled = 1;  //Set to include gyro in FIFO
+  myIMU.settings.gyroFifoDecimation = 1;  //set 1 for on /1
+
+  myIMU.settings.accelEnabled = 1;
+  myIMU.settings.accelRange = 16;      //Max G force readable.  Can be: 2, 4, 8, 16
+  myIMU.settings.accelSampleRate = 833;  //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664, 13330
+  myIMU.settings.accelBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.accelFifoEnabled = 1;  //Set to include accelerometer in the FIFO
+  myIMU.settings.accelFifoDecimation = 1;  //set 1 for on /1
+  myIMU.settings.tempEnabled = 1;
+
+  //Non-basic mode settings
+  myIMU.settings.commMode = 1;
+
+  //FIFO control settings
+  myIMU.settings.fifoThreshold = 4095;  //Can be 0 to 4095 (16 bit bytes)
+  myIMU.settings.fifoSampleRate = 100;  //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoModeWord = 6;  //FIFO mode.
+  //FIFO mode.  Can be:
+  //  0 (Bypass mode, FIFO off)
+  //  1 (Stop when full)
+  //  3 (Continuous during trigger)
+  //  4 (Bypass until trigger)
+  //  6 (Continous mode)
+
+  //Call .begin() to configure the IMUs
+  if ( myIMU.begin() != 0 )
+  {
+    Serial.println("Problem starting the IMU sensor");
+  }
+  else
+  {
+    Serial.println("Sensor IMU started.");
+  }
+
+  Serial.print("Configuring FIFO with no error checking...");
+  myIMU.fifoBegin();
+  Serial.print("Done!\n");
+
+  Serial.print("Clearing out the FIFO...");
+  myIMU.fifoClear();
+  Serial.print("Done!\n");
+}
+
+
 /* Update the sensor data struct with imu values
 
 */
 void update_imu_data()
 {
-  //Get all parameters
-  sensor_data.acc_x = myIMU.readFloatAccelX();
-  sensor_data.acc_y = myIMU.readFloatAccelY();
-  sensor_data.acc_z = myIMU.readFloatAccelZ();
+  float temp;  //This is to hold read data
+  
+  //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
+  //the channels must be synchronized to a known position for the data to align
+  //properly.  Emptying the fifo is one way of doing this (this example)
+  while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-  sensor_data.gyro_x = myIMU.readFloatGyroX();
-  sensor_data.gyro_y = myIMU.readFloatGyroY();
-  sensor_data.gyro_z = myIMU.readFloatGyroZ();
+    temp = myIMU.calcGyro(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print(",");
 
-  sensor_data.imu_temperature = myIMU.readTempC();
+    temp = myIMU.calcGyro(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print(",");
 
-  print_imu_values();
+    temp = myIMU.calcGyro(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print(",");
 
-}
+    temp = myIMU.calcAccel(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print(",");
 
-/* Inefficient way of printing out imu values, since we
-    are reading the values all over again
-*/
-void print_imu_values()
-{
-  Serial.print("x_gyro:");
-  Serial.print(myIMU.readFloatGyroX(), 4);
-  Serial.print(",");
-  Serial.print("y_gyro:");
-  Serial.print(myIMU.readFloatGyroY(), 4);
-  Serial.print(",");
-  Serial.print("z_gyro ");
-  Serial.println(myIMU.readFloatGyroZ(), 4);
+    temp = myIMU.calcAccel(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print(",");
 
+    temp = myIMU.calcAccel(myIMU.fifoRead());
+    Serial.print(temp);
+    Serial.print("\n");
 
-  Serial.print("x_acc:");
-  Serial.print(myIMU.readFloatAccelX(), 4);
-  Serial.print(",");
-  Serial.print("y_acc:");
-  Serial.print(myIMU.readFloatAccelY(), 4);
-  Serial.print(",");
-  Serial.print("z_acc:");
-  Serial.println(myIMU.readFloatAccelZ(), 4);
+  }
 
-
-  Serial.print("Degrees_C:");
-  Serial.println(myIMU.readTempC(), 4);
 }
