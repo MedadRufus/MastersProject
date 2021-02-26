@@ -88,6 +88,7 @@ void setup() {
   Serial.println("======= with assistance from Richard Ibbotson =========");
   Serial.println("=======================================================");
 
+  sd_manager.SD_Manager_init();
 
 
   // Now set up tasks to run independently.
@@ -161,8 +162,6 @@ void TaskReadBaro(void *pvParameters)
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
-  
-  sd_manager.SD_Manager_init();
 
 
   
