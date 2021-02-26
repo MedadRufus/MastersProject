@@ -48,7 +48,6 @@ const int led1 = LED_PIN;
 bool state1 = false;   // false is OFF, true is ON
 
 static ms8607 m_ms8607;
-
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
 
