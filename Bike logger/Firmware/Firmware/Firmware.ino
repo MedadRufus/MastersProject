@@ -49,6 +49,7 @@ bool state1 = false;   // false is OFF, true is ON
 static ms8607 m_ms8607;
 
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
+SD_Manager sd_manager;
 
 
 struct SensorData
@@ -131,6 +132,10 @@ void setup()
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+
+  /* initiliase the SD card manager */
+  sd_manager.SD_Manager_init();
+
 }
 
 
@@ -183,6 +188,10 @@ void update_baro_data()
   Serial.println(" %RH");
 
   Serial.println("");
+    /* Write baro data to file */
+  sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+  Serial.print(buffer1);
+  sd_manager.appendFileSimple("/baro.csv", buffer1);
 
 }
 
