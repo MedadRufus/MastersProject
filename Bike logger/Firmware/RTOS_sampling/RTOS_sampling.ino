@@ -85,6 +85,7 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
+  #if 0
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
@@ -103,6 +104,7 @@ void setup() {
     ,  2   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
+   #endif
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
 
@@ -162,6 +164,8 @@ void TaskReadImu(void *pvParameters)
 void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 1;
 
   /*
     Blink
@@ -170,17 +174,22 @@ void TaskBlink(void *pvParameters)  // This is a task.
     If you want to know what pin the on-board LED is connected to on your ESP32 model, check
     the Technical Specs of your board.
   */
+  bool led_state = false;   // false is OFF, true is ON
 
   // initialize digital LED_BUILTIN on pin 13 as an output.
   pinMode(LED_BUILTIN, OUTPUT);
-
-  for (;;) // A Task shall never return or exit.
+  digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
+  
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for( ;; )
   {
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-    vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    vTaskDelay(100);  // one tick delay (15ms) in between reads for stability
+      // Wait for the next cycle.
+      vTaskDelayUntil( &xLastWakeTime, xFrequency );
+      led_state = !led_state;
+      digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
   }
+
 }
 
 
