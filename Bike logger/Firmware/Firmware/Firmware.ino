@@ -309,8 +309,8 @@ void update_imu_data()
 
 
 /*  Callback: printPVTdata will be called when new NAV PVT data arrives
- *  See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
- */
+    See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
+*/
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
   sensor_data.latitude = ubxDataStruct.lat;
