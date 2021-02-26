@@ -251,19 +251,16 @@ void TaskReadImu(void *pvParameters)
   }
 }
 
+  /*
+    Blink
+    Turns on an LED on for BLINK_INTERVAL, then off for BLINK_INTERVAL, repeatedly.
+  */
 void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = BLINK_INTERVAL;
 
-  /*
-    Blink
-    Turns on an LED on for one second, then off for one second, repeatedly.
-
-    If you want to know what pin the on-board LED is connected to on your ESP32 model, check
-    the Technical Specs of your board.
-  */
   bool led_state = false;   // false is OFF, true is ON
 
   // initialize digital LED_BUILTIN on pin 13 as an output.
