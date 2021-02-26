@@ -318,4 +318,15 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   sensor_data.altitude = ubxDataStruct.hMSL;
   sensor_data.sats = ubxDataStruct.numSV;
   sensor_data.velocity = ubxDataStruct.gSpeed;
+
+  sprintf (buffer_gnss, "%d,%d,%d,%d,%d\n",
+           sensor_data.latitude,
+           sensor_data.longitude,
+           sensor_data.altitude,
+           sensor_data.sats,
+           sensor_data.velocity
+          );
+
+  Serial.print(buffer_gnss);
+  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
