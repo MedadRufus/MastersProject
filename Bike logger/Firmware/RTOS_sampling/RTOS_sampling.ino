@@ -458,7 +458,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           );
 
   Serial.print(buffer_gnss);
-  //sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
+  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
 
 
