@@ -2,7 +2,7 @@
 #include "Wire.h"
 #include "SparkFunLSM6DS3.h"
 #include "sd_card_manager.h"
-
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
@@ -11,8 +11,8 @@
 #endif
 
 #define LED_BUILTIN 27
-
-
+#define RXD2 17
+#define TXD2 16
 
 struct SensorData
 {
@@ -54,11 +54,11 @@ SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
+SFE_UBLOX_GNSS myGNSS;
 
 
-// define two tasks for Blink & AnalogRead
-void TaskBlink( void *pvParameters );
-void TaskAnalogReadA3( void *pvParameters );
+char buffer_gnss [400];
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -81,7 +81,16 @@ void setup() {
     ,  "TaskBlink"   // A name just for humans
     ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
-    ,  0  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL
+    ,  ARDUINO_RUNNING_CORE);
+
+  xTaskCreatePinnedToCore(
+    TaskManageGPS
+    ,  "TaskManageGPS"   // A name just for humans
+    ,  10024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL
+    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
@@ -165,7 +174,7 @@ void TaskBlink(void *pvParameters)  // This is a task.
 {
   (void) pvParameters;
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = 1;
+  const TickType_t xFrequency = 100;
 
   /*
     Blink
@@ -193,7 +202,38 @@ void TaskBlink(void *pvParameters)  // This is a task.
 }
 
 
+void TaskManageGPS(void *pvParameters)
+{
+  (void) pvParameters;
 
+    /* Setup GNSS */
+  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
+  if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
+  {
+    Serial.println(F("u-blox GNSS not detected"));
+  }
+  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
+  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
+
+
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = 250;
+
+  
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for( ;; )
+  {
+      // Wait for the next cycle.
+      vTaskDelayUntil( &xLastWakeTime, xFrequency );
+
+      // run task here.
+      update_gnss_data();
+  }
+
+}
 
 
 /* Update the sensor data struct with baro values
@@ -348,4 +388,36 @@ void print_imu_values()
 
   Serial.print("Imu Degrees_C:");
   Serial.println(sensor_data.imu_temperature, 4);
+}
+
+
+/* Update GNSS data */
+void update_gnss_data()
+{
+  myGNSS.checkUblox(); // Check for the arrival of new data and process it.
+  myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
+}
+
+/*  Callback: printPVTdata will be called when new NAV PVT data arrives
+    See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
+*/
+void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
+{
+
+  sprintf (buffer_gnss,"%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+          ubxDataStruct.hour,
+          ubxDataStruct.min,
+          ubxDataStruct.sec,
+          ubxDataStruct.iTOW % 1000,
+          ubxDataStruct.lat,
+          ubxDataStruct.lon,
+          ubxDataStruct.hMSL,
+          ubxDataStruct.numSV,
+          ubxDataStruct.gSpeed,
+          ubxDataStruct.flags.bits.gnssFixOK,
+          ubxDataStruct.fixType
+         );
+
+  Serial.print(buffer_gnss);
+  //sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
