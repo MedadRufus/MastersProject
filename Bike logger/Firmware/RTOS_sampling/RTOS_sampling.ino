@@ -338,12 +338,14 @@ void TaskManageINA226(void *pvParameters)
 */
 void update_baro_data()
 {
+  #if 0
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
   Serial.print(buffer1);
   sd_manager.appendFileSimple("/baro.csv", buffer1);
+  #endif
 }
 
 
@@ -404,7 +406,7 @@ void init_imu()
 */
 void update_imu_data()
 {
-
+  #if 1
   sprintf (buffer_imu, "imu: %f,%f,%f,%f,%f,%f\n",
            myIMU.readFloatAccelX(),
            myIMU.readFloatAccelY(),
@@ -416,6 +418,7 @@ void update_imu_data()
 
   Serial.print(buffer_imu);
   sd_manager.appendFileSimple("/imu.csv", buffer_imu);
+  #endif
 }
 
 
@@ -432,7 +435,7 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-
+  #if 1
   sprintf (buffer_gnss, "gps: %02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
            ubxDataStruct.hour,
            ubxDataStruct.min,
@@ -449,6 +452,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 
   Serial.print(buffer_gnss);
   sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
+  #endif
 }
 
 /* Initialise the INA226 module */
