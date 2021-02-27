@@ -526,7 +526,7 @@ void init_ina226()
 void poll_ina226() {
 
 
-
+  if 1
   float shuntVoltage_mV = 0.0;
   float loadVoltage_V = 0.0;
   float busVoltage_V = 0.0;
@@ -553,6 +553,7 @@ void poll_ina226() {
   Serial.print("FREE HEAP");
   Serial.println(ESP.getFreeHeap());
   sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
+  #endif
 
 }
 
