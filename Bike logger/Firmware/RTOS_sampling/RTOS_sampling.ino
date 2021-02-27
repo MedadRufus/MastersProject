@@ -169,7 +169,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226"
-    ,  6000  // Stack size
+    ,  90000  // Stack size
     ,  NULL
     ,  2  // Priority
     ,  NULL
