@@ -433,6 +433,8 @@ void update_imu_data()
     Serial.print(buffer_imu);
     sd_manager.appendFileSimple("/imu.csv", buffer_imu);
   }
+  //Serial.println("IMU read done");
+
   #endif
 }
 
