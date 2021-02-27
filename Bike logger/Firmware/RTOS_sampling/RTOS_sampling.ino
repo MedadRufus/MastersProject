@@ -610,17 +610,21 @@ void init_gps()
   myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
 }
 
-void init_all_sensors()
+void init_baro()
 {
-  /* INIT baro sensor */
   m_ms8607.begin();
   if (m_ms8607.is_connected() == true) {
     m_ms8607.reset();
   }
 
   boolean connected = m_ms8607.is_connected();
-  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");  
+}
 
+void init_all_sensors()
+{
+  /* INIT baro sensor */
+  init_baro();
   /* INIT GPS */
   init_gps();
   /* INIT IMU */
