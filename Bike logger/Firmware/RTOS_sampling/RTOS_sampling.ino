@@ -152,7 +152,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageGPS
     ,  "TaskManageGPS"   // A name just for humans
-    ,  10024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  12000  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL
@@ -162,7 +162,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
-    ,  10024  // Stack size
+    ,  12000  // Stack size
     ,  NULL
     ,  1  // Priority
     ,  NULL
@@ -171,7 +171,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226"
-    ,  10024  // Stack size
+    ,  12000  // Stack size
     ,  NULL
     ,  2  // Priority
     ,  NULL
@@ -181,7 +181,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
-    ,  10024  // Stack size
+    ,  12000  // Stack size
     ,  NULL
     ,  2   // Priority
     ,  NULL
