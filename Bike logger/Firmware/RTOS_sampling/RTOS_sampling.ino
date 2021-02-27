@@ -106,6 +106,9 @@ TwoWire I2CINA226 = TwoWire(1);
 
 
 File imu_file;
+File gnss_file;
+File ina226_file;
+File baro_file;
 
 char buffer_gnss [400];
 char buffer_imu [400];
@@ -153,6 +156,10 @@ void setup() {
 
   sd_manager.SD_Manager_init();
   imu_file = SD.open("/imu.csv", FILE_APPEND);
+  gnss_file = SD.open("/gnss.csv", FILE_APPEND);
+  ina226_file = SD.open("/ina226.csv", FILE_APPEND);
+  baro_file = SD.open("/baro.csv", FILE_APPEND);
+
   
   init_all_sensors();
 
@@ -367,7 +374,7 @@ void update_baro_data()
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
   Serial.print(buffer1);
-  sd_manager.appendFileSimple("/baro.csv", buffer1);
+  sd_manager.appendFile(&baro_file, buffer1);
 #endif
 }
 
@@ -484,7 +491,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 
   Serial.print("gps:");
   Serial.print(buffer_gnss);
-  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
+  sd_manager.appendFile(&gnss_file, buffer_gnss);
 #endif
 }
 
@@ -574,7 +581,7 @@ void poll_ina226() {
 
   Serial.print(sprintfBuffer);
 
-  sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
+  sd_manager.appendFile(&ina226_file, sprintfBuffer);
 #endif
 
 }
