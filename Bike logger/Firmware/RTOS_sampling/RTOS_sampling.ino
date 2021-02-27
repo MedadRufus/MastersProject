@@ -109,6 +109,7 @@ SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226;
 TwoWire I2CINA226 = TwoWire(1);
 
+SemaphoreHandle_t  xMutex;
 
 File imu_file;
 File gnss_file;
@@ -167,6 +168,12 @@ void setup() {
 
   
   init_all_sensors();
+
+
+  xMutex = xSemaphoreCreateMutex();
+  if (xMutex == NULL) {
+    Serial.println("Mutex can not be created");
+  }
 
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
@@ -247,8 +254,9 @@ void TaskReadBaro(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-
+    xSemaphoreTake(xMutex, portMAX_DELAY);
     update_baro_data();
+    xSemaphoreGive(xMutex); // release mutex
 
   }
 }
@@ -269,7 +277,11 @@ void TaskReadImu(void *pvParameters)
   {
     // Wait for the next cycle.
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
+       
+        
+    xSemaphoreTake(xMutex, portMAX_DELAY);
     update_imu_data();
+    xSemaphoreGive(xMutex); // release mutex
 
   }
 }
