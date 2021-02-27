@@ -554,8 +554,6 @@ void poll_ina226() {
 
   Serial.print(sprintfBuffer);
 
-  Serial.print("FREE HEAP");
-  Serial.println(ESP.getFreeHeap());
   sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
   #endif
 
