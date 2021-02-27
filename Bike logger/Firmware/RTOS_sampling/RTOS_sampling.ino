@@ -448,7 +448,7 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
   #if 1
-  sprintf (buffer_gnss, "gps: %02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+  sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
            ubxDataStruct.hour,
            ubxDataStruct.min,
            ubxDataStruct.sec,
