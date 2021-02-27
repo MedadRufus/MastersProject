@@ -355,9 +355,13 @@ void update_baro_data()
 {
 #if POLL_BARO
   //Get all parameters
-  m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
+  float temperature;
+  float pressure;
+  float humidity;
+
+  m_ms8607.read_temperature_pressure_humidity(&temperature, &pressure, &humidity);
   /* Write baro data to file */
-  sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+  sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
   Serial.print(buffer1);
   sd_manager.appendFileSimple("/baro.csv", buffer1);
 #endif
