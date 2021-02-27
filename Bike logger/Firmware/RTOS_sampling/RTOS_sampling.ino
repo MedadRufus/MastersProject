@@ -103,6 +103,9 @@ char buffer1 [400];
 
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
+const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
+const uint16_t sda = 21;
+const uint16_t scl = 22;
 
 /* ==================================================================== */
 /* ============================== data ================================ */
@@ -125,7 +128,7 @@ const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
 
 void setup() {
 
-  Wire.begin(21,22,1000000); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.begin(sda,scl,I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
