@@ -501,9 +501,11 @@ void poll_ina226() {
     dtostrf(INA.getBusMicroWatts(i) / 1000.0, 9, 4, busMWChar);    // Convert floating point to char
     sprintf(sprintfBuffer, "dev_id:%2d, dev_add:%3d, dev_type:%s, voltage:%sV, shunt_v_drop:%smV, shunt_curr:%smA, power%smW\n", i + 1, INA.getDeviceAddress(i),
             INA.getDeviceName(i), busChar, shuntChar, busMAChar, busMWChar);
+    
     Serial.print(sprintfBuffer);
-  }  // for-next each INA device loop
-
+    
+    sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
+  }
 }
 
 
