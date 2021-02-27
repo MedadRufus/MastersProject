@@ -20,7 +20,7 @@ SPIClass spiSD(HSPI);
 
 // Chip select for SD card
 #define SD_CS 15
-
+#define SDSPEED 27000000
 
 SD_Manager::SD_Manager(void)
 {
@@ -33,7 +33,7 @@ void SD_Manager::SD_Manager_init()
   
   Serial.println("SD card Tests");
 
-  if (!SD.begin( SD_CS, spiSD )) {
+  if (!SD.begin( SD_CS, spiSD, SDSPEED)) {
     Serial.println("Card Mount Failed");
     return;
   }
