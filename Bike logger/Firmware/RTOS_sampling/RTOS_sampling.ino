@@ -159,7 +159,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
-    ,  12000  // Stack size
+    ,  6000  // Stack size
     ,  NULL
     ,  1  // Priority
     ,  NULL
@@ -168,7 +168,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226"
-    ,  12000  // Stack size
+    ,  6000  // Stack size
     ,  NULL
     ,  2  // Priority
     ,  NULL
@@ -178,9 +178,9 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadImu
     ,  "TaskReadImu"
-    ,  12000  // Stack size
+    ,  50000  // Stack size
     ,  NULL
-    ,  2   // Priority
+    ,  3   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
