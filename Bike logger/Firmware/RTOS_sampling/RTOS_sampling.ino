@@ -46,7 +46,9 @@
 
 #define INA_226_I2C_ADDRESS 0x41
 
-/* Config section */
+/* Config section
+   Set to true or false to poll/not poll
+*/
 #define POLL_BARO   (false)
 #define POLL_GPS    (true)
 #define POLL_IMU    (true)
@@ -137,8 +139,8 @@ const uint16_t scl2 = 18;
 
 void setup() {
 
-  Wire.begin(sda1,scl1,I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
-  I2CINA226.begin(sda2,scl2,I2C_SPEED); // port for INA226 only
+  Wire.begin(sda1, scl1, I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  I2CINA226.begin(sda2, scl2, I2C_SPEED); // port for INA226 only
 
   Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
@@ -351,14 +353,14 @@ void TaskManageINA226(void *pvParameters)
 */
 void update_baro_data()
 {
-  #if POLL_BARO
+#if POLL_BARO
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
   Serial.print(buffer1);
   sd_manager.appendFileSimple("/baro.csv", buffer1);
-  #endif
+#endif
 }
 
 
@@ -419,7 +421,7 @@ void init_imu()
 */
 void update_imu_data()
 {
-  #if POLL_IMU
+#if POLL_IMU
   float temp;  //This is to hold read data
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
@@ -442,7 +444,7 @@ void update_imu_data()
   }
   //Serial.println("IMU read done");
 
-  #endif
+#endif
 }
 
 
@@ -459,7 +461,7 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-  #if POLL_GPS
+#if POLL_GPS
   sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
            ubxDataStruct.hour,
            ubxDataStruct.min,
@@ -477,13 +479,13 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   Serial.print("gps:");
   Serial.print(buffer_gnss);
   sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
-  #endif
+#endif
 }
 
 /* Initialise the INA226 module */
 void init_ina226()
 {
-  ina226.begin(INA_226_I2C_ADDRESS,&I2CINA226);
+  ina226.begin(INA_226_I2C_ADDRESS, &I2CINA226);
 
   /* Set Number of measurements for shunt and bus voltage which shall be averaged
     Mode *     * Number of samples
@@ -542,7 +544,7 @@ void init_ina226()
 void poll_ina226() {
 
 
-  #if POLL_INA226
+#if POLL_INA226
   float shuntVoltage_mV = 0.0;
   float loadVoltage_V = 0.0;
   float busVoltage_V = 0.0;
@@ -567,7 +569,7 @@ void poll_ina226() {
   Serial.print(sprintfBuffer);
 
   sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
-  #endif
+#endif
 
 }
 
