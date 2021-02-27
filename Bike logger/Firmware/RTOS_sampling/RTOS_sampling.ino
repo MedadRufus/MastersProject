@@ -19,7 +19,8 @@
 #include "SparkFunLSM6DS3.h"
 #include "sd_card_manager.h"
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-#include <INA.h>  // Zanshin INA Library
+#include <INA226_WE.h>
+
 
 
 /* ==================================================================== */
@@ -42,6 +43,9 @@
 #define BARO_SAMPLE_INTERVAL 480
 #define IMU_SAMPLE_INTERVAL 260
 #define BLINK_INTERVAL 100
+
+#define INA_226_I2C_ADDRESS 0x41
+
 
 /* ==================================================================== */
 /* ======================== global variables ========================== */
@@ -90,20 +94,14 @@ static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
 SFE_UBLOX_GNSS myGNSS;
-
+INA226_WE ina226(INA_226_I2C_ADDRESS);
 
 char buffer_gnss [400];
 char buffer_imu [200];
+static char sprintfBuffer[150];
 
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
-const uint32_t SHUNT_MICRO_OHM = 100000;  ///< Shunt resistance in Micro-Ohm, e.g. 100000 is 0.1 Ohm
-const uint16_t MAXIMUM_AMPS = 1;          ///< Max expected amps, clamped from 1A to a max of 1022A
-uint8_t        devicesFound{0};          ///< Number of INAs found
-INA_Class      INA;                      ///< INA class instantiation to use EEPROM
-// INA_Class      INA(0);                 ///< INA class instantiation to use EEPROM
-// INA_Class      INA(5);                 ///< INA class instantiation to use dynamic memory rather
-//   than EEPROM. Allocate storage for up to (n) devices
 
 /* ==================================================================== */
 /* ============================== data ================================ */
@@ -457,55 +455,91 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 /* Initialise the INA226 module */
 void init_ina226()
 {
-  Serial.print(" - Searching & Initializing INA devices\n");
-  /************************************************************************************************
-  ** The INA.begin call initializes the device(s) found with an expected ±1 Amps maximum current **
-  ** and for a 0.1Ohm resistor, and since no specific device is given as the 3rd parameter all   **
-  ** devices are initially set to these values.                                                  **
-  ************************************************************************************************/
-  devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
-  while (devicesFound == 0) {
-    Serial.println(F("No INA device found, retrying in 10 seconds..."));
-    delay(10000);                                             // Wait 10 seconds before retrying
-    devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
-  }                                                           // while no devices detected
-  Serial.print(F(" - Detected "));
-  Serial.print(devicesFound);
-  Serial.println(F(" INA devices on the I2C bus"));
-  INA.setBusConversion(8500);             // Maximum conversion time 8.244ms
-  INA.setShuntConversion(8500);           // Maximum conversion time 8.244ms
-  INA.setAveraging(128);                  // Average each reading n-times
-  INA.setMode(INA_MODE_CONTINUOUS_BOTH);  // Bus/shunt measured continuously
-  INA.alertOnBusOverVoltage(true, 5000);  // Trigger alert if over 5V on bus
+  ina226.init();
+
+  /* Set Number of measurements for shunt and bus voltage which shall be averaged
+    Mode *     * Number of samples
+    AVERAGE_1            1 (default)
+    AVERAGE_4            4
+    AVERAGE_16          16
+    AVERAGE_64          64
+    AVERAGE_128        128
+    AVERAGE_256        256
+    AVERAGE_512        512
+    AVERAGE_1024      1024
+  */
+  //ina226.setAverage(AVERAGE_16); // choose mode and uncomment for change of default
+
+  /* Set conversion time in microseconds
+     One set of shunt and bus voltage conversion will take:
+     number of samples to be averaged x conversion time x 2
+
+       Mode *         * conversion time
+     CONV_TIME_140          140 µs
+     CONV_TIME_204          204 µs
+     CONV_TIME_332          332 µs
+     CONV_TIME_588          588 µs
+     CONV_TIME_1100         1.1 ms (default)
+     CONV_TIME_2116       2.116 ms
+     CONV_TIME_4156       4.156 ms
+     CONV_TIME_8244       8.244 ms
+  */
+  //ina226.setConversionTime(CONV_TIME_1100); //choose conversion time and uncomment for change of default
+
+  /* Set measure mode
+    POWER_DOWN - INA226 switched off
+    TRIGGERED  - measurement on demand
+    CONTINUOUS  - continuous measurements (default)
+  */
+  //ina226.setMeasureMode(CONTINUOUS); // choose mode and uncomment for change of default
+
+  /* Set Current Range
+      Mode *   * Max Current
+     MA_400          400 mA
+     MA_800          800 mA (default)
+  */
+  //ina226.setCurrentRange(MA_800); // choose gain and uncomment for change of default
+
+  /* If the current values delivered by the INA226 differ by a constant factor
+     from values obtained with calibrated equipment you can define a correction factor.
+     Correction factor = current delivered from calibrated equipment / current delivered by INA226
+  */
+  // ina226.setCorrectionFactor(0.95);
+
+
+  ina226.waitUntilConversionCompleted(); //if you comment this line the first data might be zero
 }
 
 /* Poll the INA226 once */
 void poll_ina226() {
-  /*!
-     @brief    Arduino method for the main program loop
-     @details  This is the main program for the Arduino IDE, it is an infinite loop and keeps on
-     repeating. In order to format the output use is made of the "sprintf()" function, but in the
-     Arduino implementation it has no support for floating point output, so the "dtostrf()" function
-     is used to convert the floating point numbers into formatted strings.
-     @return   void
-  */
-  static uint16_t loopCounter = 0;     // Count the number of iterations
-  static char     sprintfBuffer[150];  // Buffer to format output
-  static char     busChar[8], shuntChar[10], busMAChar[10], busMWChar[10];  // Output buffers
 
-  for (uint8_t i = 0; i < devicesFound; i++)  // Loop through all devices
-  {
-    dtostrf(INA.getBusMilliVolts(i) / 1000.0, 7, 4, busChar);      // Convert floating point to char
-    dtostrf(INA.getShuntMicroVolts(i) / 1000.0, 9, 4, shuntChar);  // Convert floating point to char
-    dtostrf(INA.getBusMicroAmps(i) / 1000.0, 9, 4, busMAChar);     // Convert floating point to char
-    dtostrf(INA.getBusMicroWatts(i) / 1000.0, 9, 4, busMWChar);    // Convert floating point to char
-    sprintf(sprintfBuffer, "dev_id:%2d, dev_add:%3d, dev_type:%s, voltage:%sV, shunt_v_drop:%smV, shunt_curr:%smA, power%smW\n", i + 1, INA.getDeviceAddress(i),
-            INA.getDeviceName(i), busChar, shuntChar, busMAChar, busMWChar);
-    
-    Serial.print(sprintfBuffer);
-    
-    sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
-  }
+
+
+  float shuntVoltage_mV = 0.0;
+  float loadVoltage_V = 0.0;
+  float busVoltage_V = 0.0;
+  float current_mA = 0.0;
+  float power_mW = 0.0;
+
+  ina226.readAndClearFlags();
+  shuntVoltage_mV = ina226.getShuntVoltage_mV();
+  busVoltage_V = ina226.getBusVoltage_V();
+  current_mA = ina226.getCurrent_mA();
+  power_mW = ina226.getBusPower();
+  loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
+
+
+  sprintf(sprintfBuffer, "Bus_voltage:%fV, shunt_v_drop:%fmV, shunt_curr:%fmA, power%fmW\n",
+          busVoltage_V,
+          shuntVoltage_mV,
+          current_mA,
+          power_mW
+         );
+
+  Serial.print(sprintfBuffer);
+
+  sd_manager.appendFileSimple("/ina226.csv", sprintfBuffer);
+
 }
 
 
