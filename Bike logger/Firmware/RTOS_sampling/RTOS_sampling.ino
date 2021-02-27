@@ -450,8 +450,6 @@ void update_imu_data()
     Serial.print(buffer_imu);
     sd_manager.appendFile(&imu_file, buffer_imu);
   }
-  //Serial.println("IMU read done");
-
 #endif
 }
 
