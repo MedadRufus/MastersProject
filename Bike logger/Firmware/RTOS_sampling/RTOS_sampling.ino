@@ -320,18 +320,6 @@ void TaskManageGPS(void *pvParameters)
 {
   (void) pvParameters;
 
-  /* Setup GNSS */
-  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
-  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
-  if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
-  {
-    Serial.println(F("u-blox GNSS not detected"));
-  }
-  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
-  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
-
-
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = GNSS_SAMPLE_INTERVAL;
 
@@ -608,6 +596,19 @@ void poll_ina226() {
 
 }
 
+void init_gps()
+{
+    /* Setup GNSS */
+  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
+  if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
+  {
+    Serial.println(F("u-blox GNSS not detected"));
+  }
+  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
+  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
+}
 
 void init_all_sensors()
 {
@@ -620,8 +621,9 @@ void init_all_sensors()
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 
+  /* INIT GPS */
+  init_gps();
   /* INIT IMU */
-
   init_imu();
   /* INIT INA226 */
   init_ina226();
