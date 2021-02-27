@@ -99,6 +99,7 @@ INA226_WE ina226(INA_226_I2C_ADDRESS);
 char buffer_gnss [400];
 char buffer_imu [200];
 static char sprintfBuffer[150];
+char buffer1 [200];
 
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
@@ -340,7 +341,6 @@ void update_baro_data()
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
   /* Write baro data to file */
-  char buffer1 [100];
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
   Serial.print(buffer1);
   sd_manager.appendFileSimple("/baro.csv", buffer1);
