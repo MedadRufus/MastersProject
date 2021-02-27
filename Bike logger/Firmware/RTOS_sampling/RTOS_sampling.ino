@@ -44,7 +44,7 @@
 
 /* Config section */
 
-/* 
+/*
   Set to true or false to poll/not poll
 */
 #define POLL_BARO   (true)
@@ -456,6 +456,8 @@ void update_imu_data()
 #if POLL_IMU
   float temp;  //This is to hold read data
 
+  Serial.println("START SAVING IMU DATA");
+
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
   //properly.  Emptying the fifo is one way of doing this (this example)
@@ -471,9 +473,11 @@ void update_imu_data()
              myIMU.calcAccel(myIMU.fifoRead())
             );
 
-    Serial.print(buffer_imu);
+    //Serial.print(buffer_imu);
     sd_manager.appendFile(&imu_file, buffer_imu);
   }
+  Serial.println("SAVED IMU DATA");
+
 #endif
 }
 
