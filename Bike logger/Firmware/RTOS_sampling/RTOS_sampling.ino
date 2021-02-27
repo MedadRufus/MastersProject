@@ -124,7 +124,7 @@ const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
 
 void setup() {
 
-  Wire.begin(21,22,400000); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.begin(21,22,1000000); // Acclerometer/gyro/temperature/pressure/humidity sensor
 
   Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
