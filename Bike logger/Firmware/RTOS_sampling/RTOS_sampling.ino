@@ -462,6 +462,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
            ubxDataStruct.fixType
           );
 
+  Serial.print("gps:");
   Serial.print(buffer_gnss);
   sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
   #endif
