@@ -94,7 +94,9 @@ static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
 SFE_UBLOX_GNSS myGNSS;
-INA226_WE ina226(INA_226_I2C_ADDRESS);
+INA226_WE ina226;
+
+TwoWire I2CINA226 = TwoWire(1);
 
 char buffer_gnss [400];
 char buffer_imu [400];
@@ -129,6 +131,7 @@ const uint16_t scl = 22;
 void setup() {
 
   Wire.begin(sda,scl,I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  I2CINA226.begin(19,18); // port for INA226 only
 
   Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
@@ -471,7 +474,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 /* Initialise the INA226 module */
 void init_ina226()
 {
-  ina226.init();
+  ina226.begin(INA_226_I2C_ADDRESS,&I2CINA226);
 
   /* Set Number of measurements for shunt and bus voltage which shall be averaged
     Mode *     * Number of samples
