@@ -544,7 +544,7 @@ void poll_ina226() {
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
 
 
-  sprintf(sprintfBuffer, "Bus_voltage:%fV, shunt_v_drop:%fmV, shunt_curr:%fmA, power%fmW\n",
+  sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
           shuntVoltage_mV,
           current_mA,
