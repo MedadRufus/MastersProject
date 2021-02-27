@@ -344,7 +344,7 @@ void TaskManageINA226(void *pvParameters)
 */
 void update_baro_data()
 {
-  #if 0
+  #if 1
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
   /* Write baro data to file */
