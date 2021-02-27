@@ -46,6 +46,11 @@
 
 #define INA_226_I2C_ADDRESS 0x41
 
+/* Config section */
+#define POLL_BARO   (false)
+#define POLL_GPS    (true)
+#define POLL_IMU    (true)
+#define POLL_INA226 (true)
 
 /* ==================================================================== */
 /* ======================== global variables ========================== */
@@ -346,7 +351,7 @@ void TaskManageINA226(void *pvParameters)
 */
 void update_baro_data()
 {
-  #if 1
+  #if POLL_BARO
   //Get all parameters
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure, &sensor_data.humidity);
   /* Write baro data to file */
@@ -414,7 +419,7 @@ void init_imu()
 */
 void update_imu_data()
 {
-  #if 1
+  #if POLL_IMU
   float temp;  //This is to hold read data
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
@@ -454,7 +459,7 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-  #if 1
+  #if POLL_GPS
   sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
            ubxDataStruct.hour,
            ubxDataStruct.min,
@@ -537,7 +542,7 @@ void init_ina226()
 void poll_ina226() {
 
 
-  #if 1
+  #if POLL_INA226
   float shuntVoltage_mV = 0.0;
   float loadVoltage_V = 0.0;
   float busVoltage_V = 0.0;
