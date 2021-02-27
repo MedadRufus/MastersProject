@@ -20,7 +20,7 @@ SPIClass spiSD(HSPI);
 
 // Chip select for SD card
 #define SD_CS 15
-#define SDSPEED 27000000
+#define SDSPEED 80000000
 
 SD_Manager::SD_Manager(void)
 {
