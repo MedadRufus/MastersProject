@@ -526,7 +526,7 @@ void init_ina226()
 void poll_ina226() {
 
 
-  #if 0
+  #if 1
   float shuntVoltage_mV = 0.0;
   float loadVoltage_V = 0.0;
   float busVoltage_V = 0.0;
