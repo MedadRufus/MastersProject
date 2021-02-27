@@ -19,6 +19,8 @@
 #include "Wire.h"
 #include "SPI.h"
 #include "ms8607.h"
+#include "sd_card_manager.h"
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h> //http://librarymanager/All#SparkFun_u-blox_GNSS
 
 
 
@@ -30,6 +32,9 @@
 
 #define LED_PIN 27
 
+#define RXD2 17
+#define TXD2 16
+
 /* ==================================================================== */
 /* ======================== global variables ========================== */
 /* ==================================================================== */
@@ -37,19 +42,19 @@
 /* Global variables definitions go here */
 
 StateMachine blinker1(100, true);
-StateMachine poll_imu(10, true);
-StateMachine poll_baro(10, true);
-StateMachine poll_gps(1000, true);
-StateMachine poll_IN226(1, true);
-StateMachine write_to_sd(1, true);
+StateMachine poll_imu(1000, true);
+StateMachine poll_baro(100, true);
+StateMachine poll_gps(500, true);
+StateMachine poll_IN226(10, true);
+StateMachine write_to_sd(10, true);
 
 const int led1 = LED_PIN;
 bool state1 = false;   // false is OFF, true is ON
 
 static ms8607 m_ms8607;
-
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
-
+SD_Manager sd_manager;
+SFE_UBLOX_GNSS myGNSS;
 
 struct SensorData
 {
@@ -89,6 +94,11 @@ struct SensorData
 
 SensorData sensor_data;
 
+char buffer1 [50];
+char buffer2 [200];
+char buffer_gnss [400];
+
+
 /* ==================================================================== */
 /* ============================== data ================================ */
 /* ==================================================================== */
@@ -113,16 +123,18 @@ void setup()
   pinMode(led1, OUTPUT);
   digitalWrite(led1, state1 ? HIGH : LOW);
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.setClock(400000);
 
-  Serial.begin(115200);
+  Serial.begin(2000000);
   Serial.println("=======================================================");
   Serial.println("================ Ebike BlackBox =======================");
   Serial.println("============== By Medad Rufus Newman ==================");
   Serial.println("======= with assistance from Richard Ibbotson =========");
   Serial.println("=======================================================");
 
-  //Call .begin() to configure the IMU
-  myIMU.begin();
+  /* Initialise the IMU */
+  init_imu();
+
 
   m_ms8607.begin();
   if (m_ms8607.is_connected() == true) {
@@ -131,6 +143,22 @@ void setup()
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+
+  /* initiliase the SD card manager */
+  sd_manager.SD_Manager_init();
+
+
+  /* Setup GNSS */
+  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
+  if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
+  {
+    Serial.println(F("u-blox GNSS not detected"));
+  }
+  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
+  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
+
 }
 
 
@@ -142,7 +170,7 @@ void loop()
   }
 
   if (poll_imu.update()) {
-    update_imu_data();
+    //update_imu_data();
   }
 
   if (poll_baro.update()) {
@@ -150,6 +178,7 @@ void loop()
   }
 
   if (poll_gps.update()) {
+    update_gnss_data();
   }
 
   if (poll_IN226.update()) {
@@ -159,6 +188,12 @@ void loop()
   }
 }
 
+/* Update GNSS data */
+void update_gnss_data()
+{
+  myGNSS.checkUblox(); // Check for the arrival of new data and process it.
+  myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
+}
 
 /* Update the sensor data struct with baro values
 
@@ -169,68 +204,119 @@ void update_baro_data()
   m_ms8607.read_temperature_pressure_humidity(&sensor_data.temperature, &sensor_data.pressure,
       &sensor_data.humidity);
 
-  Serial.print("Tempeature = ");
-  Serial.print(sensor_data.temperature);
-  Serial.print((char)176);
-  Serial.println(" C");
 
-  Serial.print("Pressure = ");
-  Serial.print(sensor_data.pressure);
-  Serial.println(" hPa");
-
-  Serial.print("Humidity = ");
-  Serial.print(sensor_data.humidity);
-  Serial.println(" %RH");
-
-  Serial.println("");
+  /* Write baro data to file */
+  sprintf (buffer1, "%f,%f,%f\n", sensor_data.temperature, sensor_data.pressure, sensor_data.humidity);
+  Serial.print(buffer1);
+  sd_manager.appendFileSimple("/baro.csv", buffer1);
 
 }
+
+
+void init_imu()
+{
+
+  //Over-ride default settings if desired
+  myIMU.settings.gyroEnabled = 1;  //Can be 0 or 1
+  myIMU.settings.gyroRange = 2000;   //Max deg/s.  Can be: 125, 245, 500, 1000, 2000
+  myIMU.settings.gyroSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666
+  myIMU.settings.gyroBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.gyroFifoEnabled = 1;  //Set to include gyro in FIFO
+  myIMU.settings.gyroFifoDecimation = 1;  //set 1 for on /1
+
+  myIMU.settings.accelEnabled = 1;
+  myIMU.settings.accelRange = 16;      //Max G force readable.  Can be: 2, 4, 8, 16
+  myIMU.settings.accelSampleRate = 833;  //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664, 13330
+  myIMU.settings.accelBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.accelFifoEnabled = 1;  //Set to include accelerometer in the FIFO
+  myIMU.settings.accelFifoDecimation = 1;  //set 1 for on /1
+  myIMU.settings.tempEnabled = 1;
+
+  //Non-basic mode settings
+  myIMU.settings.commMode = 1;
+
+  //FIFO control settings
+  myIMU.settings.fifoThreshold = 4095;  //Can be 0 to 4095 (16 bit bytes)
+  myIMU.settings.fifoSampleRate = 100;  //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoModeWord = 6;  //FIFO mode.
+  //FIFO mode.  Can be:
+  //  0 (Bypass mode, FIFO off)
+  //  1 (Stop when full)
+  //  3 (Continuous during trigger)
+  //  4 (Bypass until trigger)
+  //  6 (Continous mode)
+
+  //Call .begin() to configure the IMUs
+  if ( myIMU.begin() != 0 )
+  {
+    Serial.println("Problem starting the IMU sensor");
+  }
+  else
+  {
+    Serial.println("Sensor IMU started.");
+  }
+
+  Serial.print("Configuring FIFO with no error checking...");
+  myIMU.fifoBegin();
+  Serial.print("Done!\n");
+
+  Serial.print("Clearing out the FIFO...");
+  myIMU.fifoClear();
+  Serial.print("Done!\n");
+}
+
 
 /* Update the sensor data struct with imu values
 
 */
 void update_imu_data()
 {
-  //Get all parameters
-  sensor_data.acc_x = myIMU.readFloatAccelX();
-  sensor_data.acc_y = myIMU.readFloatAccelY();
-  sensor_data.acc_z = myIMU.readFloatAccelZ();
+  float temp;  //This is to hold read data
 
-  sensor_data.gyro_x = myIMU.readFloatGyroX();
-  sensor_data.gyro_y = myIMU.readFloatGyroY();
-  sensor_data.gyro_z = myIMU.readFloatGyroZ();
+  //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
+  //the channels must be synchronized to a known position for the data to align
+  //properly.  Emptying the fifo is one way of doing this (this example)
+  while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-  sensor_data.imu_temperature = myIMU.readTempC();
 
-  print_imu_values();
+    sprintf (buffer2, "%f,%f,%f,%f,%f,%f\n",
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcGyro(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead()),
+             myIMU.calcAccel(myIMU.fifoRead())
+            );
+
+    Serial.print(buffer2);
+    sd_manager.appendFileSimple("/imu.csv", buffer2);
+
+
+  }
 
 }
 
-/* Inefficient way of printing out imu values, since we
-    are reading the values all over again
+
+/*  Callback: printPVTdata will be called when new NAV PVT data arrives
+    See u-blox_structs.h for the full definition of UBX_NAV_PVT_data_t
 */
-void print_imu_values()
+void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-  Serial.print("x_gyro:");
-  Serial.print(myIMU.readFloatGyroX(), 4);
-  Serial.print(",");
-  Serial.print("y_gyro:");
-  Serial.print(myIMU.readFloatGyroY(), 4);
-  Serial.print(",");
-  Serial.print("z_gyro ");
-  Serial.println(myIMU.readFloatGyroZ(), 4);
 
+  sprintf (buffer_gnss,"%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+          ubxDataStruct.hour,
+          ubxDataStruct.min,
+          ubxDataStruct.sec,
+          ubxDataStruct.iTOW % 1000,
+          ubxDataStruct.lat,
+          ubxDataStruct.lon,
+          ubxDataStruct.hMSL,
+          ubxDataStruct.numSV,
+          ubxDataStruct.gSpeed,
+          ubxDataStruct.flags.bits.gnssFixOK,
+          ubxDataStruct.fixType
+         );
 
-  Serial.print("x_acc:");
-  Serial.print(myIMU.readFloatAccelX(), 4);
-  Serial.print(",");
-  Serial.print("y_acc:");
-  Serial.print(myIMU.readFloatAccelY(), 4);
-  Serial.print(",");
-  Serial.print("z_acc:");
-  Serial.println(myIMU.readFloatAccelZ(), 4);
-
-
-  Serial.print("Degrees_C:");
-  Serial.println(myIMU.readTempC(), 4);
+  Serial.print(buffer_gnss);
+  sd_manager.appendFileSimple("/gnss.csv", buffer_gnss);
 }
