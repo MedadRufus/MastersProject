@@ -12,13 +12,14 @@
 #include <INA226_WE.h>
 #define I2C_ADDRESS 0x41
 
-INA226_WE ina226(I2C_ADDRESS);
-// INA226_WE ina226 = INA226_WE(); // Alternative: sets default address 0x40
+INA226_WE ina226;
+
+TwoWire I2CINA226 = TwoWire(0);
 
 void setup() {
   Serial.begin(2000000);
-  Wire.begin(21,22);
-  ina226.init();
+  I2CINA226.begin(19,18);
+  ina226.begin(I2C_ADDRESS,&I2CINA226);
 
   /* Set Number of measurements for shunt and bus voltage which shall be averaged
   * Mode *     * Number of samples *
