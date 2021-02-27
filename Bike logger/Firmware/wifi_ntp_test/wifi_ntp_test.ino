@@ -15,7 +15,10 @@ void printLocalTime()
     Serial.println("Failed to obtain time");
     return;
   }
-  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+
+  /* e.g. 2021-02-28T00:38:30 */
+  Serial.println(&timeinfo, "%FT%T");
+
 }
 
 void setup()
