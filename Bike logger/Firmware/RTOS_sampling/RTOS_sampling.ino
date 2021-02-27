@@ -200,7 +200,7 @@ void setup() {
     ,  "TaskReadBaro"
     ,  6000  // Stack size
     ,  NULL
-    ,  1  // Priority
+    ,  2  // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
@@ -209,7 +209,7 @@ void setup() {
     ,  "TaskManageINA226"
     ,  90000  // Stack size
     ,  NULL
-    ,  2  // Priority
+    ,  3  // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
@@ -219,7 +219,7 @@ void setup() {
     ,  "TaskReadImu"
     ,  50000  // Stack size
     ,  NULL
-    ,  3   // Priority
+    ,  2   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
