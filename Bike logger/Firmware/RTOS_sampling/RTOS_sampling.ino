@@ -106,9 +106,11 @@ char buffer1 [400];
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
 const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
-const uint16_t sda = 21;
-const uint16_t scl = 22;
-
+/* Pin numbers for the i2c ports */
+const uint16_t sda1 = 21;
+const uint16_t scl1 = 22;
+const uint16_t sda2 = 19;
+const uint16_t scl2 = 18;
 /* ==================================================================== */
 /* ============================== data ================================ */
 /* ==================================================================== */
@@ -130,8 +132,8 @@ const uint16_t scl = 22;
 
 void setup() {
 
-  Wire.begin(sda,scl,I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
-  I2CINA226.begin(19,18); // port for INA226 only
+  Wire.begin(sda1,scl1,I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  I2CINA226.begin(sda2,scl2,I2C_SPEED); // port for INA226 only
 
   Serial.begin(SERIAL_SPEED);
   Serial.println("=======================================================");
