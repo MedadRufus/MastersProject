@@ -96,10 +96,10 @@ SD_Manager sd_manager;
 SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226(INA_226_I2C_ADDRESS);
 
-char buffer_gnss [200];
-char buffer_imu [200];
-static char sprintfBuffer[200];
-char buffer1 [200];
+char buffer_gnss [400];
+char buffer_imu [400];
+static char sprintfBuffer[400];
+char buffer1 [400];
 
 
 const uint32_t SERIAL_SPEED = 2000000;     ///< Use fast serial speed
