@@ -102,8 +102,10 @@ LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
 SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226;
-
 TwoWire I2CINA226 = TwoWire(1);
+
+
+File imu_file;
 
 char buffer_gnss [400];
 char buffer_imu [400];
@@ -150,6 +152,8 @@ void setup() {
   Serial.println("=======================================================");
 
   sd_manager.SD_Manager_init();
+  imu_file = SD.open("/imu.csv", FILE_APPEND);
+  
   init_all_sensors();
 
   // Now set up tasks to run independently.
@@ -444,7 +448,7 @@ void update_imu_data()
             );
 
     Serial.print(buffer_imu);
-    sd_manager.appendFileSimple("/imu.csv", buffer_imu);
+    sd_manager.appendFile(&imu_file, buffer_imu);
   }
   //Serial.println("IMU read done");
 
