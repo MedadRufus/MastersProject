@@ -57,6 +57,7 @@
 #define POLL_IMU    (true)
 #define POLL_INA226 (true)
 #define POLL_BRAKE  (true)
+#define POLL_SPEED  (true)
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
@@ -65,7 +66,7 @@
 #define IMU_SAMPLE_INTERVAL 300
 #define BLINK_INTERVAL 100
 #define BRAKE_INTERVAL 100
-
+#define SPEED_INTERVAL 100
 
 #ifndef WIFI_CONFIG_H
 #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
@@ -73,7 +74,7 @@
 #endif // !WIFI_CONFIG_H
 
 #define MOTOR_PULSE_A_PIN 35
-#define MOTOR_PULSE_A_PIN 34
+#define MOTOR_PULSE_B_PIN 34
 #define PAS 36
 #define THROTTLE 39
 
@@ -242,6 +243,15 @@ void setup() {
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
+    TaskSpeed
+    ,  "TaskSpeed"   // A name just for humans
+    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL
+    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL
+    ,  ARDUINO_RUNNING_CORE);
+    
+  xTaskCreatePinnedToCore(
     TaskManageGPS
     ,  "TaskManageGPS"   // A name just for humans
     ,  12000  // This stack size can be checked & adjusted by reading the Stack Highwater
@@ -325,7 +335,26 @@ void TaskReadBaro(void *pvParameters)
 }
 
 
+void TaskSpeed(void *pvParameters)
+{
+  (void) pvParameters;
 
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = SPEED_INTERVAL;
+
+
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for ( ;; )
+  {
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+        
+    check_speed();
+
+  }
+}
 
 void TaskBrake(void *pvParameters)
 {
@@ -696,6 +725,29 @@ void poll_ina226(INA226_STATUS ina226_status) {
   Serial.print(sprintfBuffer);
 
   sd_manager.appendFile(&ina226_file, sprintfBuffer);
+#endif
+
+}
+
+
+/* Check the brake */
+void check_speed() {
+
+
+#if POLL_SPEED
+  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
+  float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
+  Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
+
+  char buffer_speed[100];
+
+  sprintf(buffer_speed, "speed_voltage[mV]:%f\n",
+         speed_voltage);
+
+  Serial.print(buffer_speed);
+
+  sd_manager.appendFile(&motor_speed_file, buffer_speed);
 #endif
 
 }
