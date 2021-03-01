@@ -30,7 +30,7 @@ extern "C"
 /* Definition of public (external) data types go here */
 
 
-extern SemaphoreHandle_t xMutex;
+extern SemaphoreHandle_t I2C1_Mutex;
 
 
 

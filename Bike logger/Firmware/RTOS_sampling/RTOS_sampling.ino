@@ -119,7 +119,7 @@ SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226;
 TwoWire I2CINA226 = TwoWire(1);
 
-SemaphoreHandle_t  xMutex;
+SemaphoreHandle_t  I2C1_Mutex;
 
 File imu_file;
 File gnss_file;
@@ -182,8 +182,8 @@ void setup() {
   init_all_sensors();
 
 
-  xMutex = xSemaphoreCreateMutex();
-  if (xMutex == NULL) {
+  I2C1_Mutex = xSemaphoreCreateMutex();
+  if (I2C1_Mutex == NULL) {
     Serial.println("Mutex can not be created");
   }
 
@@ -461,7 +461,7 @@ void update_imu_data()
   //properly.  Emptying the fifo is one way of doing this (this example)
   while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-    xSemaphoreTake(xMutex, portMAX_DELAY);
+    xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
     
     sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
              myIMU.calcGyro(myIMU.fifoRead()),
@@ -472,7 +472,7 @@ void update_imu_data()
              myIMU.calcAccel(myIMU.fifoRead())
             );
 
-    xSemaphoreGive(xMutex); // release mutex
+    xSemaphoreGive(I2C1_Mutex); // release mutex
 
     //Serial.print(buffer_imu);
     sd_manager.appendFile(&imu_file, buffer_imu);
