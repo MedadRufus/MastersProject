@@ -231,7 +231,7 @@ void setup() {
     ,  "TaskReadImu"
     ,  50000  // Stack size
     ,  NULL
-    ,  2   // Priority
+    ,  1   // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
