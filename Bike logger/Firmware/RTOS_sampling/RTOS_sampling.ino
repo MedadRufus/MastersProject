@@ -494,11 +494,9 @@ void update_baro_data()
 
   m_ms8607.read_temperature_pressure_humidity(&temperature, &pressure, &humidity);
   /* Write baro data to file */
-  sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
-  Serial.print(NTP.getTimeDateStringUs());
-  Serial.print(" ");
+  sprintf (buffer1, "%s temp:%f,pressure:%f,humidity:%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
-  sd_manager.appendFile(&baro_file, buffer1);
+  sd_manager.appendFile(&data_file, buffer1);
 #endif
 }
 
@@ -606,7 +604,8 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 #if POLL_GPS
-  sprintf (buffer_gnss, "%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+  sprintf (buffer_gnss, "%s gps:%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+           NTP.getTimeDateStringUs(),
            ubxDataStruct.hour,
            ubxDataStruct.min,
            ubxDataStruct.sec,
@@ -619,9 +618,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
            ubxDataStruct.flags.bits.gnssFixOK,
            ubxDataStruct.fixType
           );
-  Serial.print(NTP.getTimeDateStringUs());
-  Serial.print(" ");
-  Serial.print("gps:");
+
   Serial.print(buffer_gnss);
   sd_manager.appendFile(&gnss_file, buffer_gnss);
 #endif
@@ -705,16 +702,11 @@ void poll_ina226(INA226_STATUS ina226_status) {
   power_mW = ina226.getBusPower();
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
   
-  xSemaphoreGive(I2C2_Mutex); // release mutex
+  xSemaphoreGive(I2C2_Mutex); // release mutex  
 
-  Serial.print(NTP.getTimeDateStringUs());
-  Serial.print(" ");
-  Serial.print("role: ");
-  Serial.print(ina226_status);
-  Serial.print(" ");
-  
-
-  sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
+  sprintf(sprintfBuffer, "%s role: %d, Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
+          NTP.getTimeDateStringUs(),
+          ina226_status,
           busVoltage_V,
           shuntVoltage_mV,
           current_mA,
@@ -736,12 +728,11 @@ void check_speed() {
 #if POLL_SPEED
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
-  Serial.print(NTP.getTimeDateStringUs());
-  Serial.print(" ");
 
   char buffer_speed[100];
 
-  sprintf(buffer_speed, "speed_voltage[mV]:%f\n",
+  sprintf(buffer_speed, "%s speed_voltage[mV]:%f\n",
+         NTP.getTimeDateStringUs(),
          speed_voltage);
 
   Serial.print(buffer_speed);
@@ -758,11 +749,10 @@ void check_brake() {
 #if POLL_BRAKE
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
-  Serial.print(NTP.getTimeDateStringUs());
-  Serial.print(" ");
 
   char brake_buffer[100];
-  sprintf(brake_buffer, "brake_voltage[mV]:%f\n",
+  sprintf(brake_buffer, "%s brake_voltage[mV]:%f\n",
+         NTP.getTimeDateStringUs(),
          brake_voltage);
 
   Serial.print(brake_buffer);
