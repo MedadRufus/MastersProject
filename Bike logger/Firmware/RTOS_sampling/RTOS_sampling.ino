@@ -235,7 +235,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskBrake
     ,  "TaskBrake"   // A name just for humans
-    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL
@@ -244,7 +244,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskSpeed
     ,  "TaskSpeed"   // A name just for humans
-    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL
