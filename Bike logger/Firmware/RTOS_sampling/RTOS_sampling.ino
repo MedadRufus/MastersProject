@@ -57,7 +57,7 @@
 #define INA226_SAMPLE_INTERVAL 10
 #define GNSS_SAMPLE_INTERVAL 250
 #define BARO_SAMPLE_INTERVAL 100
-#define IMU_SAMPLE_INTERVAL 1000
+#define IMU_SAMPLE_INTERVAL 300
 #define BLINK_INTERVAL 100
 
 /* ==================================================================== */
