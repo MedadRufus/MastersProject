@@ -116,6 +116,15 @@ typedef enum
   CHARGE = 0,
   DISCHARGE
 }INA226_STATUS;
+/** Structure to initialize INA226 task */
+typedef struct {
+  INA226_STATUS ina226_status;
+} ina226_config_t;
+
+
+ina226_config_t charge_config = {.ina226_status = CHARGE};
+ina226_config_t discharge_config = {.ina226_status = DISCHARGE};
+
 SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
@@ -229,13 +238,21 @@ void setup() {
 
   xTaskCreatePinnedToCore(
     TaskManageINA226
-    ,  "TaskManageINA226"
-    ,  90000  // Stack size
-    ,  NULL
+    ,  "TaskManageINA226_charge"
+    ,  10000  // Stack size
+    ,  &charge_config
     ,  3  // Priority
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
+  xTaskCreatePinnedToCore(
+    TaskManageINA226
+    ,  "TaskManageINA226_discharge"
+    ,  10000  // Stack size
+    ,  &discharge_config
+    ,  4  // Priority
+    ,  NULL
+    ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
     TaskReadImu
@@ -359,8 +376,12 @@ void TaskManageGPS(void *pvParameters)
 
 void TaskManageINA226(void *pvParameters)
 {
-  (void) pvParameters;
+  //(void) pvParameters;
 
+  ina226_config_t our_config = *(ina226_config_t *) pvParameters;
+
+  Serial.print("charge config: ");
+  Serial.println(our_config.ina226_status);
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = INA226_SAMPLE_INTERVAL;
@@ -374,8 +395,7 @@ void TaskManageINA226(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-    poll_ina226(CHARGE);
-    poll_ina226(DISCHARGE);
+    poll_ina226(our_config.ina226_status);
 
   }
 
