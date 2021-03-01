@@ -374,7 +374,9 @@ void TaskManageINA226(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-    poll_ina226();
+    poll_ina226(CHARGE);
+    poll_ina226(DISCHARGE);
+
   }
 
 }
@@ -589,7 +591,7 @@ void init_ina226()
 }
 
 /* Poll the INA226 once */
-void poll_ina226() {
+void poll_ina226(INA226_STATUS ina226_status) {
 
 
 #if POLL_INA226
@@ -612,6 +614,10 @@ void poll_ina226() {
 
   Serial.print(NTP.getTimeDateStringUs());
   Serial.print(" ");
+  Serial.print("role: ");
+  Serial.print(ina226_status);
+  Serial.print(" ");
+  
 
   sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
