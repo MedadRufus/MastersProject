@@ -192,6 +192,9 @@ void setup() {
   gnss_file = SD.open("/gnss.csv", FILE_APPEND);
   ina226_file = SD.open("/ina226.csv", FILE_APPEND);
   baro_file = SD.open("/baro.csv", FILE_APPEND);
+  pas_file = SD.open("/pas.csv", FILE_APPEND);
+  motor_speed_file = SD.open("/motor_speed.csv", FILE_APPEND);
+  brakes_file = SD.open("/brakes.csv", FILE_APPEND);
 
   
   init_all_sensors();
