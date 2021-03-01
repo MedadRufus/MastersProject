@@ -767,7 +767,7 @@ void check_brake() {
 
   Serial.print(brake_buffer);
 
-  sd_manager.appendFile(&brake_file, brake_buffer);
+  sd_manager.appendFile(&brakes_file, brake_buffer);
 #endif
 
 }
