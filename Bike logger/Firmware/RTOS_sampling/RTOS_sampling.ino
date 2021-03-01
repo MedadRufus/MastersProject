@@ -503,8 +503,11 @@ void update_baro_data()
   float temperature;
   float pressure;
   float humidity;
-
+  
+  xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
   m_ms8607.read_temperature_pressure_humidity(&temperature, &pressure, &humidity);
+  xSemaphoreGive(I2C1_Mutex); // release mutex
+
   /* Write baro data to file */
   sprintf (buffer1, "%s temp:%f,pressure:%f,humidity:%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
