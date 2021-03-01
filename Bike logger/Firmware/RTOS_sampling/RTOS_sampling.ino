@@ -232,7 +232,6 @@ void setup() {
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
 
-  // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
     TaskBrake
     ,  "TaskBrake"   // A name just for humans
