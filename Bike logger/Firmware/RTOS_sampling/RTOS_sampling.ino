@@ -111,6 +111,11 @@ struct SensorData
     int32_t motor_speed;
 };
 
+typedef enum 
+{
+  CHARGE = 0,
+  DISCHARGE
+}INA226_STATUS;
 SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
