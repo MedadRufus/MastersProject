@@ -111,6 +111,11 @@ struct SensorData
     int32_t motor_speed;
 };
 
+typedef enum 
+{
+  CHARGE = 0,
+  DISCHARGE
+}INA226_STATUS;
 SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
@@ -119,7 +124,8 @@ SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226;
 TwoWire I2CINA226 = TwoWire(1);
 
-SemaphoreHandle_t  xMutex;
+SemaphoreHandle_t  I2C1_Mutex;
+SemaphoreHandle_t  I2C2_Mutex;
 
 File imu_file;
 File gnss_file;
@@ -182,8 +188,13 @@ void setup() {
   init_all_sensors();
 
 
-  xMutex = xSemaphoreCreateMutex();
-  if (xMutex == NULL) {
+  I2C1_Mutex = xSemaphoreCreateMutex();
+  if (I2C1_Mutex == NULL) {
+    Serial.println("Mutex can not be created");
+  }
+
+  I2C2_Mutex = xSemaphoreCreateMutex();
+  if (I2C2_Mutex == NULL) {
     Serial.println("Mutex can not be created");
   }
 
@@ -363,7 +374,9 @@ void TaskManageINA226(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-    poll_ina226();
+    poll_ina226(CHARGE);
+    poll_ina226(DISCHARGE);
+
   }
 
 }
@@ -388,6 +401,7 @@ void update_baro_data()
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
   Serial.print(buffer1);
   sd_manager.appendFile(&baro_file, buffer1);
 #endif
@@ -461,7 +475,7 @@ void update_imu_data()
   //properly.  Emptying the fifo is one way of doing this (this example)
   while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-    xSemaphoreTake(xMutex, portMAX_DELAY);
+    xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
     
     sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
              myIMU.calcGyro(myIMU.fifoRead()),
@@ -472,7 +486,7 @@ void update_imu_data()
              myIMU.calcAccel(myIMU.fifoRead())
             );
 
-    xSemaphoreGive(xMutex); // release mutex
+    xSemaphoreGive(I2C1_Mutex); // release mutex
 
     //Serial.print(buffer_imu);
     sd_manager.appendFile(&imu_file, buffer_imu);
@@ -511,6 +525,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
            ubxDataStruct.fixType
           );
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
   Serial.print("gps:");
   Serial.print(buffer_gnss);
   sd_manager.appendFile(&gnss_file, buffer_gnss);
@@ -576,7 +591,7 @@ void init_ina226()
 }
 
 /* Poll the INA226 once */
-void poll_ina226() {
+void poll_ina226(INA226_STATUS ina226_status) {
 
 
 #if POLL_INA226
@@ -586,14 +601,23 @@ void poll_ina226() {
   float current_mA = 0.0;
   float power_mW = 0.0;
 
+  xSemaphoreTake(I2C2_Mutex, portMAX_DELAY);
+
   ina226.readAndClearFlags();
   shuntVoltage_mV = ina226.getShuntVoltage_mV();
   busVoltage_V = ina226.getBusVoltage_V();
   current_mA = ina226.getCurrent_mA();
   power_mW = ina226.getBusPower();
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
+  
+  xSemaphoreGive(I2C2_Mutex); // release mutex
 
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
+  Serial.print("role: ");
+  Serial.print(ina226_status);
+  Serial.print(" ");
+  
 
   sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
