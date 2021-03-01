@@ -388,6 +388,7 @@ void update_baro_data()
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
   Serial.print(buffer1);
   sd_manager.appendFile(&baro_file, buffer1);
 #endif
@@ -511,6 +512,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
            ubxDataStruct.fixType
           );
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
   Serial.print("gps:");
   Serial.print(buffer_gnss);
   sd_manager.appendFile(&gnss_file, buffer_gnss);
@@ -594,6 +596,7 @@ void poll_ina226() {
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
 
   Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
 
   sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
