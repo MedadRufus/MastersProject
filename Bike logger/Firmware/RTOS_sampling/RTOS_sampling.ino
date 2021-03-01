@@ -123,7 +123,7 @@ static char sprintfBuffer[400];
 char buffer1 [400];
 
 
-const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed
+const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
 const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
 /* Pin numbers for the i2c ports */
 const uint16_t sda1 = 21;
