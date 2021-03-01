@@ -56,6 +56,7 @@
 #define POLL_GPS    (true)
 #define POLL_IMU    (true)
 #define POLL_INA226 (true)
+#define POLL_BRAKE  (true)
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
@@ -63,12 +64,19 @@
 #define BARO_SAMPLE_INTERVAL 250
 #define IMU_SAMPLE_INTERVAL 300
 #define BLINK_INTERVAL 100
+#define BRAKE_INTERVAL 100
 
 
 #ifndef WIFI_CONFIG_H
 #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
 #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
 #endif // !WIFI_CONFIG_H
+
+#define MOTOR_PULSE_A_PIN 35
+#define MOTOR_PULSE_A_PIN 34
+#define PAS 36
+#define THROTTLE 39
+
 /* ==================================================================== */
 /* ======================== global variables ========================== */
 /* ==================================================================== */
@@ -140,6 +148,9 @@ File imu_file;
 File gnss_file;
 File ina226_file;
 File baro_file;
+File pas_file;
+File motor_speed_file;
+File brakes_file;
 
 char buffer_gnss [400];
 char buffer_imu [400];
@@ -214,6 +225,16 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskBlink
     ,  "TaskBlink"   // A name just for humans
+    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL
+    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL
+    ,  ARDUINO_RUNNING_CORE);
+
+  // Now set up tasks to run independently.
+  xTaskCreatePinnedToCore(
+    TaskBrake
+    ,  "TaskBrake"   // A name just for humans
     ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
@@ -303,6 +324,29 @@ void TaskReadBaro(void *pvParameters)
   }
 }
 
+
+
+
+void TaskBrake(void *pvParameters)
+{
+  (void) pvParameters;
+
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = BRAKE_INTERVAL;
+
+
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount ();
+  for ( ;; )
+  {
+    // Wait for the next cycle.
+    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+        
+    check_brake();
+
+  }
+}
 
 void TaskReadImu(void *pvParameters)
 {
@@ -652,6 +696,27 @@ void poll_ina226(INA226_STATUS ina226_status) {
   Serial.print(sprintfBuffer);
 
   sd_manager.appendFile(&ina226_file, sprintfBuffer);
+#endif
+
+}
+
+/* Check the brake */
+void check_brake() {
+
+
+#if POLL_BRAKE
+  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
+  float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
+  Serial.print(NTP.getTimeDateStringUs());
+  Serial.print(" ");
+
+  char brake_buffer[100];
+  sprintf(brake_buffer, "brake_voltage[mV]:%f\n",
+         brake_voltage);
+
+  Serial.print(brake_buffer);
+
+  sd_manager.appendFile(&brake_file, brake_buffer);
 #endif
 
 }
