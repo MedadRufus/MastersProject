@@ -120,11 +120,11 @@ struct SensorData
     int32_t motor_speed;
 };
 
-typedef enum 
+typedef enum
 {
   CHARGE = 0,
   DISCHARGE
-}INA226_STATUS;
+} INA226_STATUS;
 /** Structure to initialize INA226 task */
 typedef struct {
   INA226_STATUS ina226_status;
@@ -198,9 +198,9 @@ void setup() {
   Serial.println("============== By Medad Rufus Newman ==================");
   Serial.println("======= with assistance from Richard Ibbotson =========");
   Serial.println("=======================================================");
-  
+
   init_ntp();
-  
+
   sd_manager.SD_Manager_init();
   /* 
   imu_file = SD.open("/imu.csv", FILE_APPEND);
@@ -213,7 +213,7 @@ void setup() {
   */
   data_file = SD.open("/data.csv", FILE_APPEND);
 
-  
+
   init_all_sensors();
 
 
@@ -254,7 +254,7 @@ void setup() {
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL
     ,  ARDUINO_RUNNING_CORE);
-    
+
   xTaskCreatePinnedToCore(
     TaskManageGPS
     ,  "TaskManageGPS"   // A name just for humans
@@ -354,7 +354,7 @@ void TaskSpeed(void *pvParameters)
   {
     // Wait for the next cycle.
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
-        
+
     check_speed();
 
   }
@@ -375,7 +375,7 @@ void TaskBrake(void *pvParameters)
   {
     // Wait for the next cycle.
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
-        
+
     check_brake();
 
   }
@@ -396,8 +396,8 @@ void TaskReadImu(void *pvParameters)
   {
     // Wait for the next cycle.
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
-       
-        
+
+
     update_imu_data();
 
   }
@@ -574,7 +574,7 @@ void update_imu_data()
   while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
     xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
-    
+
     sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
              myIMU.calcGyro(myIMU.fifoRead()),
              myIMU.calcGyro(myIMU.fifoRead()),
@@ -706,8 +706,8 @@ void poll_ina226(INA226_STATUS ina226_status) {
   current_mA = ina226.getCurrent_mA();
   power_mW = ina226.getBusPower();
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
-  
-  xSemaphoreGive(I2C2_Mutex); // release mutex  
+
+  xSemaphoreGive(I2C2_Mutex); // release mutex
 
   sprintf(sprintfBuffer, "%s role: %d, Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           NTP.getTimeDateStringUs(),
@@ -719,7 +719,6 @@ void poll_ina226(INA226_STATUS ina226_status) {
          );
 
   Serial.print(sprintfBuffer);
-
   sd_manager.appendFile(&data_file, sprintfBuffer);
 #endif
 
@@ -737,8 +736,8 @@ void check_speed() {
   char buffer_speed[100];
 
   sprintf(buffer_speed, "%s speed_voltage[mV]:%f\n",
-         NTP.getTimeDateStringUs(),
-         speed_voltage);
+          NTP.getTimeDateStringUs(),
+          speed_voltage);
 
   Serial.print(buffer_speed);
 
@@ -757,8 +756,8 @@ void check_brake() {
 
   char brake_buffer[100];
   sprintf(brake_buffer, "%s brake_voltage[mV]:%f\n",
-         NTP.getTimeDateStringUs(),
-         brake_voltage);
+          NTP.getTimeDateStringUs(),
+          brake_voltage);
 
   Serial.print(brake_buffer);
 
@@ -769,7 +768,7 @@ void check_brake() {
 
 void init_gps()
 {
-    /* Setup GNSS */
+  /* Setup GNSS */
   Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
   //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
   if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
@@ -789,7 +788,7 @@ void init_baro()
   }
 
   boolean connected = m_ms8607.is_connected();
-  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");  
+  Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 }
 
 void init_all_sensors()
