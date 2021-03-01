@@ -23,6 +23,10 @@
 #include <INA226_WE.h>
 
 
+#include <ESPNtpClient.h>
+#include <WiFi.h>
+#include "WifiConfig.h"
+
 
 /* ==================================================================== */
 /* ============================ constants ============================= */
@@ -60,6 +64,11 @@
 #define IMU_SAMPLE_INTERVAL 1000
 #define BLINK_INTERVAL 100
 
+
+#ifndef WIFI_CONFIG_H
+#define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
+#define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
+#endif // !WIFI_CONFIG_H
 /* ==================================================================== */
 /* ======================== global variables ========================== */
 /* ==================================================================== */
@@ -160,7 +169,9 @@ void setup() {
   Serial.println("============== By Medad Rufus Newman ==================");
   Serial.println("======= with assistance from Richard Ibbotson =========");
   Serial.println("=======================================================");
-
+  
+  init_ntp();
+  
   sd_manager.SD_Manager_init();
   imu_file = SD.open("/imu.csv", FILE_APPEND);
   gnss_file = SD.open("/gnss.csv", FILE_APPEND);
@@ -581,6 +592,7 @@ void poll_ina226() {
   power_mW = ina226.getBusPower();
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
 
+  Serial.print(NTP.getTimeDateStringUs());
 
   sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
@@ -632,4 +644,11 @@ void init_all_sensors()
   /* INIT INA226 */
   init_ina226();
 
+}
+
+void init_ntp()
+{
+  WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
+  NTP.setTimeZone (TZ_Etc_UTC);
+  NTP.begin();
 }
