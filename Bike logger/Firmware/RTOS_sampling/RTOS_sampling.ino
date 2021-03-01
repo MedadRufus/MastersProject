@@ -290,9 +290,7 @@ void TaskReadImu(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
        
         
-    xSemaphoreTake(xMutex, portMAX_DELAY);
     update_imu_data();
-    xSemaphoreGive(xMutex); // release mutex
 
   }
 }
@@ -463,7 +461,8 @@ void update_imu_data()
   //properly.  Emptying the fifo is one way of doing this (this example)
   while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
 
-
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    
     sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
              myIMU.calcGyro(myIMU.fifoRead()),
              myIMU.calcGyro(myIMU.fifoRead()),
@@ -472,6 +471,8 @@ void update_imu_data()
              myIMU.calcAccel(myIMU.fifoRead()),
              myIMU.calcAccel(myIMU.fifoRead())
             );
+
+    xSemaphoreGive(xMutex); // release mutex
 
     //Serial.print(buffer_imu);
     sd_manager.appendFile(&imu_file, buffer_imu);
