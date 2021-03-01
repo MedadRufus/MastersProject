@@ -619,10 +619,6 @@ void poll_ina226(INA226_STATUS ina226_status) {
   Serial.print(" ");
   
 
-  Serial.print("role: ");
-  Serial.print(ina226_status);
-  Serial.print(" ");
-
   sprintf(sprintfBuffer, "Bus_voltage[V]:%f, shunt_v_drop[mV]:%f, shunt_curr[mA]:%f, power[mW]:%f\n",
           busVoltage_V,
           shuntVoltage_mV,
