@@ -160,6 +160,8 @@ char buffer_gnss [400];
 char buffer_imu [400];
 static char sprintfBuffer[400];
 char buffer1 [400];
+char buffer_speed[100];
+char brake_buffer[100];
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
 const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
@@ -750,7 +752,7 @@ void check_speed() {
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
 
-  char buffer_speed[100];
+
 
   sprintf(buffer_speed, "%s speed_voltage[mV]:%f\n",
           NTP.getTimeDateStringUs(),
@@ -773,7 +775,6 @@ void check_brake() {
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
 
-  char brake_buffer[100];
   sprintf(brake_buffer, "%s brake_voltage[mV]:%f\n",
           NTP.getTimeDateStringUs(),
           brake_voltage);
