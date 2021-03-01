@@ -239,7 +239,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226_charge"
-    ,  90000  // Stack size
+    ,  10000  // Stack size
     ,  &charge_config
     ,  3  // Priority
     ,  NULL
@@ -248,7 +248,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226_discharge"
-    ,  90000  // Stack size
+    ,  10000  // Stack size
     ,  &discharge_config
     ,  4  // Priority
     ,  NULL
