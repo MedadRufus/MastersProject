@@ -144,7 +144,7 @@ TwoWire I2CINA226 = TwoWire(1);
 
 SemaphoreHandle_t  I2C1_Mutex;
 SemaphoreHandle_t  I2C2_Mutex;
-
+SemaphoreHandle_t  SPI_SD_Mutex;
 /*
 File imu_file;
 File gnss_file;
@@ -224,6 +224,11 @@ void setup() {
 
   I2C2_Mutex = xSemaphoreCreateMutex();
   if (I2C2_Mutex == NULL) {
+    Serial.println("Mutex can not be created");
+  }
+
+  SPI_SD_Mutex = xSemaphoreCreateMutex();
+  if (SPI_SD_Mutex == NULL) {
     Serial.println("Mutex can not be created");
   }
 
@@ -501,7 +506,11 @@ void update_baro_data()
   /* Write baro data to file */
   sprintf (buffer1, "%s temp:%f,pressure:%f,humidity:%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
+  
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer1);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+
 #endif
 }
 
@@ -587,7 +596,9 @@ void update_imu_data()
     xSemaphoreGive(I2C1_Mutex); // release mutex
 
     //Serial.print(buffer_imu);
+    xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
     sd_manager.appendFile(&data_file, buffer_imu);
+    xSemaphoreGive(SPI_SD_Mutex); // release mutex
   }
   Serial.println("SAVED IMU DATA");
 
@@ -625,7 +636,11 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           );
 
   Serial.print(buffer_gnss);
+
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer_gnss);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+
 #endif
 }
 
@@ -719,7 +734,9 @@ void poll_ina226(INA226_STATUS ina226_status) {
          );
 
   Serial.print(sprintfBuffer);
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, sprintfBuffer);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
 
 }
@@ -741,7 +758,9 @@ void check_speed() {
 
   Serial.print(buffer_speed);
 
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer_speed);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
 
 }
@@ -761,7 +780,9 @@ void check_brake() {
 
   Serial.print(brake_buffer);
 
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, brake_buffer);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
 
 }
