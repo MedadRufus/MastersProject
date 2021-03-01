@@ -247,3 +247,4 @@ Visualisations/plot.html
 data_analysis_tools_for_gfbs_data/.mapbox_token
 Bike logger/pcb/bom/ibom.html
 Bike logger/Firmware/RTOS_sampling/WifiConfig.h
+Bike logger/Firmware/ntp_microsecond_example/WifiConfig.h
