@@ -83,43 +83,6 @@
 /* ==================================================================== */
 
 /* Global variables definitions go here */
-
-struct SensorData
-{
-  public:
-    /* GPS related */
-    uint32_t longitude;
-    uint32_t latitude;
-    uint32_t altitude;
-    uint32_t velocity;
-    uint32_t sats;
-
-    /* Acceleration/Gyroscope */
-    float acc_x;
-    float acc_y;
-    float acc_z;
-    float gyro_x;
-    float gyro_y;
-    float gyro_z;
-    float imu_temperature;
-
-    /* Current voltage */
-    int32_t current_discharge;
-    int32_t voltage_discharge;
-    int32_t current_charge;
-    int32_t voltage_charge;
-
-    /* Temperature/pressure/humidity */
-    float temperature;
-    float pressure;
-    float humidity;
-
-    /* Other physical inputs */
-    int32_t pedal_rpm;
-    bool brake_state;
-    int32_t motor_speed;
-};
-
 typedef enum
 {
   CHARGE = 0,
@@ -134,7 +97,6 @@ typedef struct {
 ina226_config_t charge_config = {.ina226_status = CHARGE};
 ina226_config_t discharge_config = {.ina226_status = DISCHARGE};
 
-SensorData sensor_data;
 static ms8607 m_ms8607;
 LSM6DS3 myIMU; //Default constructor is I2C, addr 0x6B
 SD_Manager sd_manager;
