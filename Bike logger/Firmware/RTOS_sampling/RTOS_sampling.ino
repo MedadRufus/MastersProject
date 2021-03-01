@@ -395,8 +395,7 @@ void TaskManageINA226(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-    poll_ina226(CHARGE);
-    poll_ina226(DISCHARGE);
+    poll_ina226(our_config.ina226_status);
 
   }
 
