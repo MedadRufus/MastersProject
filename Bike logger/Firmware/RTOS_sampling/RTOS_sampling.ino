@@ -120,6 +120,7 @@ INA226_WE ina226;
 TwoWire I2CINA226 = TwoWire(1);
 
 SemaphoreHandle_t  I2C1_Mutex;
+SemaphoreHandle_t  I2C2_Mutex;
 
 File imu_file;
 File gnss_file;
@@ -184,6 +185,11 @@ void setup() {
 
   I2C1_Mutex = xSemaphoreCreateMutex();
   if (I2C1_Mutex == NULL) {
+    Serial.println("Mutex can not be created");
+  }
+
+  I2C2_Mutex = xSemaphoreCreateMutex();
+  if (I2C2_Mutex == NULL) {
     Serial.println("Mutex can not be created");
   }
 
@@ -588,12 +594,16 @@ void poll_ina226() {
   float current_mA = 0.0;
   float power_mW = 0.0;
 
+  xSemaphoreTake(I2C2_Mutex, portMAX_DELAY);
+
   ina226.readAndClearFlags();
   shuntVoltage_mV = ina226.getShuntVoltage_mV();
   busVoltage_V = ina226.getBusVoltage_V();
   current_mA = ina226.getCurrent_mA();
   power_mW = ina226.getBusPower();
   loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
+  
+  xSemaphoreGive(I2C2_Mutex); // release mutex
 
   Serial.print(NTP.getTimeDateStringUs());
   Serial.print(" ");
