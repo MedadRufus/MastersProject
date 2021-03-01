@@ -145,6 +145,7 @@ TwoWire I2CINA226 = TwoWire(1);
 SemaphoreHandle_t  I2C1_Mutex;
 SemaphoreHandle_t  I2C2_Mutex;
 
+/*
 File imu_file;
 File gnss_file;
 File ina226_file;
@@ -152,12 +153,13 @@ File baro_file;
 File pas_file;
 File motor_speed_file;
 File brakes_file;
+*/
+File data_file;
 
 char buffer_gnss [400];
 char buffer_imu [400];
 static char sprintfBuffer[400];
 char buffer1 [400];
-
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
 const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
@@ -200,6 +202,7 @@ void setup() {
   init_ntp();
   
   sd_manager.SD_Manager_init();
+  /* 
   imu_file = SD.open("/imu.csv", FILE_APPEND);
   gnss_file = SD.open("/gnss.csv", FILE_APPEND);
   ina226_file = SD.open("/ina226.csv", FILE_APPEND);
@@ -207,6 +210,8 @@ void setup() {
   pas_file = SD.open("/pas.csv", FILE_APPEND);
   motor_speed_file = SD.open("/motor_speed.csv", FILE_APPEND);
   brakes_file = SD.open("/brakes.csv", FILE_APPEND);
+  */
+  data_file = SD.open("/data.csv", FILE_APPEND);
 
   
   init_all_sensors();
@@ -582,7 +587,7 @@ void update_imu_data()
     xSemaphoreGive(I2C1_Mutex); // release mutex
 
     //Serial.print(buffer_imu);
-    sd_manager.appendFile(&imu_file, buffer_imu);
+    sd_manager.appendFile(&data_file, buffer_imu);
   }
   Serial.println("SAVED IMU DATA");
 
@@ -620,7 +625,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           );
 
   Serial.print(buffer_gnss);
-  sd_manager.appendFile(&gnss_file, buffer_gnss);
+  sd_manager.appendFile(&data_file, buffer_gnss);
 #endif
 }
 
@@ -715,7 +720,7 @@ void poll_ina226(INA226_STATUS ina226_status) {
 
   Serial.print(sprintfBuffer);
 
-  sd_manager.appendFile(&ina226_file, sprintfBuffer);
+  sd_manager.appendFile(&data_file, sprintfBuffer);
 #endif
 
 }
@@ -737,7 +742,7 @@ void check_speed() {
 
   Serial.print(buffer_speed);
 
-  sd_manager.appendFile(&motor_speed_file, buffer_speed);
+  sd_manager.appendFile(&data_file, buffer_speed);
 #endif
 
 }
@@ -757,7 +762,7 @@ void check_brake() {
 
   Serial.print(brake_buffer);
 
-  sd_manager.appendFile(&brakes_file, brake_buffer);
+  sd_manager.appendFile(&data_file, brake_buffer);
 #endif
 
 }
