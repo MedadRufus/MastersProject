@@ -246,3 +246,4 @@ data_analysis_tools_for_gfbs_data/plot_slope.html
 Visualisations/plot.html
 data_analysis_tools_for_gfbs_data/.mapbox_token
 Bike logger/pcb/bom/ibom.html
+Bike logger/Firmware/RTOS_sampling/WifiConfig.h
