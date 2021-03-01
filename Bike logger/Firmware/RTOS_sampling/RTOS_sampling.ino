@@ -389,6 +389,7 @@ void update_baro_data()
   m_ms8607.read_temperature_pressure_humidity(&temperature, &pressure, &humidity);
   /* Write baro data to file */
   sprintf (buffer1, "temp:%f,pressure:%f,humidity:%f\n", temperature, pressure, humidity);
+  Serial.print(NTP.getTimeDateStringUs());
   Serial.print(buffer1);
   sd_manager.appendFile(&baro_file, buffer1);
 #endif
@@ -508,7 +509,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
            ubxDataStruct.flags.bits.gnssFixOK,
            ubxDataStruct.fixType
           );
-
+  Serial.print(NTP.getTimeDateStringUs());
   Serial.print("gps:");
   Serial.print(buffer_gnss);
   sd_manager.appendFile(&gnss_file, buffer_gnss);
