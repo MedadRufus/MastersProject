@@ -21,7 +21,7 @@
 #include "sd_card_manager.h"
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 #include <INA226_WE.h>
-
+#include "RTOS_sampling.h"
 
 
 /* ==================================================================== */
@@ -255,9 +255,8 @@ void TaskReadBaro(void *pvParameters)
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
 
     // run task here.
-    xSemaphoreTake(xMutex, portMAX_DELAY);
     update_baro_data();
-    xSemaphoreGive(xMutex); // release mutex
+
 
   }
 }

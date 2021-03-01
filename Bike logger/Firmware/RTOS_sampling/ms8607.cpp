@@ -1,5 +1,6 @@
 #include "ms8607.h"
 #include <Wire.h>
+#include "RTOS_sampling.h"
 
 // HSENSOR device address
 #define HSENSOR_ADDR 0x40 // 0b1000000
@@ -335,7 +336,10 @@ enum ms8607_status ms8607::hsensor_reset(void) {
     return status;
 
   hsensor_conversion_time = HSENSOR_CONVERSION_TIME_12b;
+  
+  xSemaphoreGive(xMutex); // release mutex
   vTaskDelay(pdMS_TO_TICKS(HSENSOR_RESET_TIME));
+  xSemaphoreTake(xMutex, portMAX_DELAY);
 
   return ms8607_status_ok;
 }
@@ -529,7 +533,10 @@ ms8607::hsensor_humidity_conversion_and_read_adc(uint16_t *adc) {
     Wire.write(HSENSOR_READ_HUMIDITY_WO_HOLD_COMMAND);
     i2c_status = Wire.endTransmission();
     // delay depending on resolution
+    xSemaphoreGive(xMutex); // release mutex
     vTaskDelay(pdMS_TO_TICKS(hsensor_conversion_time));
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+
   }
   Wire.requestFrom((uint8_t)HSENSOR_ADDR, 3U);
   for (i = 0; i < 3; i++) {
@@ -821,7 +828,11 @@ enum ms8607_status ms8607::psensor_conversion_and_read_adc(uint8_t cmd,
   i2c_status = Wire.endTransmission();
 
   // 20ms wait for conversion
+  
+
+  xSemaphoreGive(xMutex); // release mutex
   vTaskDelay(pdMS_TO_TICKS(psensor_conversion_time[(cmd & PSENSOR_CONVERSION_OSR_MASK) / 2]));
+  xSemaphoreTake(xMutex, portMAX_DELAY);
 
   // Send the read command
   Wire.beginTransmission((uint8_t)PSENSOR_ADDR);
