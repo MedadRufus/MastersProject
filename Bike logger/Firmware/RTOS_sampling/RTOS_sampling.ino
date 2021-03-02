@@ -310,7 +310,10 @@ void TaskReopen_File(void *pvParameters)
   {
 #if PERIODIC_CLOSE_FILE
     delay(INTERVAL_BETWEEN_FLUSHING_FILE);
+    xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
     data_file.flush();
+    xSemaphoreGive(SPI_SD_Mutex);
+
 #endif
   }
 }
