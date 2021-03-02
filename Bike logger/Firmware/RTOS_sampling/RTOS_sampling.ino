@@ -242,21 +242,21 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskManageINA226, "TaskManageINA226_charge", 22000 // Stack size
       ,
-      &charge_config, 3 // Priority
+      &charge_config, 2 // Priority
       ,
       &Handle_ina1_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
       TaskManageINA226, "TaskManageINA226_discharge", 22000 // Stack size
       ,
-      &discharge_config, 3 // Priority
+      &discharge_config, 2 // Priority
       ,
       &Handle_ina2_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 50000 // Stack size
       ,
-      NULL, 3 // Priority
+      NULL,3 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 
