@@ -208,8 +208,8 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
-  
-  #if 0
+
+#if 0
   xTaskCreatePinnedToCore(
       TaskBrake, "TaskBrake" // A name just for humans
       ,
@@ -227,7 +227,7 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_speed_Task, ARDUINO_RUNNING_CORE);
-  #endif
+#endif
 
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
@@ -262,7 +262,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
-      NULL,2 // Priority
+      NULL, 2 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 
@@ -393,9 +393,9 @@ void TaskBlink(void *pvParameters) // This is a task.
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
     led_state = !led_state;
     digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
-    #if HEAP_ANALYSIS
+#if HEAP_ANALYSIS
     heap_analysis();
-    #endif
+#endif
   }
 }
 
@@ -838,7 +838,7 @@ void heap_analysis()
   measurement = uxTaskGetStackHighWaterMark(Handle_blink_Task);
   Serial.print("Handle_blink_Task: ");
   Serial.println(measurement);
- 
+
   measurement = uxTaskGetStackHighWaterMark(Handle_speed_Task);
   Serial.print("Handle_speed_Task: ");
   Serial.println(measurement);
