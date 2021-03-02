@@ -122,8 +122,8 @@ char buffer_gnss [400];
 char buffer_imu [400];
 static char sprintfBuffer[400];
 char buffer1 [400];
-char buffer_speed[100];
-char brake_buffer[100];
+char buffer_speed[400];
+char brake_buffer[400];
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
 const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
