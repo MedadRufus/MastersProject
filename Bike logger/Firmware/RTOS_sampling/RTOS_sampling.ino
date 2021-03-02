@@ -133,8 +133,8 @@ TaskHandle_t Handle_brake_Task;
 // TaskHandle_t taskhandles [] = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
 //  &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
 
-std::list<TaskHandle_t> taskhandles = {&Handle_gps_Task, &Handle_baroTask, &Handle_imu_Task, &Handle_ina1_Task,
-                                       &Handle_ina2_Task, &Handle_blink_Task, &Handle_speed_Task, &Handle_brake_Task};
+// std::list<TaskHandle_t> taskhandles = {Handle_gps_Task, Handle_baroTask, Handle_imu_Task, Handle_ina1_Task,
+//                                        Handle_ina2_Task, Handle_blink_Task, Handle_speed_Task, Handle_brake_Task};
 
 /* ==================================================================== */
 /* ============================== data ================================ */
