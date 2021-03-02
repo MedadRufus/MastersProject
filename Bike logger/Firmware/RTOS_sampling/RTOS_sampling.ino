@@ -48,7 +48,7 @@
 /*
   Set to true or false to poll/not poll
 */
-#define POLL_BARO (true)
+#define POLL_BARO (false)
 #define POLL_GPS (true)
 #define POLL_IMU (true)
 #define POLL_INA226 (true)
