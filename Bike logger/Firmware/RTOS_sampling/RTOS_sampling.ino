@@ -26,7 +26,7 @@
 #include <ESPNtpClient.h>
 #include <WiFi.h>
 #include "WifiConfig.h"
-
+#include <list>
 
 /* ==================================================================== */
 /* ============================ constants ============================= */
@@ -108,13 +108,13 @@ SemaphoreHandle_t  I2C1_Mutex;
 SemaphoreHandle_t  I2C2_Mutex;
 SemaphoreHandle_t  SPI_SD_Mutex;
 /*
-File imu_file;
-File gnss_file;
-File ina226_file;
-File baro_file;
-File pas_file;
-File motor_speed_file;
-File brakes_file;
+  File imu_file;
+  File gnss_file;
+  File ina226_file;
+  File baro_file;
+  File pas_file;
+  File motor_speed_file;
+  File brakes_file;
 */
 File data_file;
 
@@ -132,6 +132,22 @@ const uint16_t sda1 = 21;
 const uint16_t scl1 = 22;
 const uint16_t sda2 = 19;
 const uint16_t scl2 = 18;
+
+TaskHandle_t Handle_gps_Task;
+TaskHandle_t Handle_baroTask;
+TaskHandle_t Handle_imu_Task;
+TaskHandle_t Handle_ina1_Task;
+TaskHandle_t Handle_ina2_Task;
+TaskHandle_t Handle_blink_Task;
+TaskHandle_t Handle_speed_Task;
+TaskHandle_t Handle_brake_Task;
+
+// TaskHandle_t taskhandles [] = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
+//  &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
+
+std::list<TaskHandle_t> taskhandles = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
+ &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
+
 /* ==================================================================== */
 /* ============================== data ================================ */
 /* ==================================================================== */
@@ -303,6 +319,9 @@ void TaskReadBaro(void *pvParameters)
     // run task here.
     update_baro_data();
 
+    delay(5000);
+    data_file.close();
+    data_file = SD.open("/data.csv", FILE_APPEND);
 
   }
 }
@@ -396,6 +415,7 @@ void TaskBlink(void *pvParameters)  // This is a task.
     vTaskDelayUntil( &xLastWakeTime, xFrequency );
     led_state = !led_state;
     digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
+    heap_analysis();
   }
 
 }
@@ -700,7 +720,7 @@ void poll_ina226(INA226_STATUS ina226_status) {
           power_mW
          );
 
-  Serial.print(sprintfBuffer);
+  //Serial.print(sprintfBuffer);
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, sprintfBuffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
@@ -796,4 +816,64 @@ void init_ntp()
   WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
   NTP.setTimeZone (TZ_Etc_UTC);
   NTP.begin();
+}
+
+
+void heap_analysis()
+{
+  int x;
+  int measurement;
+  
+  Serial.flush();
+  Serial.println("");
+  Serial.println("****************************************************");
+  Serial.print("Free Heap: ");
+  Serial.print(xPortGetFreeHeapSize());
+  Serial.println(" bytes");
+
+  Serial.print("Min Heap: ");
+  Serial.print(xPortGetMinimumEverFreeHeapSize());
+  Serial.println(" bytes");
+  Serial.flush();
+
+  #if 0 
+  Serial.println("****************************************************");
+  Serial.println("Task            ABS             %Util");
+  Serial.println("****************************************************");
+
+  //vTaskGetRunTimeStats(ptrTaskList); //save stats to char array
+  Serial.println(ptrTaskList); //prints out already formatted stats
+  Serial.flush();
+
+  Serial.println("****************************************************");
+  Serial.println("Task            State   Prio    Stack   Num     Core" );
+  Serial.println("****************************************************");
+
+  //vTaskList(ptrTaskList); //save stats to char array
+  Serial.println(ptrTaskList); //prints out already formatted stats
+  Serial.flush();
+
+  Serial.println("****************************************************");
+  Serial.println("[Stacks Free Bytes Remaining] ");
+  #endif
+
+  for (const TaskHandle_t & taskhandle : taskhandles)
+  {
+    measurement = uxTaskGetStackHighWaterMark( taskhandle );
+    Serial.print("Thread A: ");
+    Serial.println(measurement);
+  }
+
+
+
+  measurement = uxTaskGetStackHighWaterMark( Handle_baroTask );
+  Serial.print("Thread B: ");
+  Serial.println(measurement);
+
+  measurement = uxTaskGetStackHighWaterMark( Handle_imu_Task );
+  Serial.print("Monitor Stack: ");
+  Serial.println(measurement);
+
+  Serial.println("****************************************************");
+  Serial.flush();
 }
