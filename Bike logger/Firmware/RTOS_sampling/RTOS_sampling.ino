@@ -230,7 +230,7 @@ void start_tasks()
       ,
       10000 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      NULL, 2 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 
@@ -258,7 +258,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
-      NULL,3 // Priority
+      NULL,2 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 
