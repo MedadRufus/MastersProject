@@ -55,6 +55,8 @@
 #define POLL_BRAKE (true)
 #define POLL_SPEED (true)
 
+#define HEAP_ANALYSIS (false)
+
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
 #define GNSS_SAMPLE_INTERVAL 250
@@ -373,7 +375,9 @@ void TaskBlink(void *pvParameters) // This is a task.
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
     led_state = !led_state;
     digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
+    #if HEAP_ANALYSIS
     heap_analysis();
+    #endif
   }
 }
 
