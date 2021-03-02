@@ -2,5 +2,7 @@
     "board": "esp32:esp32:featheresp32",
     "configuration": "FlashFreq=80,UploadSpeed=921600,DebugLevel=none,PartitionScheme=default",
     "port": "COM6",
-    "sketch": "RTOS_sampling.ino"
+    "sketch": "RTOS_sampling.ino",
+    "defaultBaudRate": 2000000,
+    "logLevel":"verbose"
 }
