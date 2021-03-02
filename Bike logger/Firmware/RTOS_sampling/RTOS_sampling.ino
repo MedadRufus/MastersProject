@@ -189,9 +189,8 @@ void setup()
   {
     Serial.println("Mutex can not be created");
   }
-  
-  start_tasks();
 
+  start_tasks();
 }
 
 void start_tasks()
