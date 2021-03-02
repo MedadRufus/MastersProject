@@ -52,8 +52,8 @@
 #define POLL_GPS (true)
 #define POLL_IMU (true)
 #define POLL_INA226 (true)
-#define POLL_BRAKE (true)
-#define POLL_SPEED (true)
+#define POLL_BRAKE (false)
+#define POLL_SPEED (false)
 
 #define HEAP_ANALYSIS (false)
 
@@ -206,7 +206,8 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
-
+  
+  #if 0
   xTaskCreatePinnedToCore(
       TaskBrake, "TaskBrake" // A name just for humans
       ,
@@ -224,6 +225,7 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_speed_Task, ARDUINO_RUNNING_CORE);
+  #endif
 
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
