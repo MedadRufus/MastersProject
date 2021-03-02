@@ -792,19 +792,36 @@ void heap_analysis()
   Serial.println("[Stacks Free Bytes Remaining] ");
 #endif
 
-  for (const TaskHandle_t &taskhandle : taskhandles)
-  {
-    measurement = uxTaskGetStackHighWaterMark(taskhandle);
-    Serial.print("Thread A: ");
-    Serial.println(measurement);
-  }
+  measurement = uxTaskGetStackHighWaterMark(Handle_gps_Task);
+  Serial.print("Handle_gps_Task: ");
+  Serial.println(measurement);
 
   measurement = uxTaskGetStackHighWaterMark(Handle_baroTask);
-  Serial.print("Thread B: ");
+  Serial.print("Handle_baroTask: ");
   Serial.println(measurement);
 
   measurement = uxTaskGetStackHighWaterMark(Handle_imu_Task);
-  Serial.print("Monitor Stack: ");
+  Serial.print("Handle_imu_Task: ");
+  Serial.println(measurement);
+
+  measurement = uxTaskGetStackHighWaterMark(Handle_ina1_Task);
+  Serial.print("Handle_ina1_Task: ");
+  Serial.println(measurement);
+
+  measurement = uxTaskGetStackHighWaterMark(Handle_ina2_Task);
+  Serial.print("Handle_ina2_Task: ");
+  Serial.println(measurement);
+
+  measurement = uxTaskGetStackHighWaterMark(Handle_blink_Task);
+  Serial.print("Handle_blink_Task: ");
+  Serial.println(measurement);
+ 
+  measurement = uxTaskGetStackHighWaterMark(Handle_speed_Task);
+  Serial.print("Handle_speed_Task: ");
+  Serial.println(measurement);
+
+  measurement = uxTaskGetStackHighWaterMark(Handle_brake_Task);
+  Serial.print("Handle_brake_Task: ");
   Serial.println(measurement);
 
   Serial.println("****************************************************");
