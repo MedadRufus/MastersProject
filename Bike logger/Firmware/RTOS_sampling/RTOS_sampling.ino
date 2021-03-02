@@ -103,15 +103,7 @@ TwoWire I2CINA226 = TwoWire(1);
 SemaphoreHandle_t I2C1_Mutex;
 SemaphoreHandle_t I2C2_Mutex;
 SemaphoreHandle_t SPI_SD_Mutex;
-/*
-  File imu_file;
-  File gnss_file;
-  File ina226_file;
-  File baro_file;
-  File pas_file;
-  File motor_speed_file;
-  File brakes_file;
-*/
+
 File data_file;
 
 char buffer_gnss[400];
