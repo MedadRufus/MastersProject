@@ -273,7 +273,7 @@ void setup() {
     ,  "TaskManageINA226_discharge"
     ,  22000  // Stack size
     ,  &discharge_config
-    ,  4  // Priority
+    ,  3  // Priority
     ,  &Handle_ina2_Task
     ,  ARDUINO_RUNNING_CORE);
 
@@ -282,7 +282,7 @@ void setup() {
     ,  "TaskReadImu"
     ,  50000  // Stack size
     ,  NULL
-    ,  1   // Priority
+    ,  3   // Priority
     ,  &Handle_imu_Task
     ,  ARDUINO_RUNNING_CORE);
 
