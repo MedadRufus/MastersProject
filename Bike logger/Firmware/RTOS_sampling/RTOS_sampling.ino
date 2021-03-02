@@ -8,11 +8,9 @@
 ** Mutex tips from https://microcontrollerslab.com/arduino-freertos-mutex-tutorial-priority-inversion-priority-inheritance/
 ********************************************************************/
 
-
 /* ==================================================================== */
 /* ========================== include files =========================== */
 /* ==================================================================== */
-
 
 /* Inclusion of system and local header files goes here */
 #include "ms8607.h"
@@ -45,19 +43,17 @@
 
 #define INA_226_I2C_ADDRESS 0x41
 
-
-
 /* Config section */
 
 /*
   Set to true or false to poll/not poll
 */
-#define POLL_BARO   (true)
-#define POLL_GPS    (true)
-#define POLL_IMU    (true)
+#define POLL_BARO (true)
+#define POLL_GPS (true)
+#define POLL_IMU (true)
 #define POLL_INA226 (true)
-#define POLL_BRAKE  (true)
-#define POLL_SPEED  (true)
+#define POLL_BRAKE (true)
+#define POLL_SPEED (true)
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
@@ -89,10 +85,10 @@ typedef enum
   DISCHARGE
 } INA226_STATUS;
 /** Structure to initialize INA226 task */
-typedef struct {
+typedef struct
+{
   INA226_STATUS ina226_status;
 } ina226_config_t;
-
 
 ina226_config_t charge_config = {.ina226_status = CHARGE};
 ina226_config_t discharge_config = {.ina226_status = DISCHARGE};
@@ -104,9 +100,9 @@ SFE_UBLOX_GNSS myGNSS;
 INA226_WE ina226;
 TwoWire I2CINA226 = TwoWire(1);
 
-SemaphoreHandle_t  I2C1_Mutex;
-SemaphoreHandle_t  I2C2_Mutex;
-SemaphoreHandle_t  SPI_SD_Mutex;
+SemaphoreHandle_t I2C1_Mutex;
+SemaphoreHandle_t I2C2_Mutex;
+SemaphoreHandle_t SPI_SD_Mutex;
 /*
   File imu_file;
   File gnss_file;
@@ -118,15 +114,15 @@ SemaphoreHandle_t  SPI_SD_Mutex;
 */
 File data_file;
 
-char buffer_gnss [400];
-char buffer_imu [400];
+char buffer_gnss[400];
+char buffer_imu[400];
 static char sprintfBuffer[400];
-char buffer1 [400];
+char buffer1[400];
 char buffer_speed[400];
 char brake_buffer[400];
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
-const uint32_t I2C_SPEED = 1000000; // 1 Mbits/s
+const uint32_t I2C_SPEED = 1000000;    // 1 Mbits/s
 /* Pin numbers for the i2c ports */
 const uint16_t sda1 = 21;
 const uint16_t scl1 = 22;
@@ -145,8 +141,8 @@ TaskHandle_t Handle_brake_Task;
 // TaskHandle_t taskhandles [] = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
 //  &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
 
-std::list<TaskHandle_t> taskhandles = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
- &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
+std::list<TaskHandle_t> taskhandles = {&Handle_gps_Task, &Handle_baroTask, &Handle_imu_Task, &Handle_ina1_Task,
+                                       &Handle_ina2_Task, &Handle_blink_Task, &Handle_speed_Task, &Handle_brake_Task};
 
 /* ==================================================================== */
 /* ============================== data ================================ */
@@ -154,22 +150,20 @@ std::list<TaskHandle_t> taskhandles = {&Handle_gps_Task,&Handle_baroTask, &Handl
 
 /* Definition of datatypes go here */
 
-
-
 /* ==================================================================== */
 /* ==================== function prototypes =========================== */
 /* ==================================================================== */
 
 /* Function prototypes for public (external) functions go here */
 
-
 /* ==================================================================== */
 /* ============================ functions ============================= */
 /* ==================================================================== */
 
-void setup() {
+void setup()
+{
 
-  Wire.begin(sda1, scl1, I2C_SPEED); // Acclerometer/gyro/temperature/pressure/humidity sensor
+  Wire.begin(sda1, scl1, I2C_SPEED);      // Acclerometer/gyro/temperature/pressure/humidity sensor
   I2CINA226.begin(sda2, scl2, I2C_SPEED); // port for INA226 only
 
   Serial.begin(SERIAL_SPEED);
@@ -184,98 +178,90 @@ void setup() {
   sd_manager.SD_Manager_init();
   data_file = SD.open("/data.csv", FILE_APPEND);
 
-
   init_all_sensors();
 
-
   I2C1_Mutex = xSemaphoreCreateMutex();
-  if (I2C1_Mutex == NULL) {
+  if (I2C1_Mutex == NULL)
+  {
     Serial.println("Mutex can not be created");
   }
 
   I2C2_Mutex = xSemaphoreCreateMutex();
-  if (I2C2_Mutex == NULL) {
+  if (I2C2_Mutex == NULL)
+  {
     Serial.println("Mutex can not be created");
   }
 
   SPI_SD_Mutex = xSemaphoreCreateMutex();
-  if (SPI_SD_Mutex == NULL) {
+  if (SPI_SD_Mutex == NULL)
+  {
     Serial.println("Mutex can not be created");
   }
 
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
-    TaskBlink
-    ,  "TaskBlink"   // A name just for humans
-    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
-    ,  NULL
-    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  &Handle_blink_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskBlink, "TaskBlink" // A name just for humans
+      ,
+      1024 // This stack size can be checked & adjusted by reading the Stack Highwater
+      ,
+      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      ,
+      &Handle_blink_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskBrake
-    ,  "TaskBrake"   // A name just for humans
-    ,  8024  // This stack size can be checked & adjusted by reading the Stack Highwater
-    ,  NULL
-    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  &Handle_brake_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskBrake, "TaskBrake" // A name just for humans
+      ,
+      8024 // This stack size can be checked & adjusted by reading the Stack Highwater
+      ,
+      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      ,
+      &Handle_brake_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskSpeed
-    ,  "TaskSpeed"   // A name just for humans
-    ,  8024  // This stack size can be checked & adjusted by reading the Stack Highwater
-    ,  NULL
-    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  &Handle_speed_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskSpeed, "TaskSpeed" // A name just for humans
+      ,
+      8024 // This stack size can be checked & adjusted by reading the Stack Highwater
+      ,
+      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      ,
+      &Handle_speed_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskManageGPS
-    ,  "TaskManageGPS"   // A name just for humans
-    ,  20000  // This stack size can be checked & adjusted by reading the Stack Highwater
-    ,  NULL
-    ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  &Handle_gps_Task
-    ,  ARDUINO_RUNNING_CORE);
-
-
-  xTaskCreatePinnedToCore(
-    TaskReadBaro
-    ,  "TaskReadBaro"
-    ,  20000  // Stack size
-    ,  NULL
-    ,  2  // Priority
-    ,  &Handle_baroTask
-    ,  ARDUINO_RUNNING_CORE);
+      TaskManageGPS, "TaskManageGPS" // A name just for humans
+      ,
+      20000 // This stack size can be checked & adjusted by reading the Stack Highwater
+      ,
+      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      ,
+      &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskManageINA226
-    ,  "TaskManageINA226_charge"
-    ,  22000  // Stack size
-    ,  &charge_config
-    ,  3  // Priority
-    ,  &Handle_ina1_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskReadBaro, "TaskReadBaro", 20000 // Stack size
+      ,
+      NULL, 2 // Priority
+      ,
+      &Handle_baroTask, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskManageINA226
-    ,  "TaskManageINA226_discharge"
-    ,  22000  // Stack size
-    ,  &discharge_config
-    ,  3  // Priority
-    ,  &Handle_ina2_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskManageINA226, "TaskManageINA226_charge", 22000 // Stack size
+      ,
+      &charge_config, 3 // Priority
+      ,
+      &Handle_ina1_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-    TaskReadImu
-    ,  "TaskReadImu"
-    ,  50000  // Stack size
-    ,  NULL
-    ,  3   // Priority
-    ,  &Handle_imu_Task
-    ,  ARDUINO_RUNNING_CORE);
+      TaskManageINA226, "TaskManageINA226_discharge", 22000 // Stack size
+      ,
+      &discharge_config, 3 // Priority
+      ,
+      &Handle_ina2_Task, ARDUINO_RUNNING_CORE);
+
+  xTaskCreatePinnedToCore(
+      TaskReadImu, "TaskReadImu", 50000 // Stack size
+      ,
+      NULL, 3 // Priority
+      ,
+      &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
@@ -291,21 +277,17 @@ void loop()
 
 void TaskReadBaro(void *pvParameters)
 {
-  (void) pvParameters;
-
-
+  (void)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = BARO_SAMPLE_INTERVAL;
 
-
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     // run task here.
     update_baro_data();
@@ -313,72 +295,60 @@ void TaskReadBaro(void *pvParameters)
     delay(5000);
     data_file.close();
     data_file = SD.open("/data.csv", FILE_APPEND);
-
   }
 }
 
-
 void TaskSpeed(void *pvParameters)
 {
-  (void) pvParameters;
+  (void)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = SPEED_INTERVAL;
 
-
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     check_speed();
-
   }
 }
 
 void TaskBrake(void *pvParameters)
 {
-  (void) pvParameters;
+  (void)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = BRAKE_INTERVAL;
 
-
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     check_brake();
-
   }
 }
 
 void TaskReadImu(void *pvParameters)
 {
-  (void) pvParameters;
+  (void)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = IMU_SAMPLE_INTERVAL;
 
-
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
-
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     update_imu_data();
-
   }
 }
 
@@ -386,59 +356,54 @@ void TaskReadImu(void *pvParameters)
   Blink
   Turns on an LED on for BLINK_INTERVAL, then off for BLINK_INTERVAL, repeatedly.
 */
-void TaskBlink(void *pvParameters)  // This is a task.
+void TaskBlink(void *pvParameters) // This is a task.
 {
-  (void) pvParameters;
+  (void)pvParameters;
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = BLINK_INTERVAL;
 
-  bool led_state = false;   // false is OFF, true is ON
+  bool led_state = false; // false is OFF, true is ON
 
   // initialize digital LED_BUILTIN on pin 13 as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
 
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
     led_state = !led_state;
     digitalWrite(LED_BUILTIN, led_state ? HIGH : LOW);
     heap_analysis();
   }
-
 }
-
 
 void TaskManageGPS(void *pvParameters)
 {
-  (void) pvParameters;
+  (void)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = GNSS_SAMPLE_INTERVAL;
 
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     // run task here.
     update_gnss_data();
   }
-
 }
-
 
 void TaskManageINA226(void *pvParameters)
 {
   //(void) pvParameters;
 
-  ina226_config_t our_config = *(ina226_config_t *) pvParameters;
+  ina226_config_t our_config = *(ina226_config_t *)pvParameters;
 
   Serial.print("charge config: ");
   Serial.println(our_config.ina226_status);
@@ -446,25 +411,21 @@ void TaskManageINA226(void *pvParameters)
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = INA226_SAMPLE_INTERVAL;
 
-
   // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount ();
-  for ( ;; )
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
     // Wait for the next cycle.
-    vTaskDelayUntil( &xLastWakeTime, xFrequency );
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     // run task here.
     poll_ina226(our_config.ina226_status);
-
   }
-
 }
 
 /*--------------------------------------------------*/
 /*--------------- Other Functions ------------------*/
 /*--------------------------------------------------*/
-
 
 /* Update the sensor data struct with baro values
 
@@ -476,15 +437,15 @@ void update_baro_data()
   float temperature;
   float pressure;
   float humidity;
-  
+
   xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
   m_ms8607.read_temperature_pressure_humidity(&temperature, &pressure, &humidity);
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
   /* Write baro data to file */
-  sprintf (buffer1, "%s temp:%f,pressure:%f,humidity:%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
+  sprintf(buffer1, "%s temp:%f,pressure:%f,humidity:%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
-  
+
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer1);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
@@ -492,34 +453,32 @@ void update_baro_data()
 #endif
 }
 
-
-
 void init_imu()
 {
 
   //Over-ride default settings if desired
-  myIMU.settings.gyroEnabled = 1;  //Can be 0 or 1
-  myIMU.settings.gyroRange = 2000;   //Max deg/s.  Can be: 125, 245, 500, 1000, 2000
+  myIMU.settings.gyroEnabled = 1;        //Can be 0 or 1
+  myIMU.settings.gyroRange = 2000;       //Max deg/s.  Can be: 125, 245, 500, 1000, 2000
   myIMU.settings.gyroSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666
-  myIMU.settings.gyroBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
-  myIMU.settings.gyroFifoEnabled = 1;  //Set to include gyro in FIFO
-  myIMU.settings.gyroFifoDecimation = 1;  //set 1 for on /1
+  myIMU.settings.gyroBandWidth = 200;    //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.gyroFifoEnabled = 1;    //Set to include gyro in FIFO
+  myIMU.settings.gyroFifoDecimation = 1; //set 1 for on /1
 
   myIMU.settings.accelEnabled = 1;
-  myIMU.settings.accelRange = 16;      //Max G force readable.  Can be: 2, 4, 8, 16
-  myIMU.settings.accelSampleRate = 833;  //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664, 13330
-  myIMU.settings.accelBandWidth = 200;  //Hz.  Can be: 50, 100, 200, 400;
-  myIMU.settings.accelFifoEnabled = 1;  //Set to include accelerometer in the FIFO
-  myIMU.settings.accelFifoDecimation = 1;  //set 1 for on /1
+  myIMU.settings.accelRange = 16;         //Max G force readable.  Can be: 2, 4, 8, 16
+  myIMU.settings.accelSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664, 13330
+  myIMU.settings.accelBandWidth = 200;    //Hz.  Can be: 50, 100, 200, 400;
+  myIMU.settings.accelFifoEnabled = 1;    //Set to include accelerometer in the FIFO
+  myIMU.settings.accelFifoDecimation = 1; //set 1 for on /1
   myIMU.settings.tempEnabled = 1;
 
   //Non-basic mode settings
   myIMU.settings.commMode = 1;
 
   //FIFO control settings
-  myIMU.settings.fifoThreshold = 4095;  //Can be 0 to 4095 (16 bit bytes)
-  myIMU.settings.fifoSampleRate = 100;  //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
-  myIMU.settings.fifoModeWord = 6;  //FIFO mode.
+  myIMU.settings.fifoThreshold = 4095; //Can be 0 to 4095 (16 bit bytes)
+  myIMU.settings.fifoSampleRate = 100; //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoModeWord = 6;     //FIFO mode.
   //FIFO mode.  Can be:
   //  0 (Bypass mode, FIFO off)
   //  1 (Stop when full)
@@ -528,7 +487,7 @@ void init_imu()
   //  6 (Continous mode)
 
   //Call .begin() to configure the IMUs
-  if ( myIMU.begin() != 0 )
+  if (myIMU.begin() != 0)
   {
     Serial.println("Problem starting the sensor with CS @ Pin 10.");
   }
@@ -551,25 +510,25 @@ void init_imu()
 void update_imu_data()
 {
 #if POLL_IMU
-  float temp;  //This is to hold read data
+  float temp; //This is to hold read data
 
   Serial.println("START SAVING IMU DATA");
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
   //properly.  Emptying the fifo is one way of doing this (this example)
-  while ( ( myIMU.fifoGetStatus() & 0x1000 ) == 0 ) {
+  while ((myIMU.fifoGetStatus() & 0x1000) == 0)
+  {
 
     xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
 
-    sprintf (buffer_imu, "%f,%f,%f,%f,%f,%f\n",
-             myIMU.calcGyro(myIMU.fifoRead()),
-             myIMU.calcGyro(myIMU.fifoRead()),
-             myIMU.calcGyro(myIMU.fifoRead()),
-             myIMU.calcAccel(myIMU.fifoRead()),
-             myIMU.calcAccel(myIMU.fifoRead()),
-             myIMU.calcAccel(myIMU.fifoRead())
-            );
+    sprintf(buffer_imu, "%f,%f,%f,%f,%f,%f\n",
+            myIMU.calcGyro(myIMU.fifoRead()),
+            myIMU.calcGyro(myIMU.fifoRead()),
+            myIMU.calcGyro(myIMU.fifoRead()),
+            myIMU.calcAccel(myIMU.fifoRead()),
+            myIMU.calcAccel(myIMU.fifoRead()),
+            myIMU.calcAccel(myIMU.fifoRead()));
 
     xSemaphoreGive(I2C1_Mutex); // release mutex
 
@@ -583,12 +542,10 @@ void update_imu_data()
 #endif
 }
 
-
-
 /* Update GNSS data */
 void update_gnss_data()
 {
-  myGNSS.checkUblox(); // Check for the arrival of new data and process it.
+  myGNSS.checkUblox();     // Check for the arrival of new data and process it.
   myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
 }
 
@@ -598,20 +555,19 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 #if POLL_GPS
-  sprintf (buffer_gnss, "%s gps:%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
-           NTP.getTimeDateStringUs(),
-           ubxDataStruct.hour,
-           ubxDataStruct.min,
-           ubxDataStruct.sec,
-           ubxDataStruct.iTOW % 1000,
-           ubxDataStruct.lat,
-           ubxDataStruct.lon,
-           ubxDataStruct.hMSL,
-           ubxDataStruct.numSV,
-           ubxDataStruct.gSpeed,
-           ubxDataStruct.flags.bits.gnssFixOK,
-           ubxDataStruct.fixType
-          );
+  sprintf(buffer_gnss, "%s gps:%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+          NTP.getTimeDateStringUs(),
+          ubxDataStruct.hour,
+          ubxDataStruct.min,
+          ubxDataStruct.sec,
+          ubxDataStruct.iTOW % 1000,
+          ubxDataStruct.lat,
+          ubxDataStruct.lon,
+          ubxDataStruct.hMSL,
+          ubxDataStruct.numSV,
+          ubxDataStruct.gSpeed,
+          ubxDataStruct.flags.bits.gnssFixOK,
+          ubxDataStruct.fixType);
 
   Serial.print(buffer_gnss);
 
@@ -676,13 +632,12 @@ void init_ina226()
   */
   // ina226.setCorrectionFactor(0.95);
 
-
   ina226.waitUntilConversionCompleted(); //if you comment this line the first data might be zero
 }
 
 /* Poll the INA226 once */
-void poll_ina226(INA226_STATUS ina226_status) {
-
+void poll_ina226(INA226_STATUS ina226_status)
+{
 
 #if POLL_INA226
   float shuntVoltage_mV = 0.0;
@@ -698,7 +653,7 @@ void poll_ina226(INA226_STATUS ina226_status) {
   busVoltage_V = ina226.getBusVoltage_V();
   current_mA = ina226.getCurrent_mA();
   power_mW = ina226.getBusPower();
-  loadVoltage_V  = busVoltage_V + (shuntVoltage_mV / 1000);
+  loadVoltage_V = busVoltage_V + (shuntVoltage_mV / 1000);
 
   xSemaphoreGive(I2C2_Mutex); // release mutex
 
@@ -708,27 +663,22 @@ void poll_ina226(INA226_STATUS ina226_status) {
           busVoltage_V,
           shuntVoltage_mV,
           current_mA,
-          power_mW
-         );
+          power_mW);
 
   //Serial.print(sprintfBuffer);
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, sprintfBuffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
-
 }
 
-
 /* Check the brake */
-void check_speed() {
-
+void check_speed()
+{
 
 #if POLL_SPEED
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
-
-
 
   sprintf(buffer_speed, "%s speed_voltage[mV]:%f\n",
           NTP.getTimeDateStringUs(),
@@ -740,12 +690,11 @@ void check_speed() {
   sd_manager.appendFile(&data_file, buffer_speed);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
-
 }
 
 /* Check the brake */
-void check_brake() {
-
+void check_brake()
+{
 
 #if POLL_BRAKE
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
@@ -761,7 +710,6 @@ void check_brake() {
   sd_manager.appendFile(&data_file, brake_buffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 #endif
-
 }
 
 void init_gps()
@@ -773,15 +721,16 @@ void init_gps()
   {
     Serial.println(F("u-blox GNSS not detected"));
   }
-  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-  myGNSS.setNavigationFrequency(2); //Produce two solutions per second
+  myGNSS.setI2COutput(COM_TYPE_UBX);      //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(2);       //Produce two solutions per second
   myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
 }
 
 void init_baro()
 {
   m_ms8607.begin();
-  if (m_ms8607.is_connected() == true) {
+  if (m_ms8607.is_connected() == true)
+  {
     m_ms8607.reset();
   }
 
@@ -799,22 +748,20 @@ void init_all_sensors()
   init_imu();
   /* INIT INA226 */
   init_ina226();
-
 }
 
 void init_ntp()
 {
-  WiFi.begin (YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
-  NTP.setTimeZone (TZ_Etc_UTC);
+  WiFi.begin(YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
+  NTP.setTimeZone(TZ_Etc_UTC);
   NTP.begin();
 }
-
 
 void heap_analysis()
 {
   int x;
   int measurement;
-  
+
   Serial.flush();
   Serial.println("");
   Serial.println("****************************************************");
@@ -827,7 +774,7 @@ void heap_analysis()
   Serial.println(" bytes");
   Serial.flush();
 
-  #if 0 
+#if 0 
   Serial.println("****************************************************");
   Serial.println("Task            ABS             %Util");
   Serial.println("****************************************************");
@@ -846,22 +793,20 @@ void heap_analysis()
 
   Serial.println("****************************************************");
   Serial.println("[Stacks Free Bytes Remaining] ");
-  #endif
+#endif
 
-  for (const TaskHandle_t & taskhandle : taskhandles)
+  for (const TaskHandle_t &taskhandle : taskhandles)
   {
-    measurement = uxTaskGetStackHighWaterMark( taskhandle );
+    measurement = uxTaskGetStackHighWaterMark(taskhandle);
     Serial.print("Thread A: ");
     Serial.println(measurement);
   }
 
-
-
-  measurement = uxTaskGetStackHighWaterMark( Handle_baroTask );
+  measurement = uxTaskGetStackHighWaterMark(Handle_baroTask);
   Serial.print("Thread B: ");
   Serial.println(measurement);
 
-  measurement = uxTaskGetStackHighWaterMark( Handle_imu_Task );
+  measurement = uxTaskGetStackHighWaterMark(Handle_imu_Task);
   Serial.print("Monitor Stack: ");
   Serial.println(measurement);
 
