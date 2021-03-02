@@ -462,7 +462,7 @@ void update_baro_data()
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
   /* Write baro data to file */
-  sprintf(buffer1, "%s [baro] %f,%f,%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
+  sprintf(buffer1, "%s,baro,%f,%f,%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
 
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
@@ -541,7 +541,7 @@ void update_imu_data()
 
     xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
 
-    sprintf(buffer_imu, "%s [imu] %f,%f,%f,%f,%f,%f\n",
+    sprintf(buffer_imu, "%s,imu,%f,%f,%f,%f,%f,%f\n",
             NTP.getTimeDateStringUs(),
             myIMU.calcGyro(myIMU.fifoRead()),
             myIMU.calcGyro(myIMU.fifoRead()),
@@ -575,7 +575,7 @@ void update_gnss_data()
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
 #if POLL_GPS
-  sprintf(buffer_gnss, "%s [gps] %02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
+  sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
           ubxDataStruct.min,
@@ -677,7 +677,7 @@ void poll_ina226(INA226_STATUS ina226_status)
 
   xSemaphoreGive(I2C2_Mutex); // release mutex
 
-  sprintf(sprintfBuffer, "%s [ina226] %d,%f,%f,%f,%f\n",
+  sprintf(sprintfBuffer, "%s,ina226,%d,%f,%f,%f,%f\n",
           NTP.getTimeDateStringUs(),
           ina226_status,
           busVoltage_V,
@@ -700,7 +700,7 @@ void check_speed()
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
 
-  sprintf(buffer_speed, "%s [speed] %f\n",
+  sprintf(buffer_speed, "%s,speed,%f\n",
           NTP.getTimeDateStringUs(),
           speed_voltage);
 
@@ -720,7 +720,7 @@ void check_brake()
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
 
-  sprintf(brake_buffer, "%s [brake] %f\n",
+  sprintf(brake_buffer, "%s,brake,%f\n",
           NTP.getTimeDateStringUs(),
           brake_voltage);
 
