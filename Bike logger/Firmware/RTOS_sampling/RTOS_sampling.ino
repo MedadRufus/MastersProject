@@ -56,6 +56,8 @@
 #define POLL_SPEED (false)
 
 #define HEAP_ANALYSIS (false)
+#define PERIODIC_CLOSE_FILE (false)
+
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
@@ -293,9 +295,11 @@ void TaskReadBaro(void *pvParameters)
     // run task here.
     update_baro_data();
 
+    #if PERIODIC_CLOSE_FILE
     delay(5000);
     data_file.close();
     data_file = SD.open("/data.csv", FILE_APPEND);
+    #endif
   }
 }
 
