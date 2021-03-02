@@ -225,7 +225,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskBrake
     ,  "TaskBrake"   // A name just for humans
-    ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  8024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  &Handle_brake_Task
@@ -234,7 +234,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskSpeed
     ,  "TaskSpeed"   // A name just for humans
-    ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  8024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  &Handle_speed_Task
@@ -243,7 +243,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageGPS
     ,  "TaskManageGPS"   // A name just for humans
-    ,  12000  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  20000  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  &Handle_gps_Task
@@ -253,7 +253,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskReadBaro
     ,  "TaskReadBaro"
-    ,  6000  // Stack size
+    ,  20000  // Stack size
     ,  NULL
     ,  2  // Priority
     ,  &Handle_baroTask
@@ -262,7 +262,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226_charge"
-    ,  10000  // Stack size
+    ,  22000  // Stack size
     ,  &charge_config
     ,  3  // Priority
     ,  &Handle_ina1_Task
@@ -271,7 +271,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     TaskManageINA226
     ,  "TaskManageINA226_discharge"
-    ,  10000  // Stack size
+    ,  22000  // Stack size
     ,  &discharge_config
     ,  4  // Priority
     ,  &Handle_ina2_Task
