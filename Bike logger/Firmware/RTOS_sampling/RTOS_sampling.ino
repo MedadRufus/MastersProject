@@ -210,7 +210,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskBrake, "TaskBrake" // A name just for humans
       ,
-      8024 // This stack size can be checked & adjusted by reading the Stack Highwater
+      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
@@ -219,7 +219,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskSpeed, "TaskSpeed" // A name just for humans
       ,
-      8024 // This stack size can be checked & adjusted by reading the Stack Highwater
+      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
@@ -228,35 +228,35 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
       ,
-      20000 // This stack size can be checked & adjusted by reading the Stack Highwater
+      10000 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-      TaskReadBaro, "TaskReadBaro", 20000 // Stack size
+      TaskReadBaro, "TaskReadBaro", 10000 // Stack size
       ,
       NULL, 2 // Priority
       ,
       &Handle_baroTask, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-      TaskManageINA226, "TaskManageINA226_charge", 22000 // Stack size
+      TaskManageINA226, "TaskManageINA226_charge", 10000 // Stack size
       ,
       &charge_config, 2 // Priority
       ,
       &Handle_ina1_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-      TaskManageINA226, "TaskManageINA226_discharge", 22000 // Stack size
+      TaskManageINA226, "TaskManageINA226_discharge", 10000 // Stack size
       ,
       &discharge_config, 2 // Priority
       ,
       &Handle_ina2_Task, ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
-      TaskReadImu, "TaskReadImu", 50000 // Stack size
+      TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
       NULL,3 // Priority
       ,
