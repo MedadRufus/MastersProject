@@ -219,7 +219,7 @@ void setup() {
     ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL
+    ,  &Handle_blink_Task
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -228,7 +228,7 @@ void setup() {
     ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL
+    ,  &Handle_brake_Task
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -237,7 +237,7 @@ void setup() {
     ,  3024  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL
+    ,  &Handle_speed_Task
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -246,7 +246,7 @@ void setup() {
     ,  12000  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  1  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL
+    ,  &Handle_gps_Task
     ,  ARDUINO_RUNNING_CORE);
 
 
@@ -256,7 +256,7 @@ void setup() {
     ,  6000  // Stack size
     ,  NULL
     ,  2  // Priority
-    ,  NULL
+    ,  &Handle_baroTask
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -265,7 +265,7 @@ void setup() {
     ,  10000  // Stack size
     ,  &charge_config
     ,  3  // Priority
-    ,  NULL
+    ,  &Handle_ina1_Task
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -274,7 +274,7 @@ void setup() {
     ,  10000  // Stack size
     ,  &discharge_config
     ,  4  // Priority
-    ,  NULL
+    ,  &Handle_ina2_Task
     ,  ARDUINO_RUNNING_CORE);
 
   xTaskCreatePinnedToCore(
@@ -283,7 +283,7 @@ void setup() {
     ,  50000  // Stack size
     ,  NULL
     ,  1   // Priority
-    ,  NULL
+    ,  &Handle_imu_Task
     ,  ARDUINO_RUNNING_CORE);
 
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
