@@ -56,8 +56,8 @@
 #define POLL_SPEED (false)
 
 #define HEAP_ANALYSIS (false)
-#define PERIODIC_CLOSE_FILE (false)
-
+#define PERIODIC_CLOSE_FILE (true)
+#define INTERVAL_BETWEEN_FLUSHING_FILE 10000UL
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
@@ -266,6 +266,13 @@ void start_tasks()
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 
+  xTaskCreatePinnedToCore(
+      TaskReopen_File, "TaskReopen_File", 2000 // Stack size
+      ,
+      NULL, 1 // Priority
+      ,
+      NULL, ARDUINO_RUNNING_CORE);
+
   // Now the task scheduler, which takes over control of scheduling individual tasks, is automatically started.
 }
 
@@ -294,12 +301,17 @@ void TaskReadBaro(void *pvParameters)
 
     // run task here.
     update_baro_data();
+  }
+}
 
-    #if PERIODIC_CLOSE_FILE
-    delay(5000);
-    data_file.close();
-    data_file = SD.open("/data.csv", FILE_APPEND);
-    #endif
+void TaskReopen_File(void *pvParameters)
+{
+  for (;;)
+  {
+#if PERIODIC_CLOSE_FILE
+    delay(INTERVAL_BETWEEN_FLUSHING_FILE);
+    data_file.flush();
+#endif
   }
 }
 
