@@ -189,7 +189,13 @@ void setup()
   {
     Serial.println("Mutex can not be created");
   }
+  
+  start_tasks();
 
+}
+
+void start_tasks()
+{
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
       TaskBlink, "TaskBlink" // A name just for humans
