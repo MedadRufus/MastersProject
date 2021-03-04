@@ -169,7 +169,7 @@ void start_tasks()
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
 
-#if 0
+#if POLL_BRAKE
   xTaskCreatePinnedToCore(
       TaskBrake, "TaskBrake" // A name just for humans
       ,
@@ -178,7 +178,9 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_brake_Task, ARDUINO_RUNNING_CORE);
+#endif
 
+#if POLL_SPEED
   xTaskCreatePinnedToCore(
       TaskSpeed, "TaskSpeed" // A name just for humans
       ,
@@ -189,6 +191,7 @@ void start_tasks()
       &Handle_speed_Task, ARDUINO_RUNNING_CORE);
 #endif
 
+#if POLL_GPS
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
       ,
@@ -197,14 +200,18 @@ void start_tasks()
       NULL, 2 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
+#endif
 
+#if POLL_BARO
   xTaskCreatePinnedToCore(
       TaskReadBaro, "TaskReadBaro", 10000 // Stack size
       ,
       NULL, 2 // Priority
       ,
       &Handle_baroTask, ARDUINO_RUNNING_CORE);
+#endif
 
+#if POLL_INA226
   xTaskCreatePinnedToCore(
       TaskManageINA226, "TaskManageINA226_charge", 10000 // Stack size
       ,
@@ -218,13 +225,16 @@ void start_tasks()
       &discharge_config, 2 // Priority
       ,
       &Handle_ina2_Task, ARDUINO_RUNNING_CORE);
+#endif
 
+#if POLL_IMU
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
       NULL, 2 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
+#endif
 
   xTaskCreatePinnedToCore(
       TaskReopen_File, "TaskReopen_File", 2000 // Stack size
@@ -414,7 +424,6 @@ void TaskManageINA226(void *pvParameters)
 */
 void update_baro_data()
 {
-#if POLL_BARO
   //Get all parameters
   float temperature;
   float pressure;
@@ -431,8 +440,6 @@ void update_baro_data()
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer1);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
-
-#endif
 }
 
 void init_imu()
@@ -491,7 +498,6 @@ void init_imu()
 */
 void update_imu_data()
 {
-#if POLL_IMU
   float temp; //This is to hold read data
 
   Serial.println("START SAVING IMU DATA");
@@ -521,8 +527,6 @@ void update_imu_data()
     xSemaphoreGive(SPI_SD_Mutex); // release mutex
   }
   Serial.println("SAVED IMU DATA");
-
-#endif
 }
 
 /* Update GNSS data */
@@ -537,7 +541,6 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-#if POLL_GPS
   sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
@@ -557,8 +560,6 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer_gnss);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
-
-#endif
 }
 
 /* Initialise the INA226 module */
@@ -621,8 +622,6 @@ void init_ina226()
 /* Poll the INA226 once */
 void poll_ina226(INA226_STATUS ina226_status)
 {
-
-#if POLL_INA226
   float shuntVoltage_mV = 0.0;
   float loadVoltage_V = 0.0;
   float busVoltage_V = 0.0;
@@ -652,14 +651,11 @@ void poll_ina226(INA226_STATUS ina226_status)
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, sprintfBuffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
-#endif
 }
 
 /* Check the brake */
 void check_speed()
 {
-
-#if POLL_SPEED
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
 
@@ -672,14 +668,11 @@ void check_speed()
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, buffer_speed);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
-#endif
 }
 
 /* Check the brake */
 void check_brake()
 {
-
-#if POLL_BRAKE
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
   float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
 
@@ -692,7 +685,6 @@ void check_brake()
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, brake_buffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
-#endif
 }
 
 void init_gps()
