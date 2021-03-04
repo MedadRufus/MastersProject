@@ -45,7 +45,7 @@ extern "C"
 
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
-#define GNSS_SAMPLE_INTERVAL 250
+#define GNSS_SAMPLE_INTERVAL 100
 #define BARO_SAMPLE_INTERVAL 250
 #define IMU_SAMPLE_INTERVAL 300
 #define BLINK_INTERVAL 100
@@ -62,6 +62,8 @@ extern "C"
 #define PAS 36
 #define THROTTLE 39
 
+/* Number of GPS fixes in a second */
+#define FIXS_PER_SECOND 4
 
 /* ==================================================================== */
 /* ========================== public data ============================= */
