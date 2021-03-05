@@ -715,14 +715,25 @@ void init_baro()
 
 void init_all_sensors()
 {
-  /* INIT baro sensor */
+  #if POLL_BARO
+   /* INIT baro sensor */
   init_baro();
+  #endif
+
+  #if POLL_GPS
   /* INIT GPS */
   init_gps();
+  #endif
+
+  #if POLL_IMU
   /* INIT IMU */
   init_imu();
+  #endif
+
+  #if POLL_INA226
   /* INIT INA226 */
   init_ina226();
+  #endif
 }
 
 void init_ntp()
