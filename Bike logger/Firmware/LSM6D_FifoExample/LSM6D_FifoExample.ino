@@ -55,7 +55,7 @@ LSM6DS3 myIMU;
 long lastTime = 0; //Simple local timer.
 char buffer_imu[400];
 
-uint16_t readings_in_one_go = 8;
+uint16_t readings_in_one_go = 1;
 uint16_t bytes_in_one_reading = 12;
 uint16_t bytes_to_read = bytes_in_one_reading * readings_in_one_go;
 
