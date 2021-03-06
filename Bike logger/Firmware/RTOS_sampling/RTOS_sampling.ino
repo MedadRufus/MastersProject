@@ -696,9 +696,9 @@ void init_gps()
   {
     Serial.println(F("u-blox GNSS not detected"));
   }
-  myGNSS.setI2COutput(COM_TYPE_UBX);      //Set the I2C port to output UBX only (turn off NMEA noise)
-  myGNSS.setNavigationFrequency(FIXS_PER_SECOND);       //Produce five solutions per second
-  myGNSS.setAutoPVTcallback(&logPVTdata); // Enable automatic NAV PVT messages with callback to printPVTdata
+  myGNSS.setI2COutput(COM_TYPE_UBX);              //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setNavigationFrequency(FIXS_PER_SECOND); //Produce five solutions per second
+  myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
 }
 
 void init_baro()
@@ -715,25 +715,25 @@ void init_baro()
 
 void init_all_sensors()
 {
-  #if POLL_BARO
-   /* INIT baro sensor */
+#if POLL_BARO
+  /* INIT baro sensor */
   init_baro();
-  #endif
+#endif
 
-  #if POLL_GPS
+#if POLL_GPS
   /* INIT GPS */
   init_gps();
-  #endif
+#endif
 
-  #if POLL_IMU
+#if POLL_IMU
   /* INIT IMU */
   init_imu();
-  #endif
+#endif
 
-  #if POLL_INA226
+#if POLL_INA226
   /* INIT INA226 */
   init_ina226();
-  #endif
+#endif
 }
 
 void init_ntp()
@@ -760,7 +760,7 @@ void heap_analysis()
   Serial.println(" bytes");
   Serial.flush();
 
-#if 0 
+#if 0
   Serial.println("****************************************************");
   Serial.println("Task            ABS             %Util");
   Serial.println("****************************************************");
