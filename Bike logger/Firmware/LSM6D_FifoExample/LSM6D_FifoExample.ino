@@ -130,7 +130,21 @@ void loop()
     //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
     //the channels must be synchronized to a known position for the data to align
     //properly.  Emptying the fifo is one way of doing this (this example)
-    while ((myIMU.fifoGetStatus() & 0x1000) == 0)
+uint16_t bytes_left ;
+
+    while(1)
+    {
+    bytes_left= myIMU.fifoGetStatus() & 0x7FF;
+    
+
+    Serial.printf("bytes to read: 0b");
+    Serial.println(bytes_left,BIN);
+    Serial.println(bytes_left,DEC);
+
+    delay(10);
+    }
+
+    for (bytes_left; bytes_left > 0; bytes_left = bytes_left-bytes_to_read)
     {
       uint8_t data[bytes_to_read];
       myIMU.readRegisterRegion(data, LSM6DS3_ACC_GYRO_FIFO_DATA_OUT_L, sizeof(data));
@@ -152,9 +166,16 @@ void loop()
                 y_gyro,
                 z_gyro);
 
-        Serial.print(buffer_imu);
+        //Serial.print(buffer_imu);
       }
     }
+
+
+    bytes_left = myIMU.fifoGetStatus();//& 0x7FF;
+
+    Serial.printf("bytes to read end: 0b");
+    Serial.println(bytes_left,BIN);
+
   }
 }
 
