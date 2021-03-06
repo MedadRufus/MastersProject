@@ -238,6 +238,19 @@ fp-info-cache
 *.csv
 
 
+# Visual studio code
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+
 # OUtput files for drill
 Bike logger/pcb/output/*
 data_analysis_tools_for_gfbs_data/plot.html
@@ -248,3 +261,7 @@ data_analysis_tools_for_gfbs_data/.mapbox_token
 Bike logger/pcb/bom/ibom.html
 Bike logger/Firmware/RTOS_sampling/WifiConfig.h
 Bike logger/Firmware/ntp_microsecond_example/WifiConfig.h
+
+
+
+
