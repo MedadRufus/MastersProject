@@ -33,7 +33,7 @@ extern "C"
   Set to true or false to poll/not poll
 */
 #define POLL_BARO (false)
-#define POLL_GPS (true)
+#define POLL_GPS (false)
 #define POLL_IMU (true)
 #define POLL_INA226 (true)
 #define POLL_BRAKE (false)
@@ -86,4 +86,3 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-

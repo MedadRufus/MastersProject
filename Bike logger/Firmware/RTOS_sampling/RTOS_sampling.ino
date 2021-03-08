@@ -199,6 +199,7 @@ void start_tasks()
       10000 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 2 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 #endif
@@ -467,8 +468,8 @@ void init_imu()
 
   //FIFO control settings
   myIMU.settings.fifoThreshold = fifo_capacity; //Can be 0 to 4095 (16 bit bytes)
-  myIMU.settings.fifoSampleRate = 100; //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
-  myIMU.settings.fifoModeWord = 1;     //FIFO mode.
+  myIMU.settings.fifoSampleRate = 100;          //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoModeWord = 1;              //FIFO mode.
   //FIFO mode.  Can be:
   //  0 (Bypass mode, FIFO off)
   //  1 (Stop when full)
