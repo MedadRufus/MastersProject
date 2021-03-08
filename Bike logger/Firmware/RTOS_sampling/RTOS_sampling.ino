@@ -100,7 +100,6 @@ uint16_t bytes_to_read = bytes_in_one_reading * readings_in_one_go;
 uint16_t fifo_capacity = 4095;
 long lastTime = 0; //Simple local timer.
 
-
 /* ==================================================================== */
 /* ============================== data ================================ */
 /* ==================================================================== */
@@ -518,14 +517,13 @@ void update_imu_data()
 
   lastTime = millis(); //Update the timer
 
-
   if ((fifo_status & 0b0001000000000000) == 0) // not empty
   {
     bytes_left = (fifo_status & 0x7FF);
 
     log_d("bytes in fifo:%d", bytes_left);
 
-    bytes_left  = (bytes_left == 0) ? fifo_capacity / 2 : bytes_left;
+    bytes_left = (bytes_left == 0) ? fifo_capacity / 2 : bytes_left;
 
     for (bytes_left; bytes_left > bytes_to_read * 4; bytes_left = bytes_left - bytes_to_read)
     {
@@ -564,8 +562,6 @@ void update_imu_data()
 
   log_d("duration[ms]:%d", millis() - lastTime);
 }
-
-
 
 int16_t convert(uint8_t *bytes_source, uint16_t start)
 {
