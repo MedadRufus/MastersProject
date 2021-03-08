@@ -501,7 +501,7 @@ void update_imu_data()
 {
   float temp; //This is to hold read data
 
-  Serial.println("START SAVING IMU DATA");
+  log_d("%s","START SAVING IMU DATA");
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
@@ -558,9 +558,8 @@ void update_imu_data()
       }
     }
   }
-  Serial.println("SAVED IMU DATA");
 
-  log_d("duration[ms]:%d", millis() - lastTime);
+  log_d("IMU read/save duration[ms]:%d", millis() - lastTime);
 }
 
 int16_t convert(uint8_t *bytes_source, uint16_t start)
