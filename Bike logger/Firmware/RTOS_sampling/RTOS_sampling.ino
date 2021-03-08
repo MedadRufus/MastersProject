@@ -521,13 +521,10 @@ void update_imu_data()
   if ((fifo_status & 0b0001000000000000) == 0) // not empty
   {
     bytes_left = (fifo_status & 0x7FF);
-    
-    log_d("bytes in fifo:%d",bytes_left);
 
-    if (bytes_left == 0)
-    {
-      bytes_left = fifo_capacity / 2;
-    }
+    log_d("bytes in fifo:%d", bytes_left);
+
+    bytes_left  = (bytes_left == 0) ? fifo_capacity / 2 : bytes_left;
 
     for (bytes_left; bytes_left > bytes_to_read * 4; bytes_left = bytes_left - bytes_to_read)
     {
