@@ -25,7 +25,7 @@
 #include <WiFi.h>
 #include "WifiConfig.h"
 #include "config.h"
-#include <list>
+#include <bitset>
 
 /* ==================================================================== */
 /* ============================ constants ============================= */
@@ -94,11 +94,12 @@ TaskHandle_t Handle_blink_Task;
 TaskHandle_t Handle_speed_Task;
 TaskHandle_t Handle_brake_Task;
 
-// TaskHandle_t taskhandles [] = {&Handle_gps_Task,&Handle_baroTask, &Handle_imu_Task,&Handle_ina1_Task,
-//  &Handle_ina2_Task,&Handle_blink_Task,&Handle_speed_Task,&Handle_brake_Task};
+uint16_t readings_in_one_go = 8;
+uint16_t bytes_in_one_reading = 12;
+uint16_t bytes_to_read = bytes_in_one_reading * readings_in_one_go;
+uint16_t fifo_capacity = 4095;
+long lastTime = 0; //Simple local timer.
 
-// std::list<TaskHandle_t> taskhandles = {Handle_gps_Task, Handle_baroTask, Handle_imu_Task, Handle_ina1_Task,
-//                                        Handle_ina2_Task, Handle_blink_Task, Handle_speed_Task, Handle_brake_Task};
 
 /* ==================================================================== */
 /* ============================== data ================================ */
@@ -459,15 +460,15 @@ void init_imu()
   myIMU.settings.accelBandWidth = 200;    //Hz.  Can be: 50, 100, 200, 400;
   myIMU.settings.accelFifoEnabled = 1;    //Set to include accelerometer in the FIFO
   myIMU.settings.accelFifoDecimation = 1; //set 1 for on /1
-  myIMU.settings.tempEnabled = 1;
+  myIMU.settings.tempEnabled = 0;
 
   //Non-basic mode settings
   myIMU.settings.commMode = 1;
 
   //FIFO control settings
-  myIMU.settings.fifoThreshold = 4095; //Can be 0 to 4095 (16 bit bytes)
+  myIMU.settings.fifoThreshold = fifo_capacity; //Can be 0 to 4095 (16 bit bytes)
   myIMU.settings.fifoSampleRate = 100; //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
-  myIMU.settings.fifoModeWord = 6;     //FIFO mode.
+  myIMU.settings.fifoModeWord = 1;     //FIFO mode.
   //FIFO mode.  Can be:
   //  0 (Bypass mode, FIFO off)
   //  1 (Stop when full)
@@ -505,28 +506,72 @@ void update_imu_data()
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
   //properly.  Emptying the fifo is one way of doing this (this example)
-  while ((myIMU.fifoGetStatus() & 0x1000) == 0)
+  uint16_t bytes_left;
+
+  xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
+  uint16_t fifo_status = myIMU.fifoGetStatus();
+  xSemaphoreGive(I2C1_Mutex); // release mutex
+
+  // uses binary print out implementation from : https://stackoverflow.com/a/31660310/13737285
+  log_d("fifo_Status : %s", std::bitset<sizeof(fifo_status) * 8>(fifo_status).to_string().insert(0, "0b").c_str());
+
+  lastTime = millis(); //Update the timer
+
+
+  if ((fifo_status & 0b0001000000000000) == 0) // not empty
   {
+    bytes_left = (fifo_status & 0x7FF);
+    
+    log_d("bytes in fifo:%d",bytes_left);
 
-    xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
+    if (bytes_left == 0)
+    {
+      bytes_left = fifo_capacity / 2;
+    }
 
-    sprintf(buffer_imu, "%s,imu,%f,%f,%f,%f,%f,%f\n",
-            NTP.getTimeDateStringUs(),
-            myIMU.calcGyro(myIMU.fifoRead()),
-            myIMU.calcGyro(myIMU.fifoRead()),
-            myIMU.calcGyro(myIMU.fifoRead()),
-            myIMU.calcAccel(myIMU.fifoRead()),
-            myIMU.calcAccel(myIMU.fifoRead()),
-            myIMU.calcAccel(myIMU.fifoRead()));
+    for (bytes_left; bytes_left > bytes_to_read * 4; bytes_left = bytes_left - bytes_to_read)
+    {
+      uint8_t data_bytes[bytes_to_read];
+      xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
+      myIMU.readRegisterRegion(data_bytes, LSM6DS3_ACC_GYRO_FIFO_DATA_OUT_L, sizeof(data_bytes));
+      xSemaphoreGive(I2C1_Mutex); // release mutex
 
-    xSemaphoreGive(I2C1_Mutex); // release mutex
+      for (int i = 0; i < readings_in_one_go; i++)
+      {
+        int16_t x_acc = convert(data_bytes, i * bytes_in_one_reading + 0);
+        int16_t y_acc = convert(data_bytes, i * bytes_in_one_reading + 2);
+        int16_t z_acc = convert(data_bytes, i * bytes_in_one_reading + 4);
+        int16_t x_gyro = convert(data_bytes, i * bytes_in_one_reading + 6);
+        int16_t y_gyro = convert(data_bytes, i * bytes_in_one_reading + 8);
+        int16_t z_gyro = convert(data_bytes, i * bytes_in_one_reading + 10);
 
-    //Serial.print(buffer_imu);
-    xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-    sd_manager.appendFile(&data_file, buffer_imu);
-    xSemaphoreGive(SPI_SD_Mutex); // release mutex
+        sprintf(buffer_imu, "%s,imu,%d,%d,%d,%d,%d,%d\n",
+                NTP.getTimeDateStringUs(),
+                x_acc,
+                y_acc,
+                z_acc,
+                x_gyro,
+                y_gyro,
+                z_gyro);
+
+        Serial.print(buffer_imu);
+
+        xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
+        sd_manager.appendFile(&data_file, buffer_imu);
+        xSemaphoreGive(SPI_SD_Mutex); // release mutex
+      }
+    }
   }
   Serial.println("SAVED IMU DATA");
+
+  log_d("duration[ms]:%d", millis() - lastTime);
+}
+
+
+
+int16_t convert(uint8_t *bytes_source, uint16_t start)
+{
+  return (int16_t)bytes_source[start] | int16_t(bytes_source[start + 1] << 8);
 }
 
 /* Update GNSS data */
