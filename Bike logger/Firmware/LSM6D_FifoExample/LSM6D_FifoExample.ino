@@ -55,14 +55,16 @@ LSM6DS3 myIMU;
 long lastTime = 0; //Simple local timer.
 char buffer_imu[400];
 
-uint16_t readings_in_one_go = 1;
+uint16_t readings_in_one_go = 8;
 uint16_t bytes_in_one_reading = 12;
 uint16_t bytes_to_read = bytes_in_one_reading * readings_in_one_go;
+
+uint16_t fifo_capacity = 4095;
 
 void setup(void)
 {
   Wire.begin(21, 22); // Acclerometer/gyro/temperature/pressure/humidity sensor
-  Wire.setClock(400000);
+  Wire.setClock(800000);
 
   //Over-ride default settings if desired
   myIMU.settings.gyroEnabled = 1;        //Can be 0 or 1
@@ -84,8 +86,8 @@ void setup(void)
   myIMU.settings.commMode = 1;
 
   //FIFO control settings
-  myIMU.settings.fifoThreshold = 4095; //Can be 0 to 4095 (16 bit bytes)
-  myIMU.settings.fifoSampleRate = 400; //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
+  myIMU.settings.fifoThreshold = fifo_capacity; //Can be 0 to 4095 (16 bit bytes)
+  myIMU.settings.fifoSampleRate = 100; //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
   myIMU.settings.fifoModeWord = 6;     //FIFO mode.
   //FIFO mode.  Can be:
   //  0 (Bypass mode, FIFO off)
@@ -119,65 +121,69 @@ void setup(void)
 
 void loop()
 {
-  float temp; //This is to hold read data
-  uint16_t tempUnsigned;
 
   /* Poll the LSM6DS every second */
-  if (millis() - lastTime > 1000)
+  if (millis() - lastTime > 100)
   {
+
     lastTime = millis(); //Update the timer
 
     //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
     //the channels must be synchronized to a known position for the data to align
     //properly.  Emptying the fifo is one way of doing this (this example)
-uint16_t bytes_left ;
+    uint16_t bytes_left;
+    uint16_t fifo_status = myIMU.fifoGetStatus();
 
-    while(1)
+    Serial.println("fifo_Status");
+
+    Serial.println(fifo_status,BIN);
+
+    if ((fifo_status & 0b0001000000000000) == 0) // not empty
     {
-    bytes_left= myIMU.fifoGetStatus() & 0x7FF;
-    
 
-    Serial.printf("bytes to read: 0b");
-    Serial.println(bytes_left,BIN);
-    Serial.println(bytes_left,DEC);
+      bytes_left = (fifo_status & 0x7FF);
+      Serial.println(bytes_left);
 
-    delay(10);
-    }
-
-    for (bytes_left; bytes_left > 0; bytes_left = bytes_left-bytes_to_read)
-    {
-      uint8_t data[bytes_to_read];
-      myIMU.readRegisterRegion(data, LSM6DS3_ACC_GYRO_FIFO_DATA_OUT_L, sizeof(data));
-
-      for (int i = 0; i < readings_in_one_go; i++)
+      if (bytes_left == 0)
       {
-        int16_t x_acc = convert(data, i * bytes_in_one_reading + 0);
-        int16_t y_acc = convert(data, i * bytes_in_one_reading + 2);
-        int16_t z_acc = convert(data, i * bytes_in_one_reading + 4);
-        int16_t x_gyro = convert(data, i * bytes_in_one_reading + 6);
-        int16_t y_gyro = convert(data, i * bytes_in_one_reading + 8);
-        int16_t z_gyro = convert(data, i * bytes_in_one_reading + 10);
+        bytes_left = fifo_capacity / 2;
+      }
 
-        sprintf(buffer_imu, "imu,%d,%d,%d,%d,%d,%d\n",
-                x_acc,
-                y_acc,
-                z_acc,
-                x_gyro,
-                y_gyro,
-                z_gyro);
+      Serial.println("done");
 
-        //Serial.print(buffer_imu);
+      for (bytes_left; bytes_left > bytes_to_read * 4; bytes_left = bytes_left - bytes_to_read)
+      {
+        //Serial.println(bytes_left);
+        uint8_t data[bytes_to_read];
+        myIMU.readRegisterRegion(data, LSM6DS3_ACC_GYRO_FIFO_DATA_OUT_L, sizeof(data));
+
+        for (int i = 0; i < readings_in_one_go; i++)
+        {
+          int16_t x_acc = convert(data, i * bytes_in_one_reading + 0);
+          int16_t y_acc = convert(data, i * bytes_in_one_reading + 2);
+          int16_t z_acc = convert(data, i * bytes_in_one_reading + 4);
+          int16_t x_gyro = convert(data, i * bytes_in_one_reading + 6);
+          int16_t y_gyro = convert(data, i * bytes_in_one_reading + 8);
+          int16_t z_gyro = convert(data, i * bytes_in_one_reading + 10);
+
+          sprintf(buffer_imu, "imu,%d,%d,%d,%d,%d,%d\n",
+                  x_acc,
+                  y_acc,
+                  z_acc,
+                  x_gyro,
+                  y_gyro,
+                  z_gyro);
+
+          //Serial.print(buffer_imu);
+        }
       }
     }
 
-
-    bytes_left = myIMU.fifoGetStatus();//& 0x7FF;
-
-    Serial.printf("bytes to read end: 0b");
-    Serial.println(bytes_left,BIN);
-
+    Serial.printf("duration[ms]:");
+    Serial.println(millis() - lastTime);
   }
 }
+
 
 int16_t convert(uint8_t *bytes_source, uint16_t start)
 {
