@@ -600,7 +600,19 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
 
-/* Initialise the INA226 module */
+
+/**
+ * @brief Set the sys time ublox object
+ * 
+ * @param ubxDataStruct 
+ * @return true 
+ * @return false 
+ */
+
+/**
+ * @brief Initialise the INA226 module
+ * 
+ */
 void init_ina226()
 {
   ina226.begin(INA_226_I2C_ADDRESS, &I2CINA226);
@@ -691,7 +703,7 @@ void poll_ina226(INA226_STATUS ina226_status)
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
 
-/* Check the brake */
+/* Check the speed */
 void check_speed()
 {
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
@@ -724,7 +736,10 @@ void check_brake()
   sd_manager.appendFile(&data_file, brake_buffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
-
+/**
+ * @brief Initialise GPS
+ * 
+ */
 void init_gps()
 {
   /* Setup GNSS */
@@ -739,6 +754,10 @@ void init_gps()
   myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
 }
 
+/**
+ * @brief Initliase Barometer
+ * 
+ */
 void init_baro()
 {
   m_ms8607.begin();
@@ -751,6 +770,10 @@ void init_baro()
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 }
 
+/**
+ * @brief Initilise all sensors
+ * 
+ */
 void init_all_sensors()
 {
 #if POLL_BARO
@@ -774,6 +797,10 @@ void init_all_sensors()
 #endif
 }
 
+/**
+ * @brief Init ntp
+ * 
+ */
 void init_ntp()
 {
   WiFi.begin(YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
