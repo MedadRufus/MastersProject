@@ -613,7 +613,9 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 }
 
 /**
- * @brief Set the sys time ublox object
+ * @brief Set the sys time ublox object.
+ * Set only when systime is 1 second out of sync with gps
+ * Set systime only when ublox has good fix.
  * 
  * @param ubxDataStruct 
  * @return true 
