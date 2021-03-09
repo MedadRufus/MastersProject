@@ -198,7 +198,8 @@ void start_tasks()
       10000 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 2 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      NULL,
+      1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 #endif
@@ -501,7 +502,7 @@ void update_imu_data()
 {
   float temp; //This is to hold read data
 
-  log_d("%s","START SAVING IMU DATA");
+  log_d("%s", "START SAVING IMU DATA");
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
@@ -579,6 +580,9 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
+  /* sync systime if it has not yet been done */
+  set_sys_time_ublox(ubxDataStruct);
+
   sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
@@ -600,7 +604,64 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
 
-/* Initialise the INA226 module */
+/**
+ * @brief Set the sys time ublox object
+ * 
+ * @param ubxDataStruct 
+ * @return true 
+ * @return false 
+ */
+bool set_sys_time_ublox(UBX_NAV_PVT_data_t ubxDataStruct)
+{
+
+  if (ubxDataStruct.flags.bits.gnssFixOK == 0) // not a fix. Don't sync systime
+  {
+    return false;
+  }
+
+  timeval newtime;
+  timeval currenttime;
+
+  gettimeofday(&currenttime, NULL);
+
+  struct tm t;
+  time_t t_of_day;
+
+  t.tm_year = ubxDataStruct.year - 1900; // Year - 1900
+  t.tm_mon = ubxDataStruct.month - 1;    // Month, where 0 = jan
+  t.tm_mday = ubxDataStruct.day;         // Day of the month
+  t.tm_hour = ubxDataStruct.hour;
+  t.tm_min = ubxDataStruct.min;
+  t.tm_sec = ubxDataStruct.sec;
+  t.tm_isdst = 0; // Is DST on? 1 = yes, 0 = no, -1 = unknown
+  t_of_day = mktime(&t);
+
+  Serial.printf("Seconds since the Epoch: %ld\n", (uint32_t)t_of_day);
+
+  newtime.tv_sec = t_of_day;
+  newtime.tv_usec = ubxDataStruct.iTOW % 1000 * 1000;
+
+  Serial.printf("newtime  %ld.%ld\n", newtime.tv_sec, newtime.tv_usec);
+
+  if (currenttime.tv_sec == newtime.tv_sec)
+  {
+    // systime is already synced with GPS. no need to sync.
+    return false;
+  }
+
+  if (settimeofday(&newtime, NULL))
+  {
+    // hard adjustment
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Initialise the INA226 module
+ * 
+ */
 void init_ina226()
 {
   ina226.begin(INA_226_I2C_ADDRESS, &I2CINA226);
@@ -691,7 +752,7 @@ void poll_ina226(INA226_STATUS ina226_status)
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
 
-/* Check the brake */
+/* Check the speed */
 void check_speed()
 {
   // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
@@ -724,7 +785,10 @@ void check_brake()
   sd_manager.appendFile(&data_file, brake_buffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
-
+/**
+ * @brief Initialise GPS
+ * 
+ */
 void init_gps()
 {
   /* Setup GNSS */
@@ -739,6 +803,10 @@ void init_gps()
   myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
 }
 
+/**
+ * @brief Initliase Barometer
+ * 
+ */
 void init_baro()
 {
   m_ms8607.begin();
@@ -751,6 +819,10 @@ void init_baro()
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
 }
 
+/**
+ * @brief Initilise all sensors
+ * 
+ */
 void init_all_sensors()
 {
 #if POLL_BARO
@@ -774,6 +846,10 @@ void init_all_sensors()
 #endif
 }
 
+/**
+ * @brief Init ntp
+ * 
+ */
 void init_ntp()
 {
   WiFi.begin(YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
