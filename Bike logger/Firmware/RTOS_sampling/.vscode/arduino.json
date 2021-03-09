@@ -4,5 +4,6 @@
     "port": "COM6",
     "sketch": "RTOS_sampling.ino",
     "defaultBaudRate": 2000000,
-    "logLevel":"verbose"
+    "logLevel":"verbose",
+    "output": "./Build"
 }
