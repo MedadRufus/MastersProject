@@ -22,6 +22,9 @@
 */
 
 #include <Wire.h> //Needed for I2C to GPS
+#include <sys/time.h>
+#include "time.h"
+#include "include/time.h"
 
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h> //http://librarymanager/All#SparkFun_u-blox_GNSS
 SFE_UBLOX_GNSS myGNSS;
@@ -38,75 +41,83 @@ SFE_UBLOX_GNSS myGNSS;
 //        |                 |              |
 void printPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
-    Serial.println();
+  Serial.println();
 
-    Serial.print(F("Time: ")); // Print the time
-    uint8_t hms = ubxDataStruct.hour; // Print the hours
-    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
-    Serial.print(hms);
-    Serial.print(F(":"));
-    hms = ubxDataStruct.min; // Print the minutes
-    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
-    Serial.print(hms);
-    Serial.print(F(":"));
-    hms = ubxDataStruct.sec; // Print the seconds
-    if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
-    Serial.print(hms);
-    Serial.print(F("."));
-    uint32_t millisecs = ubxDataStruct.iTOW % 1000; // Print the milliseconds
-    if (millisecs < 100) Serial.print(F("0")); // Print the trailing zeros correctly
-    if (millisecs < 10) Serial.print(F("0"));
-    Serial.print(millisecs);
+  Serial.print(F("Time: "));        // Print the time
+  uint8_t hms = ubxDataStruct.hour; // Print the hours
+  if (hms < 10)
+    Serial.print(F("0")); // Print a leading zero if required
+  Serial.print(hms);
+  Serial.print(F(":"));
 
-    int32_t latitude = ubxDataStruct.lat; // Print the latitude
-    Serial.print(F(" Lat: "));
-    Serial.print(latitude);
+  hms = ubxDataStruct.min; // Print the minutes
+  if (hms < 10)
+    Serial.print(F("0")); // Print a leading zero if required
+  Serial.print(hms);
+  Serial.print(F(":"));
+  hms = ubxDataStruct.sec; // Print the seconds
+  if (hms < 10)
+    Serial.print(F("0")); // Print a leading zero if required
+  Serial.print(hms);
+  Serial.print(F("."));
+  uint32_t millisecs = ubxDataStruct.iTOW % 1000; // Print the milliseconds
+  if (millisecs < 100)
+    Serial.print(F("0")); // Print the trailing zeros correctly
+  if (millisecs < 10)
+    Serial.print(F("0"));
+  Serial.print(millisecs);
 
-    int32_t longitude = ubxDataStruct.lon; // Print the longitude
-    Serial.print(F(" Long: "));
-    Serial.print(longitude);
-    Serial.print(F(" (degrees * 10^-7)"));
+  int32_t latitude = ubxDataStruct.lat; // Print the latitude
+  Serial.print(F(" Lat: "));
+  Serial.print(latitude);
 
-    int32_t altitude = ubxDataStruct.height; // Print the Height above ellipsoid: mm
-    Serial.print(F(" Altitude: "));
-    Serial.print(altitude);
-    Serial.print(F(" (mm)"));
+  int32_t longitude = ubxDataStruct.lon; // Print the longitude
+  Serial.print(F(" Long: "));
+  Serial.print(longitude);
+  Serial.print(F(" (degrees * 10^-7)"));
 
-    uint8_t sats = ubxDataStruct.numSV; // Print the height above mean sea level
-    Serial.print(F(" SIV: "));
-    Serial.print(sats);
-    Serial.print(F(" "));
+  int32_t altitude = ubxDataStruct.height; // Print the Height above ellipsoid: mm
+  Serial.print(F(" Altitude: "));
+  Serial.print(altitude);
+  Serial.print(F(" (mm)"));
 
-    uint8_t fix_ok = ubxDataStruct.flags.bits.gnssFixOK; // Print the height above mean sea level
-    Serial.print(F(" FIX OK: "));
-    Serial.print(fix_ok);
-    Serial.print(F(" "));
+  uint8_t sats = ubxDataStruct.numSV; // Print the height above mean sea level
+  Serial.print(F(" SIV: "));
+  Serial.print(sats);
+  Serial.print(F(" "));
 
+  uint8_t fix_ok = ubxDataStruct.flags.bits.gnssFixOK; // Print the height above mean sea level
+  Serial.print(F(" FIX OK: "));
+  Serial.print(fix_ok);
+  Serial.print(F(" "));
 
-    uint8_t fix_type = ubxDataStruct.fixType; // Print the height above mean sea level
-    Serial.print(F(" FIX Type: "));
-    Serial.print(fix_type);
-    Serial.println(F(" "));
+  uint8_t fix_type = ubxDataStruct.fixType; // Print the height above mean sea level
+  Serial.print(F(" FIX Type: "));
+  Serial.print(fix_type);
+  Serial.println(F(" "));
+
+  set_sys_time_ublox(ubxDataStruct);
 }
 
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial); //Wait for user to open terminal
+  while (!Serial)
+    ; //Wait for user to open terminal
   Serial.println("SparkFun u-blox Example");
 
   Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
-
 
   //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
 
   if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
   {
     Serial.println(F("u-blox GNSS not detected at default I2C address. Please check wiring. Freezing."));
-    while (1);
+    while (1)
+      ;
   }
 
-  myGNSS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+  myGNSS.setI2COutput(COM_TYPE_UBX);                 //Set the I2C port to output UBX only (turn off NMEA noise)
   myGNSS.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT); //Save (only) the communications port settings to flash and BBR
 
   myGNSS.setNavigationFrequency(2); //Produce two solutions per second
@@ -116,9 +127,56 @@ void setup()
 
 void loop()
 {
-  myGNSS.checkUblox(); // Check for the arrival of new data and process it.
+  myGNSS.checkUblox();     // Check for the arrival of new data and process it.
   myGNSS.checkCallbacks(); // Check if any callbacks are waiting to be processed.
 
   Serial.print(".");
   delay(50);
+}
+
+bool set_sys_time_ublox(UBX_NAV_PVT_data_t ubxDataStruct)
+{
+
+  if (ubxDataStruct.flags.bits.gnssFixOK == 0) // not a fix. Don't sync systime
+  {
+    return false;
+  }
+
+  timeval newtime;
+  timeval currenttime;
+
+  gettimeofday(&currenttime, NULL);
+
+  struct tm t;
+  time_t t_of_day;
+
+  t.tm_year = ubxDataStruct.year - 1900; // Year - 1900
+  t.tm_mon = ubxDataStruct.month - 1;    // Month, where 0 = jan
+  t.tm_mday = ubxDataStruct.day;         // Day of the month
+  t.tm_hour = ubxDataStruct.hour;
+  t.tm_min = ubxDataStruct.min;
+  t.tm_sec = ubxDataStruct.sec;
+  t.tm_isdst = 0; // Is DST on? 1 = yes, 0 = no, -1 = unknown
+  t_of_day = mktime(&t);
+
+  Serial.printf("Seconds since the Epoch: %ld\n", (uint32_t)t_of_day);
+
+  newtime.tv_sec = t_of_day;
+  newtime.tv_usec = ubxDataStruct.iTOW % 1000 * 1000;
+
+  Serial.printf("newtime  %ld.%ld\n", newtime.tv_sec, newtime.tv_usec);
+
+  if (currenttime.tv_sec == newtime.tv_sec)
+  {
+    // systime is already synced with GPS. no need to sync.
+    return false;
+  }
+
+  if (settimeofday(&newtime, NULL))
+  {
+    // hard adjustment
+    return false;
+  }
+
+  return true;
 }
