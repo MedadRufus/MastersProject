@@ -442,6 +442,10 @@ void update_baro_data()
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
 
+/**
+ * @brief Initialise IMU
+ * 
+ */
 void init_imu()
 {
 
@@ -560,7 +564,13 @@ void update_imu_data()
 
   log_d("IMU read/save duration[ms]:%d", millis() - lastTime);
 }
-
+/**
+ * @brief Convert a 2 byte array into a int16_t
+ * 
+ * @param bytes_source 
+ * @param start 
+ * @return int16_t 
+ */
 int16_t convert(uint8_t *bytes_source, uint16_t start)
 {
   return (int16_t)bytes_source[start] | int16_t(bytes_source[start + 1] << 8);
