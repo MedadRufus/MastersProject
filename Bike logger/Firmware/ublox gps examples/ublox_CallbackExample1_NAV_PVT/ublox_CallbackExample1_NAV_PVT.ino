@@ -53,37 +53,37 @@ void printPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
     if (hms < 10) Serial.print(F("0")); // Print a leading zero if required
     Serial.print(hms);
     Serial.print(F("."));
-    unsigned long millisecs = ubxDataStruct.iTOW % 1000; // Print the milliseconds
+    uint32_t millisecs = ubxDataStruct.iTOW % 1000; // Print the milliseconds
     if (millisecs < 100) Serial.print(F("0")); // Print the trailing zeros correctly
     if (millisecs < 10) Serial.print(F("0"));
     Serial.print(millisecs);
 
-    long latitude = ubxDataStruct.lat; // Print the latitude
+    int32_t latitude = ubxDataStruct.lat; // Print the latitude
     Serial.print(F(" Lat: "));
     Serial.print(latitude);
 
-    long longitude = ubxDataStruct.lon; // Print the longitude
+    int32_t longitude = ubxDataStruct.lon; // Print the longitude
     Serial.print(F(" Long: "));
     Serial.print(longitude);
     Serial.print(F(" (degrees * 10^-7)"));
 
-    long altitude = ubxDataStruct.hMSL; // Print the height above mean sea level
+    int32_t altitude = ubxDataStruct.height; // Print the Height above ellipsoid: mm
     Serial.print(F(" Altitude: "));
     Serial.print(altitude);
     Serial.print(F(" (mm)"));
 
-    int sats = ubxDataStruct.numSV; // Print the height above mean sea level
+    uint8_t sats = ubxDataStruct.numSV; // Print the height above mean sea level
     Serial.print(F(" SIV: "));
     Serial.print(sats);
     Serial.print(F(" "));
 
-    int fix_ok = ubxDataStruct.flags.bits.gnssFixOK; // Print the height above mean sea level
+    uint8_t fix_ok = ubxDataStruct.flags.bits.gnssFixOK; // Print the height above mean sea level
     Serial.print(F(" FIX OK: "));
     Serial.print(fix_ok);
     Serial.print(F(" "));
 
 
-    int fix_type = ubxDataStruct.fixType; // Print the height above mean sea level
+    uint8_t fix_type = ubxDataStruct.fixType; // Print the height above mean sea level
     Serial.print(F(" FIX Type: "));
     Serial.print(fix_type);
     Serial.println(F(" "));
