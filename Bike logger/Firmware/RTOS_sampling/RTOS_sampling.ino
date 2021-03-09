@@ -579,6 +579,9 @@ void update_gnss_data()
 */
 void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 {
+  /* sync systime if it has not yet been done */
+  set_sys_time_ublox(ubxDataStruct);
+
   sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%d,%d,%d,%d,%d,%d,%d\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
@@ -608,6 +611,52 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
  * @return true 
  * @return false 
  */
+bool set_sys_time_ublox(UBX_NAV_PVT_data_t ubxDataStruct)
+{
+
+  if (ubxDataStruct.flags.bits.gnssFixOK == 0) // not a fix. Don't sync systime
+  {
+    return false;
+  }
+
+  timeval newtime;
+  timeval currenttime;
+
+  gettimeofday(&currenttime, NULL);
+
+  struct tm t;
+  time_t t_of_day;
+
+  t.tm_year = ubxDataStruct.year - 1900; // Year - 1900
+  t.tm_mon = ubxDataStruct.month - 1;    // Month, where 0 = jan
+  t.tm_mday = ubxDataStruct.day;         // Day of the month
+  t.tm_hour = ubxDataStruct.hour;
+  t.tm_min = ubxDataStruct.min;
+  t.tm_sec = ubxDataStruct.sec;
+  t.tm_isdst = 0; // Is DST on? 1 = yes, 0 = no, -1 = unknown
+  t_of_day = mktime(&t);
+
+  Serial.printf("Seconds since the Epoch: %ld\n", (uint32_t)t_of_day);
+
+  newtime.tv_sec = t_of_day;
+  newtime.tv_usec = ubxDataStruct.iTOW % 1000 * 1000;
+
+  Serial.printf("newtime  %ld.%ld\n", newtime.tv_sec, newtime.tv_usec);
+
+  if (currenttime.tv_sec == newtime.tv_sec)
+  {
+    // systime is already synced with GPS. no need to sync.
+    return false;
+  }
+
+  if (settimeofday(&newtime, NULL))
+  {
+    // hard adjustment
+    return false;
+  }
+
+  return true;
+}
 
 /**
  * @brief Initialise the INA226 module
