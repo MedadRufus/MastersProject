@@ -198,7 +198,8 @@ void start_tasks()
       10000 // This stack size can be checked & adjusted by reading the Stack Highwater
       ,
       NULL, 2 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+      NULL,
+      1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_gps_Task, ARDUINO_RUNNING_CORE);
 #endif
@@ -501,7 +502,7 @@ void update_imu_data()
 {
   float temp; //This is to hold read data
 
-  log_d("%s","START SAVING IMU DATA");
+  log_d("%s", "START SAVING IMU DATA");
 
   //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
   //the channels must be synchronized to a known position for the data to align
@@ -602,7 +603,6 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   sd_manager.appendFile(&data_file, buffer_gnss);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
 }
-
 
 /**
  * @brief Set the sys time ublox object
