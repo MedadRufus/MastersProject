@@ -33,8 +33,8 @@ extern "C"
   Set to true or false to poll/not poll
 */
 #define POLL_BARO (false)
-#define POLL_GPS (false)
-#define POLL_IMU (true)
+#define POLL_GPS (true)
+#define POLL_IMU (false)
 #define POLL_INA226 (true)
 #define POLL_BRAKE (false)
 #define POLL_SPEED (false)
@@ -47,7 +47,7 @@ extern "C"
 #define INA226_SAMPLE_INTERVAL 10
 #define GNSS_SAMPLE_INTERVAL 100
 #define BARO_SAMPLE_INTERVAL 250
-#define IMU_SAMPLE_INTERVAL 1000
+#define IMU_SAMPLE_INTERVAL 500
 #define BLINK_INTERVAL 100
 #define BRAKE_INTERVAL 100
 #define SPEED_INTERVAL 100
