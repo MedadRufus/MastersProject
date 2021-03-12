@@ -14,7 +14,7 @@
 
 INA226_WE ina226;
 
-TwoWire I2CINA226 = TwoWire(0);
+TwoWire I2CINA226 = TwoWire(1);
 
 void setup() {
   Serial.begin(2000000);
