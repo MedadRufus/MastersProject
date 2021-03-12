@@ -721,6 +721,13 @@ void init_ina226()
   */
   //ina226.setCurrentRange(MA_800); // choose gain and uncomment for change of default
 
+
+  /* Set calibration based on resistor value and current range
+   *  Takes in Resistance value in Ohms, max current in A
+  */
+  ina226.setResistorRange(0.0024,30);
+
+
   /* If the current values delivered by the INA226 differ by a constant factor
      from values obtained with calibrated equipment you can define a correction factor.
      Correction factor = current delivered from calibrated equipment / current delivered by INA226
