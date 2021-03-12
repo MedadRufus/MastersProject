@@ -218,7 +218,9 @@ void start_tasks()
       &charge_config, 2 // Priority
       ,
       &Handle_ina1_Task, ARDUINO_RUNNING_CORE);
+#endif
 
+#if 0 // to poll the charger IMU226.
   xTaskCreatePinnedToCore(
       TaskManageINA226, "TaskManageINA226_discharge", 10000 // Stack size
       ,
