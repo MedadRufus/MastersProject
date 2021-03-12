@@ -63,6 +63,9 @@ void setup() {
      MA_800          800 mA (default)
   */
   //ina226.setCurrentRange(MA_800); // choose gain and uncomment for change of default
+
+
+  ina226.setResistorRange(0.0024,30);
   
   /* If the current values delivered by the INA226 differ by a constant factor
      from values obtained with calibrated equipment you can define a correction factor.
