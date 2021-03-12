@@ -88,6 +88,7 @@ INA_Class      INA;                      ///< INA class instantiation to use EEP
 // INA_Class      INA(0);                 ///< INA class instantiation to use EEPROM
 // INA_Class      INA(5);                 ///< INA class instantiation to use dynamic memory rather
 //   than EEPROM. Allocate storage for up to (n) devices
+TwoWire I2CINA226 = TwoWire(1);
 
 void setup() {
   /*!
@@ -110,12 +111,12 @@ void setup() {
   ** and for a 0.1Ohm resistor, and since no specific device is given as the 3rd parameter all   **
   ** devices are initially set to these values.                                                  **
   ************************************************************************************************/
-  Wire.begin(19,18);
-  devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
+  I2CINA226.begin(19,18);
+  devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM, &I2CINA226);  // Expected max Amp & shunt resistance
   while (devicesFound == 0) {
     Serial.println(F("No INA device found, retrying in 10 seconds..."));
     delay(10000);                                             // Wait 10 seconds before retrying
-    devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM);  // Expected max Amp & shunt resistance
+    devicesFound = INA.begin(MAXIMUM_AMPS, SHUNT_MICRO_OHM, &I2CINA226);  // Expected max Amp & shunt resistance
   }                                                           // while no devices detected
   Serial.print(F(" - Detected "));
   Serial.print(devicesFound);
