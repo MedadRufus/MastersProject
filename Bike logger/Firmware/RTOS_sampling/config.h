@@ -65,6 +65,10 @@ extern "C"
 /* Number of GPS fixes in a second */
 #define FIXS_PER_SECOND 4
 
+/* INA226 info */
+#define SHUNT_RESISTANCE (float)0.0024 // Ohms
+#define INA226_FULL_V_RANGE (float)30.0  // Volts
+
 /* ==================================================================== */
 /* ========================== public data ============================= */
 /* ==================================================================== */
