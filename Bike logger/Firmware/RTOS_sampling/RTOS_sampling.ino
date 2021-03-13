@@ -725,7 +725,7 @@ void init_ina226()
   /* Set calibration based on resistor value and current range
    *  Takes in Resistance value in Ohms, max current in A
   */
-  ina226.setResistorRange(SHUNT_RESISTANCE,INA226_FULL_V_RANGE);
+  ina226.setResistorRange(SHUNT_RESISTANCE,INA226_FULL_CURRENT_RANGE);
 
 
   /* If the current values delivered by the INA226 differ by a constant factor
