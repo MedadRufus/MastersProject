@@ -734,7 +734,8 @@ void init_ina226()
   */
   // ina226.setCorrectionFactor(0.95);
 
-  ina226.waitUntilConversionCompleted(); //if you comment this line the first data might be zero
+  //ina226.waitUntilConversionCompleted(); //if you comment this line the first data might be zero
+  delay(10);
 }
 
 /* Poll the INA226 once */
