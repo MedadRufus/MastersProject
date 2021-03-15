@@ -842,6 +842,15 @@ void init_baro()
 
   boolean connected = m_ms8607.is_connected();
   Serial.println(connected ? "MS8607 Sensor connencted" : "MS8607 Sensor disconnected");
+
+  //The sensor has 6 resolution levels. The higher the resolution the longer each
+  //reading takes to complete.
+  //  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_256); //1ms per reading, 0.11mbar resolution
+  //  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_512); //2ms per reading, 0.062mbar resolution
+  //  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_1024); //3ms per reading, 0.039mbar resolution
+  //  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_2048); //5ms per reading, 0.028mbar resolution
+  //  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_4096); //9ms per reading, 0.021mbar resolution
+  m_ms8607.set_pressure_resolution(ms8607_pressure_resolution_osr_8192); //17ms per reading, 0.016mbar resolution
 }
 
 /**
