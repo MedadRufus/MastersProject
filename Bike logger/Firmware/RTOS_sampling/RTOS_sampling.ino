@@ -78,7 +78,7 @@ char buffer_speed[400];
 char brake_buffer[400];
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
-const uint32_t I2C_SPEED = 1000000;    // 1 Mbits/s
+const uint32_t I2C_SPEED = 400000;    // 1 Mbits/s
 /* Pin numbers for the i2c ports */
 const uint16_t sda1 = 21;
 const uint16_t scl1 = 22;
