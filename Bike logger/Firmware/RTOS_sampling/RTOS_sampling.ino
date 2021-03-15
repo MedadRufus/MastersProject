@@ -818,6 +818,8 @@ void init_gps()
   {
     Serial.println(F("u-blox GNSS not detected"));
   }
+  
+  myGNSS.factoryReset();
   myGNSS.setI2COutput(COM_TYPE_UBX);              //Set the I2C port to output UBX only (turn off NMEA noise)
   myGNSS.setNavigationFrequency(FIXS_PER_SECOND); //Produce five solutions per second
   myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
