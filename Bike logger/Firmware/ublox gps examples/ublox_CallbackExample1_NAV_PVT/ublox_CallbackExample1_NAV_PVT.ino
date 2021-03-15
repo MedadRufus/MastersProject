@@ -112,9 +112,8 @@ void setup()
 
   if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
   {
-    Serial.println(F("u-blox GNSS not detected at default I2C address. Please check wiring. Freezing."));
-    while (1)
-      ;
+    Serial.println(F("u-blox GNSS not detected at default I2C address. Trying to factory reset"));
+    myGNSS.factoryReset();
   }
 
   myGNSS.setI2COutput(COM_TYPE_UBX);                 //Set the I2C port to output UBX only (turn off NMEA noise)
