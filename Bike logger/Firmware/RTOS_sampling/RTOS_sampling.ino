@@ -601,7 +601,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.iTOW % 1000,
           ubxDataStruct.lat,
           ubxDataStruct.lon,
-          ubxDataStruct.hMSL,
+          ubxDataStruct.height,
           ubxDataStruct.numSV,
           ubxDataStruct.gSpeed,
           ubxDataStruct.flags.bits.gnssFixOK,
