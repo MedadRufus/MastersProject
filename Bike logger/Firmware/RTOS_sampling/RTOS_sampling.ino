@@ -658,12 +658,14 @@ bool set_sys_time_ublox(UBX_NAV_PVT_data_t ubxDataStruct)
   if (currenttime.tv_sec == newtime.tv_sec)
   {
     // systime is already synced with GPS. no need to sync.
+    Serial.println("systime is already synced with GPS. no need to sync.");
     return false;
   }
 
   if (settimeofday(&newtime, NULL))
   {
     // hard adjustment
+    Serial.println("systime is not synced. Hard ajustment.");
     return false;
   }
 
@@ -766,7 +768,7 @@ void poll_ina226(INA226_STATUS ina226_status)
           current_mA,
           power_mW);
 
-  //Serial.print(sprintfBuffer);
+  Serial.print(sprintfBuffer);
   xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
   sd_manager.appendFile(&data_file, sprintfBuffer);
   xSemaphoreGive(SPI_SD_Mutex); // release mutex
