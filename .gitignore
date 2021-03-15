@@ -273,4 +273,11 @@ Bike logger/Data_analysis/power_gps_speed.html
 Bike logger/Firmware/RTOS_sampling/WifiConfig.h
 Bike logger/Firmware/ntp_microsecond_example/WifiConfig.h
 Bike logger/Firmware/advancedExample_ntplib/WifiConfig.h
+Bike logger/Data_analysis/power.html
+Bike logger/Data_analysis/.mapbox_token
+Bike logger/Data_analysis/plot.html
+Bike logger/Data_analysis/plot_acc.html
+Bike logger/Data_analysis/power_gps_speed.html
+Bike logger/Data_analysis/gps_speed_3d.html
+Bike logger/Data_analysis/queenspark map trip.html
 
