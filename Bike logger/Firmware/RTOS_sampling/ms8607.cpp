@@ -831,7 +831,8 @@ enum ms8607_status ms8607::psensor_conversion_and_read_adc(uint8_t cmd,
   
 
   xSemaphoreGive(I2C1_Mutex); // release mutex
-  delay(psensor_conversion_time[(cmd & PSENSOR_CONVERSION_OSR_MASK) / 2]);
+  //delay(psensor_conversion_time[(cmd & PSENSOR_CONVERSION_OSR_MASK) / 2]);
+  delay(20);
   xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
 
   // Send the read command
