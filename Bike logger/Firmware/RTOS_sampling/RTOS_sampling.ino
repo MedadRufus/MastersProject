@@ -601,7 +601,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.iTOW % 1000,
           ubxDataStruct.lat,
           ubxDataStruct.lon,
-          ubxDataStruct.hMSL,
+          ubxDataStruct.height,
           ubxDataStruct.numSV,
           ubxDataStruct.gSpeed,
           ubxDataStruct.flags.bits.gnssFixOK,
@@ -725,7 +725,7 @@ void init_ina226()
   /* Set calibration based on resistor value and current range
    *  Takes in Resistance value in Ohms, max current in A
   */
-  ina226.setResistorRange(0.0024,30);
+  ina226.setResistorRange(SHUNT_RESISTANCE,INA226_FULL_CURRENT_RANGE);
 
 
   /* If the current values delivered by the INA226 differ by a constant factor
