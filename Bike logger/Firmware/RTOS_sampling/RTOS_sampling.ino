@@ -593,7 +593,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   /* sync systime if it has not yet been done */
   set_sys_time_ublox(ubxDataStruct);
 
-  sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%f,%f,%f,%d,%d,%d,%d\n",
+  sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%f,%f,%f,%f,%d,%d,%d\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
           ubxDataStruct.min,
@@ -601,9 +601,9 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.iTOW % 1000,
           (float)ubxDataStruct.lat/10000000,
           (float)ubxDataStruct.lon/10000000,
-          (float)ubxDataStruct.height/1000,
+          (float)ubxDataStruct.height/1000,     /* m altitude */
+          (float)ubxDataStruct.gSpeed * 0.0036, /* km/h */
           ubxDataStruct.numSV,
-          ubxDataStruct.gSpeed,
           ubxDataStruct.flags.bits.gnssFixOK,
           ubxDataStruct.fixType);
 
