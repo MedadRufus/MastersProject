@@ -46,7 +46,7 @@ extern "C"
 /* poll intervals in milliseconds */
 #define INA226_SAMPLE_INTERVAL 10
 #define GNSS_SAMPLE_INTERVAL 50
-#define BARO_SAMPLE_INTERVAL 100
+#define BARO_SAMPLE_INTERVAL 250
 #define IMU_SAMPLE_INTERVAL 100
 #define BLINK_INTERVAL 100
 #define BRAKE_INTERVAL 100
@@ -63,7 +63,7 @@ extern "C"
 #define THROTTLE 39
 
 /* Number of GPS fixes in a second */
-#define FIXS_PER_SECOND 4
+#define FIXS_PER_SECOND 10
 
 /* INA226 info */
 #define FULL_RANGE_VOLTAGE_DROP (float) 0.08192 // Volts
