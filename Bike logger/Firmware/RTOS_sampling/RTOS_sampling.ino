@@ -815,7 +815,6 @@ void init_gps()
 {
   /* Setup GNSS */
   Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
-  //myGNSS.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
   if (myGNSS.begin(Serial1) == false) //Connect to the u-blox module using Wire port
   {
     Serial.println(F("u-blox GNSS not detected"));
@@ -823,6 +822,7 @@ void init_gps()
   
   myGNSS.factoryReset();
   myGNSS.setDynamicModel(DYN_MODEL_AUTOMOTIVE);
+  delay(1000); /* Allow gps to restart */
   myGNSS.setUART1Output(COM_TYPE_UBX);              //Set the UART port to output UBX only (turn off NMEA noise)
   myGNSS.setNavigationFrequency(FIXS_PER_SECOND); //Produce five solutions per second
   myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
