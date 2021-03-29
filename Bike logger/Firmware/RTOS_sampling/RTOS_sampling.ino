@@ -78,7 +78,7 @@ char buffer_speed[400];
 char brake_buffer[400];
 
 const uint32_t SERIAL_SPEED = 2000000; // Use fast serial speed 2 Mbits/s
-const uint32_t I2C_SPEED = 400000;    // 1 Mbits/s
+const uint32_t I2C_SPEED = 400000;     // 1 Mbits/s
 /* Pin numbers for the i2c ports */
 const uint16_t sda1 = 21;
 const uint16_t scl1 = 22;
@@ -599,9 +599,9 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.min,
           ubxDataStruct.sec,
           ubxDataStruct.iTOW % 1000,
-          (float)ubxDataStruct.lat/10000000,
-          (float)ubxDataStruct.lon/10000000,
-          (float)ubxDataStruct.height/1000,     /* m altitude */
+          (float)ubxDataStruct.lat / 10000000,
+          (float)ubxDataStruct.lon / 10000000,
+          (float)ubxDataStruct.height / 1000,   /* m altitude */
           (float)ubxDataStruct.gSpeed * 0.0036, /* km/h */
           ubxDataStruct.numSV,
           ubxDataStruct.flags.bits.gnssFixOK,
@@ -723,12 +723,10 @@ void init_ina226()
   */
   //ina226.setCurrentRange(MA_800); // choose gain and uncomment for change of default
 
-
   /* Set calibration based on resistor value and current range
    *  Takes in Resistance value in Ohms, max current in A
   */
-  ina226.setResistorRange(SHUNT_RESISTANCE,INA226_FULL_CURRENT_RANGE);
-
+  ina226.setResistorRange(SHUNT_RESISTANCE, INA226_FULL_CURRENT_RANGE);
 
   /* If the current values delivered by the INA226 differ by a constant factor
      from values obtained with calibrated equipment you can define a correction factor.
@@ -819,11 +817,11 @@ void init_gps()
   {
     Serial.println(F("u-blox GNSS not detected"));
   }
-  
+
   myGNSS.factoryReset();
   myGNSS.setDynamicModel(DYN_MODEL_AUTOMOTIVE);
-  delay(1000); /* Allow gps to restart */
-  myGNSS.setUART1Output(COM_TYPE_UBX);              //Set the UART port to output UBX only (turn off NMEA noise)
+  delay(1000);                                    /* Allow gps to restart */
+  myGNSS.setUART1Output(COM_TYPE_UBX);            //Set the UART port to output UBX only (turn off NMEA noise)
   myGNSS.setNavigationFrequency(FIXS_PER_SECOND); //Produce five solutions per second
   myGNSS.setAutoPVTcallback(&logPVTdata);         // Enable automatic NAV PVT messages with callback to printPVTdata
 }
