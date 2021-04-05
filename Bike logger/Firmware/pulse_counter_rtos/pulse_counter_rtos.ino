@@ -282,7 +282,7 @@ static void mcpwm_example_config(void *arg)
     vTaskDelete(NULL);
 }
 
-void app_main(void)
+void setup(void)
 {
     Serial.begin(SERIAL_SPEED);
     Serial.printf("Testing MCPWM...\n");
@@ -292,4 +292,10 @@ void app_main(void)
     xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  //comment if you don't want to use capture module
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
     xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);
+}
+
+
+void loop()
+{
+  
 }
