@@ -62,6 +62,16 @@ typedef struct {
     uint32_t edge_direction;
 } capture;
 
+typedef struct {
+   uint32_t high_period;
+   uint32_t low_period;
+} duty_cycle_params_t;
+
+
+
+duty_cycle_params_t dcycle_params[CAP_SIG_NUM];
+
+
 xQueueHandle cap_queue;
 #if MCPWM_EN_CAPTURE
 static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
@@ -175,7 +185,25 @@ static void log_signal(int index,capture evt,uint32_t *current_cap_value,uint32_
     previous_cap_value[index] = evt.capture_signal;
     current_cap_value[index] = (current_cap_value[index] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
     edge_direction_value[index] = evt.edge_direction;
-    Serial.printf("CAP%d : %d us DIRECTION : %d\n", index,current_cap_value[index],edge_direction_value[index]);
+
+    switch(evt.edge_direction)
+    {
+      case 1:
+      dcycle_params[index].low_period = edge_direction_value[index];
+      break;
+      case 2:
+      dcycle_params[index].high_period = edge_direction_value[index];
+      break;
+    }
+
+    float d_cycle = duty_cycle(dcycle_params[index].low_period,dcycle_params[index].high_period);
+    
+    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index,current_cap_value[index],edge_direction_value[index],d_cycle);
+}
+
+static float duty_cycle(int low, int high)
+{
+  return (float)high /(float)(low + high);
 }
 
 #if MCPWM_EN_CAPTURE
