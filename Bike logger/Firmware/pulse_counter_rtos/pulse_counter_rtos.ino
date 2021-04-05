@@ -157,17 +157,28 @@ static void gpio_test_signal(void *arg)
  */
 static void disp_captured_signal(void *arg)
 {
+    uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
+    uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
     capture evt;
     while (1) {
         xQueueReceive(cap_queue, &evt, portMAX_DELAY);
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
-            Serial.print("CAP0 : %d us\n", evt.capture_signal);
+            current_cap_value[0] = evt.capture_signal - previous_cap_value[0];
+            previous_cap_value[0] = evt.capture_signal;
+            current_cap_value[0] = (current_cap_value[0] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
+            Serial.printf("CAP0 : %d us\n", current_cap_value[0]);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
-            Serial.print("CAP1 : %d us\n", evt.capture_signal);
+            current_cap_value[1] = evt.capture_signal - previous_cap_value[1];
+            previous_cap_value[1] = evt.capture_signal;
+            current_cap_value[1] = (current_cap_value[1] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
+            Serial.printf("CAP1 : %d us\n", current_cap_value[1]);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
-            Serial.print("CAP2 : %d us\n", evt.capture_signal);
+            current_cap_value[2] = evt.capture_signal -  previous_cap_value[2];
+            previous_cap_value[2] = evt.capture_signal;
+            current_cap_value[2] = (current_cap_value[2] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
+            Serial.printf("CAP2 : %d us\n", current_cap_value[2]);
         }
     }
 }
@@ -181,26 +192,18 @@ static void IRAM_ATTR isr_handler(void)
     uint32_t mcpwm_intr_status;
     capture evt;
     mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
-    //calculate the interval in the ISR,
-    //so that the interval will be always correct even when cap_queue is not handled in time and overflow.
     if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        current_cap_value[0] = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
-        evt.capture_signal = (current_cap_value[0] - previous_cap_value[0]) / (rtc_clk_apb_freq_get() / 1000000);
-        previous_cap_value[0] = current_cap_value[0];
+        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
         evt.sel_cap_signal = MCPWM_SELECT_CAP0;
         xQueueSendFromISR(cap_queue, &evt, NULL);
     }
     if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        current_cap_value[1] = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
-        evt.capture_signal = (current_cap_value[1] - previous_cap_value[1]) / (rtc_clk_apb_freq_get() / 1000000);
-        previous_cap_value[1] = current_cap_value[1];
+        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
         evt.sel_cap_signal = MCPWM_SELECT_CAP1;
         xQueueSendFromISR(cap_queue, &evt, NULL);
     }
     if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        current_cap_value[2] = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
-        evt.capture_signal = (current_cap_value[2] - previous_cap_value[2]) / (rtc_clk_apb_freq_get() / 1000000);
-        previous_cap_value[2] = current_cap_value[2];
+        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
         evt.sel_cap_signal = MCPWM_SELECT_CAP2;
         xQueueSendFromISR(cap_queue, &evt, NULL);
     }
@@ -304,8 +307,6 @@ void setup(void)
     Serial.begin(SERIAL_SPEED);
     Serial.print("Testing MCPWM...\n");
     cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
-    current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t)); //comment if you don't want to use capture module
-    previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));  //comment if you don't want to use capture module
     xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  //comment if you don't want to use capture module
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
     xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);
