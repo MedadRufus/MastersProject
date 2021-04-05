@@ -21,7 +21,6 @@
 #include "esp_attr.h"
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
-#include "soc/mcpwm_periph.h"
 // setting PWM properties
 const int freq = 5;  // set this
 const int downtime_dutyCycle = 83; // set this
