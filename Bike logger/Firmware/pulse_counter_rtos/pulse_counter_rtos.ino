@@ -46,7 +46,7 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define GPIO_PWM1B_OUT 16   //Set GPIO 16 as PWM1B
 #define GPIO_PWM2A_OUT 15   //Set GPIO 15 as PWM2A
 #define GPIO_PWM2B_OUT 14   //Set GPIO 14 as PWM2B
-#define GPIO_CAP1_IN   39   //Set GPIO 39 as  CAP1
+#define GPIO_CAP1_IN   18   //Set GPIO 39 as  CAP1
 #define GPIO_CAP0_IN   25   //Set GPIO 36 as  CAP0
 #define GPIO_CAP2_IN   26   //Set GPIO 26 as  CAP2
 #define GPIO_SYNC0_IN   2   //Set GPIO 02 as SYNC0
@@ -128,18 +128,18 @@ static void gpio_test_signal(void *arg)
     gp.pin_bit_mask = GPIO_SEL_27;
     gpio_config(&gp);
 
-    gp.pin_bit_mask = GPIO_SEL_33;
+    gp.pin_bit_mask = GPIO_SEL_19;
     gpio_config(&gp);
     
     while (1) {
         //here the period of test signal is 20ms
         gpio_set_level(GPIO_NUM_27, 1); //Set high
-        gpio_set_level(GPIO_NUM_33, 1); //Set high
+        gpio_set_level(GPIO_NUM_19, 1); //Set high
 
         vTaskDelay(10);             //delay of 10ms
         
         gpio_set_level(GPIO_NUM_27, 0); //Set low
-        gpio_set_level(GPIO_NUM_33, 0); //Set low
+        gpio_set_level(GPIO_NUM_19, 0); //Set low
 
         vTaskDelay(10);         //delay of 10ms
     }
