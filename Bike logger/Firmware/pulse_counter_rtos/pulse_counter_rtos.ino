@@ -74,9 +74,6 @@ typedef struct {
     mcpwm_capture_signal_t sel_cap_signal;
 } capture;
 
-uint32_t *current_cap_value = NULL;
-uint32_t *previous_cap_value = NULL;
-
 xQueueHandle cap_queue;
 #if MCPWM_EN_CAPTURE
 static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
