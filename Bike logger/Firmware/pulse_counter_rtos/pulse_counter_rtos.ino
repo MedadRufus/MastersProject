@@ -46,8 +46,8 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define GPIO_PWM1B_OUT 16   //Set GPIO 16 as PWM1B
 #define GPIO_PWM2A_OUT 15   //Set GPIO 15 as PWM2A
 #define GPIO_PWM2B_OUT 14   //Set GPIO 14 as PWM2B
-#define GPIO_CAP0_IN   23   //Set GPIO 23 as  CAP0
-#define GPIO_CAP1_IN   25   //Set GPIO 25 as  CAP1
+#define GPIO_CAP0_IN   36   //Set GPIO 36 as  CAP0
+#define GPIO_CAP1_IN   39   //Set GPIO 39 as  CAP1
 #define GPIO_CAP2_IN   26   //Set GPIO 26 as  CAP2
 #define GPIO_SYNC0_IN   2   //Set GPIO 02 as SYNC0
 #define GPIO_SYNC1_IN   4   //Set GPIO 04 as SYNC1
