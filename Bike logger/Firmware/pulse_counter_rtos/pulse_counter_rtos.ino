@@ -67,7 +67,7 @@ static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
 
 static void mcpwm_example_gpio_initialize(void)
 {
-    printf("initializing mcpwm gpio...\n");
+    Serial.print("initializing mcpwm gpio...\n");
 #if MCPWM_GPIO_INIT
     mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, GPIO_PWM0A_OUT);
     mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0B, GPIO_PWM0B_OUT);
@@ -120,7 +120,7 @@ static void mcpwm_example_gpio_initialize(void)
  */
 static void gpio_test_signal(void *arg)
 {
-    printf("intializing test signal...\n");
+    Serial.print("intializing test signal...\n");
     gpio_config_t gp;
     gp.intr_type = GPIO_INTR_DISABLE;
     gp.mode = GPIO_MODE_OUTPUT;
@@ -144,13 +144,13 @@ static void disp_captured_signal(void *arg)
     while (1) {
         xQueueReceive(cap_queue, &evt, portMAX_DELAY);
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
-            printf("CAP0 : %d us\n", evt.capture_signal);
+            Serial.print("CAP0 : %d us\n", evt.capture_signal);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
-            printf("CAP1 : %d us\n", evt.capture_signal);
+            Serial.print("CAP1 : %d us\n", evt.capture_signal);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
-            printf("CAP2 : %d us\n", evt.capture_signal);
+            Serial.print("CAP2 : %d us\n", evt.capture_signal);
         }
     }
 }
@@ -200,7 +200,7 @@ static void mcpwm_example_config(void *arg)
     mcpwm_example_gpio_initialize();
 
     //2. initialize mcpwm configuration
-    printf("Configuring Initial Parameters of mcpwm...\n");
+    Serial.print("Configuring Initial Parameters of mcpwm...\n");
     mcpwm_config_t pwm_config;
     pwm_config.frequency = 1000;    //frequency = 1000Hz
     pwm_config.cmpr_a = 60.0;       //duty cycle of PWMxA = 60.0%
@@ -284,7 +284,8 @@ static void mcpwm_example_config(void *arg)
 
 void app_main(void)
 {
-    printf("Testing MCPWM...\n");
+    Serial.begin(SERIAL_SPEED);
+    Serial.printf("Testing MCPWM...\n");
     cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
     current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t)); //comment if you don't want to use capture module
     previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));  //comment if you don't want to use capture module
