@@ -59,6 +59,7 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 typedef struct {
     uint32_t capture_signal;
     mcpwm_capture_signal_t sel_cap_signal;
+    uint32_t edge_direction;
 } capture;
 
 xQueueHandle cap_queue;
@@ -152,6 +153,7 @@ static void disp_captured_signal(void *arg)
 {
     uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
     uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
+    uint32_t *edge_direction_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
     capture evt;
     while (1) {
         xQueueReceive(cap_queue, &evt, portMAX_DELAY);
@@ -165,7 +167,8 @@ static void disp_captured_signal(void *arg)
             current_cap_value[1] = evt.capture_signal - previous_cap_value[1];
             previous_cap_value[1] = evt.capture_signal;
             current_cap_value[1] = (current_cap_value[1] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            Serial.printf("CAP1 : %d us\n", current_cap_value[1]);
+            edge_direction_value[1] = evt.edge_direction;
+            Serial.printf("CAP1 : %d us DIRECTION : %d\n", current_cap_value[1],edge_direction_value[1]);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
             current_cap_value[2] = evt.capture_signal -  previous_cap_value[2];
@@ -193,6 +196,7 @@ static void IRAM_ATTR isr_handler(void*)
     if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
         evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
         evt.sel_cap_signal = MCPWM_SELECT_CAP1;
+        evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP1);
         xQueueSendFromISR(cap_queue, &evt, NULL);
     }
     if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
