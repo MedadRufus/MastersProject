@@ -158,25 +158,24 @@ static void disp_captured_signal(void *arg)
     while (1) {
         xQueueReceive(cap_queue, &evt, portMAX_DELAY);
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
-            current_cap_value[0] = evt.capture_signal - previous_cap_value[0];
-            previous_cap_value[0] = evt.capture_signal;
-            current_cap_value[0] = (current_cap_value[0] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            Serial.printf("CAP0 : %d us\n", current_cap_value[0]);
+            log_signal(MCPWM_SELECT_CAP0,evt,current_cap_value,previous_cap_value,edge_direction_value);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
-            current_cap_value[1] = evt.capture_signal - previous_cap_value[1];
-            previous_cap_value[1] = evt.capture_signal;
-            current_cap_value[1] = (current_cap_value[1] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            edge_direction_value[1] = evt.edge_direction;
-            Serial.printf("CAP1 : %d us DIRECTION : %d\n", current_cap_value[1],edge_direction_value[1]);
+            log_signal(MCPWM_SELECT_CAP1,evt,current_cap_value,previous_cap_value,edge_direction_value);
         }
         if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
-            current_cap_value[2] = evt.capture_signal -  previous_cap_value[2];
-            previous_cap_value[2] = evt.capture_signal;
-            current_cap_value[2] = (current_cap_value[2] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            Serial.printf("CAP2 : %d us\n", current_cap_value[2]);
+            log_signal(MCPWM_SELECT_CAP2,evt,current_cap_value,previous_cap_value,edge_direction_value);
         }
     }
+}
+
+static void log_signal(int index,capture evt,uint32_t *current_cap_value,uint32_t *previous_cap_value,uint32_t *edge_direction_value)
+{
+    current_cap_value[index] = evt.capture_signal - previous_cap_value[index];
+    previous_cap_value[index] = evt.capture_signal;
+    current_cap_value[index] = (current_cap_value[index] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
+    edge_direction_value[index] = evt.edge_direction;
+    Serial.printf("CAP%d : %d us DIRECTION : %d\n", index,current_cap_value[index],edge_direction_value[index]);
 }
 
 #if MCPWM_EN_CAPTURE
