@@ -300,7 +300,7 @@ static void mcpwm_example_config(void *arg)
 void setup(void)
 {
     Serial.begin(SERIAL_SPEED);
-    Serial.printf("Testing MCPWM...\n");
+    Serial.print("Testing MCPWM...\n");
     cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
     current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t)); //comment if you don't want to use capture module
     previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));  //comment if you don't want to use capture module
