@@ -31,7 +31,7 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
 #define MCPWM_EN_FAULT 0     //Make this 1 to test fault submodule of mcpwm, set action on MCPWM signal on fault occurence like overcurrent, overvoltage, etc
 #define MCPWM_EN_SYNC 0      //Make this 1 to test sync submodule of mcpwm, sync timer signals
-#define MCPWM_EN_CAPTURE 0   //Make this 1 to test capture submodule of mcpwm, measure time between rising/falling edge of captured signal
+#define MCPWM_EN_CAPTURE 1   //Make this 1 to test capture submodule of mcpwm, measure time between rising/falling edge of captured signal
 #define MCPWM_GPIO_INIT 0    //select which function to use to initialize gpio signals
 #define CAP_SIG_NUM 3   //Three capture signals
 
