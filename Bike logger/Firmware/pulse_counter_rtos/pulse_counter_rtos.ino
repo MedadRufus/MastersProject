@@ -192,7 +192,7 @@ static void disp_captured_signal(void *arg)
 /**
  * @brief this is ISR handler function, here we check for interrupt that triggers rising edge on CAP0 signal and according take action
  */
-static void IRAM_ATTR isr_handler(void)
+static void IRAM_ATTR isr_handler(void*)
 {
     uint32_t mcpwm_intr_status;
     capture evt;
