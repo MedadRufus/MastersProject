@@ -121,15 +121,15 @@ static void mcpwm_example_gpio_initialize(void)
     };
     mcpwm_set_pin(MCPWM_UNIT_0, &pin_config);
 #endif
-    gpio_pulldown_en(GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
-    gpio_pulldown_en(GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
-    gpio_pulldown_en(GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
-    gpio_pulldown_en(GPIO_SYNC0_IN);   //Enable pull down on SYNC0  signal
-    gpio_pulldown_en(GPIO_SYNC1_IN);   //Enable pull down on SYNC1  signal
-    gpio_pulldown_en(GPIO_SYNC2_IN);   //Enable pull down on SYNC2  signal
-    gpio_pulldown_en(GPIO_FAULT0_IN);  //Enable pull down on FAULT0 signal
-    gpio_pulldown_en(GPIO_FAULT1_IN);  //Enable pull down on FAULT1 signal
-    gpio_pulldown_en(GPIO_FAULT2_IN);  //Enable pull down on FAULT2 signal
+    gpio_pulldown_en((gpio_num_t)GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
+    gpio_pulldown_en((gpio_num_t)GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
+    gpio_pulldown_en((gpio_num_t)GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
+    gpio_pulldown_en((gpio_num_t)GPIO_SYNC0_IN);   //Enable pull down on SYNC0  signal
+    gpio_pulldown_en((gpio_num_t)GPIO_SYNC1_IN);   //Enable pull down on SYNC1  signal
+    gpio_pulldown_en((gpio_num_t)GPIO_SYNC2_IN);   //Enable pull down on SYNC2  signal
+    gpio_pulldown_en((gpio_num_t)GPIO_FAULT0_IN);  //Enable pull down on FAULT0 signal
+    gpio_pulldown_en((gpio_num_t)GPIO_FAULT1_IN);  //Enable pull down on FAULT1 signal
+    gpio_pulldown_en((gpio_num_t)GPIO_FAULT2_IN);  //Enable pull down on FAULT2 signal
 }
 
 /**
