@@ -21,11 +21,11 @@
 #include "esp_attr.h"
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
+#include "soc/mcpwm_reg.h"
+#include "soc/mcpwm_struct.h"
 
 const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
-#include "soc/mcpwm_reg.h"
-#include "soc/mcpwm_struct.h"
 
 #define MCPWM_EN_CARRIER 0   //Make this 1 to test carrier submodule of mcpwm, set high frequency carrier parameters
 #define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
