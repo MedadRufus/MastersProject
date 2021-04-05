@@ -275,3 +275,11 @@ Bike logger/Firmware/ntp_microsecond_example/WifiConfig.h
 Bike logger/Firmware/advancedExample_ntplib/WifiConfig.h
 Bike logger/Data_analysis/.mapbox_token
 Bike logger/Data_analysis/output/*
+
+
+# platform.io gitignore
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+.pio
