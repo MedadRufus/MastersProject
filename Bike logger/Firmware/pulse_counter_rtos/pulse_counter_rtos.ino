@@ -21,20 +21,8 @@
 #include "esp_attr.h"
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
-// setting PWM properties
-const int freq = 5;  // set this
-const int downtime_dutyCycle = 83; // set this
-
-const int ledChannel = 0;
-const int resolution = 8;
-const int dutyCycle = downtime_dutyCycle * 255 / 100;
-
 
 const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
-
-// the number of the LED pin
-const int ledPin = 27;
-const int MotorAPin = 35;
 
 #include "soc/mcpwm_reg.h"
 #include "soc/mcpwm_struct.h"
