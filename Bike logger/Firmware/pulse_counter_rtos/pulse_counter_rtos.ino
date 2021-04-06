@@ -269,7 +269,7 @@ static void mcpwm_example_config(void *arg)
     //7. Capture configuration
     //comment if you don't want to use capture submodule, also u can comment the capture gpio signals
     //configure CAP0, CAP1 and CAP2 signal to start capture counter on rising edge
-    //we generate a gpio_test_signal of 20ms on GPIO 12 and connect it to one of the capture signal, the disp_captured_function displays the time between rising edge
+    //we generate a gpio_test_signal of 20ms on GPIO 19 and connect it to one of the capture signal, the disp_captured_function displays the time between rising edge
     //In general practice you can connect Capture  to external signal, measure time between rising edge or falling edge and take action accordingly
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
