@@ -89,9 +89,9 @@ static void mcpwm_example_gpio_initialize(void)
   mcpwm_set_pin(MCPWM_UNIT_0, &pin_config);
 
 
-  gpio_pulldown_en((gpio_num_t)GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
+  gpio_pullup_en((gpio_num_t)GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
   gpio_pulldown_en((gpio_num_t)GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
-  gpio_pulldown_en((gpio_num_t)GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
+  gpio_pullup_en((gpio_num_t)GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
 }
 
 /**
