@@ -222,51 +222,6 @@ static void mcpwm_example_config(void *arg)
   Serial.print("Configuring Initial Parameters of mcpwm...\n");
 
 
-#if MCPWM_EN_CARRIER
-  //3. carrier configuration
-  //comment if you don't want to use carrier mode
-  //in carrier mode very high frequency carrier signal is generated at mcpwm high level signal
-  mcpwm_carrier_config_t chop_config;
-  chop_config.carrier_period = 6;         //carrier period = (6 + 1)*800ns
-  chop_config.carrier_duty = 3;           //carrier duty = (3)*12.5%
-  chop_config.carrier_os_mode = MCPWM_ONESHOT_MODE_EN; //If one shot mode is enabled then set pulse width, if disabled no need to set pulse width
-  chop_config.pulse_width_in_os = 3;      //first pulse width = (3 + 1)*carrier_period
-  chop_config.carrier_ivt_mode = MCPWM_CARRIER_OUT_IVT_EN; //output signal inversion enable
-  mcpwm_carrier_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &chop_config);  //Enable carrier on PWM2A and PWM2B with above settings
-  //use mcpwm_carrier_disable function to disable carrier on mcpwm timer on which it was enabled
-#endif
-
-#if MCPWM_EN_DEADTIME
-  //4. deadtime configuration
-  //comment if you don't want to use deadtime submodule
-  //add rising edge delay or falling edge delay. There are 8 different types, each explained in mcpwm_deadtime_type_t in mcpwm.h
-  mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_2, MCPWM_BYPASS_FED, 1000, 1000);   //Enable deadtime on PWM2A and PWM2B with red = (1000)*100ns on PWM2A
-  mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_BYPASS_RED, 300, 2000);        //Enable deadtime on PWM1A and PWM1B with fed = (2000)*100ns on PWM1B
-  mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_ACTIVE_RED_FED_FROM_PWMXA, 656, 67);  //Enable deadtime on PWM0A and PWM0B with red = (656)*100ns & fed = (67)*100ns on PWM0A and PWM0B generated from PWM0A
-  //use mcpwm_deadtime_disable function to disable deadtime on mcpwm timer on which it was enabled
-#endif
-
-#if MCPWM_EN_FAULT
-  //5. enable fault condition
-  //comment if you don't want to use fault submodule, also u can comment the fault gpio signals
-  //whenever fault occurs you can configure mcpwm signal to either force low, force high or toggle.
-  //in cycmode, as soon as fault condition is over, the mcpwm signal is resumed, whereas in oneshot mode you need to reset.
-  mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F0); //Enable FAULT, when high level occurs on FAULT0 signal
-  mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F1); //Enable FAULT, when high level occurs on FAULT1 signal
-  mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F2); //Enable FAULT, when high level occurs on FAULT2 signal
-  mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_F0, MCPWM_FORCE_MCPWMXA_HIGH, MCPWM_FORCE_MCPWMXB_LOW); //Action taken on PWM1A and PWM1B, when FAULT0 occurs
-  mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_F1, MCPWM_FORCE_MCPWMXA_LOW, MCPWM_FORCE_MCPWMXB_HIGH); //Action taken on PWM1A and PWM1B, when FAULT1 occurs
-  mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_SELECT_F2, MCPWM_FORCE_MCPWMXA_HIGH, MCPWM_FORCE_MCPWMXB_LOW); //Action taken on PWM0A and PWM0B, when FAULT2 occurs
-  mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_SELECT_F1, MCPWM_FORCE_MCPWMXA_LOW, MCPWM_FORCE_MCPWMXB_HIGH); //Action taken on PWM0A and PWM0B, when FAULT1 occurs
-#endif
-
-#if MCPWM_EN_SYNC
-  //6. Syncronization configuration
-  //comment if you don't want to use sync submodule, also u can comment the sync gpio signals
-  //here synchronization occurs on PWM1A and PWM1B
-  mcpwm_sync_enable(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_SYNC0, 200);    //Load counter value with 20% of period counter of mcpwm timer 1 when sync 0 occurs
-#endif
-
 #if MCPWM_EN_CAPTURE
   //7. Capture configuration
   //comment if you don't want to use capture submodule, also u can comment the capture gpio signals
