@@ -106,8 +106,8 @@ static void gpio_test_signal(void *arg)
   const int downtime_dutyCycle = 83; // set this
 
   const int ledChannel = 0;
-  const int resolution = 8;
-  const int dutyCycle = downtime_dutyCycle * 255 / 100;
+  const int resolution = 8; // number of bits
+  const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
 
   init_blink(ledChannel, freq, 27, dutyCycle, resolution);
   init_blink(ledChannel, freq, 19, dutyCycle, resolution);
