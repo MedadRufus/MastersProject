@@ -189,10 +189,10 @@ static void log_signal(int index,capture evt,uint32_t *current_cap_value,uint32_
     switch(evt.edge_direction)
     {
       case 1:
-      dcycle_params[index].low_period = edge_direction_value[index];
+      dcycle_params[index].low_period = current_cap_value[index];
       break;
       case 2:
-      dcycle_params[index].high_period = edge_direction_value[index];
+      dcycle_params[index].high_period = current_cap_value[index];
       break;
     }
 
