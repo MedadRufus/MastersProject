@@ -133,27 +133,33 @@ static void mcpwm_example_gpio_initialize(void)
 static void gpio_test_signal(void *arg)
 {
     Serial.print("intializing test signal...\n");
-    gpio_config_t gp;
-    gp.intr_type = GPIO_INTR_DISABLE;
-    gp.mode = GPIO_MODE_OUTPUT;
-    gp.pin_bit_mask = GPIO_SEL_27;
-    gpio_config(&gp);
 
-    gp.pin_bit_mask = GPIO_SEL_19;
-    gpio_config(&gp);
+    // setting PWM properties
+    const int freq = 5;  // set this
+    const int downtime_dutyCycle = 83; // set this
     
-    while (1) {
-        //here the period of test signal is 20ms
-        gpio_set_level(GPIO_NUM_27, 1); //Set high
-        gpio_set_level(GPIO_NUM_19, 1); //Set high
+    const int ledChannel = 0;
+    const int resolution = 8;
+    const int dutyCycle = downtime_dutyCycle * 255 / 100;
 
-        vTaskDelay(10);             //delay of 10ms
-        
-        gpio_set_level(GPIO_NUM_27, 0); //Set low
-        gpio_set_level(GPIO_NUM_19, 0); //Set low
+    init_blink(ledChannel, freq, 27, dutyCycle, resolution);
+    init_blink(ledChannel, freq, 19, dutyCycle, resolution);
 
-        vTaskDelay(10);         //delay of 10ms
-    }
+    vTaskDelete(NULL);
+
+}
+
+void init_blink(int ledChannel, int freq,int ledPin, int dutyCycle, int resolution)
+{
+    // configure LED PWM functionalitites
+    ledcSetup(ledChannel, freq, resolution);
+    
+    // attach the channel to the GPIO to be controlled
+    ledcAttachPin(ledPin, ledChannel);
+    
+    ledcWrite(ledChannel, dutyCycle);
+
+    
 }
 
 /**
