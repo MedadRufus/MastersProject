@@ -191,6 +191,7 @@ static void IRAM_ATTR isr_handler(void*)
   if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
     evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
     evt.sel_cap_signal = MCPWM_SELECT_CAP0;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP0);
     xQueueSendFromISR(cap_queue, &evt, NULL);
   }
   if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
@@ -202,6 +203,7 @@ static void IRAM_ATTR isr_handler(void*)
   if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
     evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
     evt.sel_cap_signal = MCPWM_SELECT_CAP2;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP2);
     xQueueSendFromISR(cap_queue, &evt, NULL);
   }
   MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
