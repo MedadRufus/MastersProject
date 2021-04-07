@@ -56,6 +56,9 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define GPIO_FAULT1_IN 34   //Set GPIO 34 as FAULT1
 #define GPIO_FAULT2_IN 34   //Set GPIO 34 as FAULT2
 
+#define LED_BUILTIN 27
+#define TEST_TOGGLE_PIN 16
+
 typedef struct {
   uint32_t capture_signal;
   mcpwm_capture_signal_t sel_cap_signal;
@@ -109,8 +112,8 @@ static void gpio_test_signal(void *arg)
   const int resolution = 8; // number of bits
   const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
 
-  init_blink(ledChannel, freq, 27, dutyCycle, resolution);
-  init_blink(ledChannel, freq, 19, dutyCycle, resolution);
+  init_blink(ledChannel, freq, LED_BUILTIN, dutyCycle, resolution);
+  init_blink(ledChannel, freq, TEST_TOGGLE_PIN, dutyCycle, resolution);
 
   vTaskDelete(NULL);
 
