@@ -59,6 +59,11 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define LED_BUILTIN 27
 #define TEST_TOGGLE_PIN 16
 
+/* test pulse settings */
+// setting PWM properties
+const int freq = 5;  // set this
+const int hightime_dutyCycle = 17;  // Percentage.Set this
+
 typedef struct {
   uint32_t capture_signal;
   mcpwm_capture_signal_t sel_cap_signal;
@@ -104,10 +109,8 @@ static void gpio_test_signal(void *arg)
 {
   Serial.print("intializing test signal...\n");
 
-  // setting PWM properties
-  const int freq = 5;  // set this
-  const int downtime_dutyCycle = 83; // set this
 
+  const int downtime_dutyCycle = 100 - hightime_dutyCycle; 
   const int ledChannel = 0;
   const int resolution = 8; // number of bits
   const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
