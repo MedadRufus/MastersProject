@@ -41,14 +41,14 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
 
 #define GPIO_PWM0A_OUT 19   //Set GPIO 19 as PWM0A
-#define GPIO_PWM0B_OUT 18   //Set GPIO 18 as PWM0B
-#define GPIO_PWM1A_OUT 17   //Set GPIO 17 as PWM1A
-#define GPIO_PWM1B_OUT 16   //Set GPIO 16 as PWM1B
-#define GPIO_PWM2A_OUT 15   //Set GPIO 15 as PWM2A
-#define GPIO_PWM2B_OUT 14   //Set GPIO 14 as PWM2B
+#define GPIO_PWM0B_OUT 32   //Set GPIO 18 as PWM0B
+#define GPIO_PWM1A_OUT 33   //Set GPIO 17 as PWM1A
+#define GPIO_PWM1B_OUT 23   //Set GPIO 16 as PWM1B
+#define GPIO_PWM2A_OUT 25   //Set GPIO 15 as PWM2A
+#define GPIO_PWM2B_OUT 26   //Set GPIO 14 as PWM2B
 #define GPIO_CAP1_IN   17   //Set GPIO 39 as  CAP1
 #define GPIO_CAP0_IN   25   //Set GPIO 36 as  CAP0
-#define GPIO_CAP2_IN   26   //Set GPIO 26 as  CAP2
+#define GPIO_CAP2_IN   22   //Set GPIO 26 as  CAP2
 #define GPIO_SYNC0_IN   2   //Set GPIO 02 as SYNC0
 #define GPIO_SYNC1_IN   4   //Set GPIO 04 as SYNC1
 #define GPIO_SYNC2_IN   5   //Set GPIO 05 as SYNC2
@@ -57,7 +57,9 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define GPIO_FAULT2_IN 34   //Set GPIO 34 as FAULT2
 
 #define LED_BUILTIN 27
-#define TEST_TOGGLE_PIN 16
+#define TEST_TOGGLE_PIN_1 16
+#define TEST_TOGGLE_PIN_2 21
+
 
 /* test pulse settings */
 // setting PWM properties
@@ -150,7 +152,8 @@ static void gpio_test_signal(void *arg)
   const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
 
   init_blink(ledChannel, freq, LED_BUILTIN, dutyCycle, resolution);
-  init_blink(ledChannel, freq, TEST_TOGGLE_PIN, dutyCycle, resolution);
+  init_blink(2, freq, TEST_TOGGLE_PIN_1, dutyCycle, resolution);
+  init_blink(3, freq, TEST_TOGGLE_PIN_2, 18, resolution);
 
   vTaskDelete(NULL);
 
@@ -301,9 +304,9 @@ static void mcpwm_example_config(void *arg)
   //configure CAP0, CAP1 and CAP2 signal to start capture counter on rising edge
   //we generate a gpio_test_signal of 20ms on GPIO 19 and connect it to one of the capture signal, the disp_captured_function displays the time between rising edge
   //In general practice you can connect Capture  to external signal, measure time between rising edge or falling edge and take action accordingly
-  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
-  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
-  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+  mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
 
   //enable interrupt, so each this a rising edge occurs interrupt is triggered
   MCPWM[MCPWM_UNIT_0]->int_ena.val = CAP0_INT_EN | CAP1_INT_EN | CAP2_INT_EN;  //Enable interrupt on  CAP0, CAP1 and CAP2 signal
