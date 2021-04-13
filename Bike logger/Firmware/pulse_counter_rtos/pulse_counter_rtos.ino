@@ -109,18 +109,18 @@ static void mcpwm_example_gpio_initialize(void)
     mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_2, GPIO_FAULT2_IN);
 #else
     mcpwm_pin_config_t pin_config = {
-        .mcpwm0a_out_num = GPIO_PWM0A_OUT,
-        .mcpwm0b_out_num = GPIO_PWM0B_OUT,
-        .mcpwm1a_out_num = GPIO_PWM1A_OUT,
-        .mcpwm1b_out_num = GPIO_PWM1B_OUT,
-        .mcpwm2a_out_num = GPIO_PWM2A_OUT,
-        .mcpwm2b_out_num = GPIO_PWM2B_OUT,
-        .mcpwm_sync0_in_num  = GPIO_SYNC0_IN,
-        .mcpwm_sync1_in_num  = GPIO_SYNC1_IN,
-        .mcpwm_sync2_in_num  = GPIO_SYNC2_IN,
-        .mcpwm_fault0_in_num = GPIO_FAULT0_IN,
-        .mcpwm_fault1_in_num = GPIO_FAULT1_IN,
-        .mcpwm_fault2_in_num = GPIO_FAULT2_IN,
+        .mcpwm0a_out_num = -1,  //Not used
+        .mcpwm0b_out_num = -1,  //Not used
+        .mcpwm1a_out_num = -1,  //Not used
+        .mcpwm1b_out_num = -1,  //Not used
+        .mcpwm2a_out_num = -1,  //Not used
+        .mcpwm2b_out_num = -1,  //Not used
+        .mcpwm_sync0_in_num  = -1,  //Not used
+        .mcpwm_sync1_in_num  = -1,  //Not used
+        .mcpwm_sync2_in_num  = -1,  //Not used
+        .mcpwm_fault0_in_num = -1,  //Not used
+        .mcpwm_fault1_in_num = -1,  //Not used
+        .mcpwm_fault2_in_num = -1,  //Not used
         .mcpwm_cap0_in_num   = GPIO_CAP0_IN,
         .mcpwm_cap1_in_num   = GPIO_CAP1_IN,
         .mcpwm_cap2_in_num   = GPIO_CAP2_IN
