@@ -235,7 +235,6 @@ static void IRAM_ATTR isr_handler(void*)
   uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
   uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
 
-  MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
 
   #ifdef DEBUG_INTERRUPT
   Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
@@ -263,6 +262,10 @@ static void IRAM_ATTR isr_handler(void*)
     xQueueSendFromISR(cap_queue, &evt, NULL);
   }
   #endif
+
+
+  MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+
 }
 #endif
 
