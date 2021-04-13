@@ -145,9 +145,9 @@ static void gpio_test_signal(void *arg)
   const int resolution = 8; // number of bits
   const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
 
-  init_blink(ledChannel, freq, LED_BUILTIN, dutyCycle, resolution);
-  init_blink(2, freq, TEST_TOGGLE_PIN_1, dutyCycle, resolution);
-  init_blink(3, freq, TEST_TOGGLE_PIN_2, 18, resolution);
+  init_blink(ledChannel, 4, LED_BUILTIN, dutyCycle, resolution);
+  init_blink(2, 4, TEST_TOGGLE_PIN_1, 127, resolution);
+  init_blink(3, 3, TEST_TOGGLE_PIN_2, 40, resolution);
 
   vTaskDelete(NULL);
 
@@ -206,9 +206,12 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
       break;
   }
 
-  float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
+  if (edge_direction_value[index] == 1) // TODO: convert this to enum: 1 = positive edge, 2 = negetive edge
+  {
+    float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
+    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
+  }
 
-  Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
 }
 
 static float duty_cycle(int low, int high)
@@ -225,6 +228,18 @@ static void IRAM_ATTR isr_handler(void*)
   uint32_t mcpwm_intr_status;
   capture evt;
   mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
+
+  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
+  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
+  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
+
+  MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+
+  Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
+  Serial.println();
+
+
+  #if 1
   if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
     evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
     evt.sel_cap_signal = MCPWM_SELECT_CAP0;
@@ -243,7 +258,7 @@ static void IRAM_ATTR isr_handler(void*)
     evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP2);
     xQueueSendFromISR(cap_queue, &evt, NULL);
   }
-  MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+  #endif
 }
 #endif
 
