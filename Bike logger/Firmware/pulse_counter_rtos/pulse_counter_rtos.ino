@@ -26,6 +26,8 @@
 
 const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
+//#define DEBUG_INTERRUPT
+
 
 #define MCPWM_EN_CARRIER 0   //Make this 1 to test carrier submodule of mcpwm, set high frequency carrier parameters
 #define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
@@ -235,8 +237,10 @@ static void IRAM_ATTR isr_handler(void*)
 
   MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
 
+  #ifdef DEBUG_INTERRUPT
   Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
   Serial.println();
+  #endif
 
 
   #if 1
