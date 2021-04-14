@@ -283,19 +283,19 @@ static void mcpwm_example_config(void *arg)
     pwm_config.cmpr_b = 50.0;       //duty cycle of PWMxb = 50.0%
     pwm_config.counter_mode = MCPWM_UP_COUNTER;
     pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
+    // mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
     pwm_config.frequency = 500;     //frequency = 500Hz
     pwm_config.cmpr_a = 45.9;       //duty cycle of PWMxA = 45.9%
     pwm_config.cmpr_b = 7.0;    //duty cycle of PWMxb = 07.0%
     pwm_config.counter_mode = MCPWM_UP_COUNTER;
     pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_1, &pwm_config);   //Configure PWM1A & PWM1B with above settings
+    // mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_1, &pwm_config);   //Configure PWM1A & PWM1B with above settings
     pwm_config.frequency = 400;     //frequency = 400Hz
     pwm_config.cmpr_a = 23.2;       //duty cycle of PWMxA = 23.2%
     pwm_config.cmpr_b = 97.0;       //duty cycle of PWMxb = 97.0%
     pwm_config.counter_mode = MCPWM_UP_DOWN_COUNTER; //frequency is half when up down count mode is set i.e. SYMMETRIC PWM
     pwm_config.duty_mode = MCPWM_DUTY_MODE_1;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &pwm_config);   //Configure PWM2A & PWM2B with above settings
+    // mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &pwm_config);   //Configure PWM2A & PWM2B with above settings
 
 #if MCPWM_EN_CARRIER
     //3. carrier configuration
