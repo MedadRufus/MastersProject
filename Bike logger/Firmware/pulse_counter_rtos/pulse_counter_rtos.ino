@@ -26,6 +26,8 @@
 
 const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
+//#define DEBUG_INTERRUPT
+
 
 #define MCPWM_EN_CARRIER 0   //Make this 1 to test carrier submodule of mcpwm, set high frequency carrier parameters
 #define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
@@ -41,14 +43,14 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
 
 #define GPIO_PWM0A_OUT 19   //Set GPIO 19 as PWM0A
-#define GPIO_PWM0B_OUT 18   //Set GPIO 18 as PWM0B
-#define GPIO_PWM1A_OUT 17   //Set GPIO 17 as PWM1A
-#define GPIO_PWM1B_OUT 16   //Set GPIO 16 as PWM1B
-#define GPIO_PWM2A_OUT 15   //Set GPIO 15 as PWM2A
-#define GPIO_PWM2B_OUT 14   //Set GPIO 14 as PWM2B
-#define GPIO_CAP1_IN   18   //Set GPIO 39 as  CAP1
+#define GPIO_PWM0B_OUT 32   //Set GPIO 18 as PWM0B
+#define GPIO_PWM1A_OUT 33   //Set GPIO 17 as PWM1A
+#define GPIO_PWM1B_OUT 23   //Set GPIO 16 as PWM1B
+#define GPIO_PWM2A_OUT 25   //Set GPIO 15 as PWM2A
+#define GPIO_PWM2B_OUT 26   //Set GPIO 14 as PWM2B
+#define GPIO_CAP1_IN   17   //Set GPIO 39 as  CAP1
 #define GPIO_CAP0_IN   25   //Set GPIO 36 as  CAP0
-#define GPIO_CAP2_IN   26   //Set GPIO 26 as  CAP2
+#define GPIO_CAP2_IN   22   //Set GPIO 26 as  CAP2
 #define GPIO_SYNC0_IN   2   //Set GPIO 02 as SYNC0
 #define GPIO_SYNC1_IN   4   //Set GPIO 04 as SYNC1
 #define GPIO_SYNC2_IN   5   //Set GPIO 05 as SYNC2
@@ -57,7 +59,9 @@ const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 #define GPIO_FAULT2_IN 34   //Set GPIO 34 as FAULT2
 
 #define LED_BUILTIN 27
-#define TEST_TOGGLE_PIN 16
+#define TEST_TOGGLE_PIN_1 16
+#define TEST_TOGGLE_PIN_2 21
+
 
 /* test pulse settings */
 // setting PWM properties
@@ -87,19 +91,47 @@ static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
 
 static void mcpwm_example_gpio_initialize(void)
 {
-  Serial.print("initializing mcpwm gpio...\n");
 
-  mcpwm_pin_config_t pin_config = {
-    .mcpwm_cap0_in_num   = GPIO_CAP0_IN,
-    .mcpwm_cap1_in_num   = GPIO_CAP1_IN,
-    .mcpwm_cap2_in_num   = GPIO_CAP2_IN
-  };
-  mcpwm_set_pin(MCPWM_UNIT_0, &pin_config);
-
-
-  gpio_pullup_en((gpio_num_t)GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
-  gpio_pulldown_en((gpio_num_t)GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
-  gpio_pullup_en((gpio_num_t)GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
+    Serial.print("initializing mcpwm gpio...\n");
+#if MCPWM_GPIO_INIT
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, GPIO_PWM0A_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0B, GPIO_PWM0B_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM1A, GPIO_PWM1A_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM1B, GPIO_PWM1B_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM2A, GPIO_PWM2A_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM2B, GPIO_PWM2B_OUT);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_0, GPIO_CAP0_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_1, GPIO_CAP1_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_2, GPIO_CAP2_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_0, GPIO_SYNC0_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_1, GPIO_SYNC1_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_2, GPIO_SYNC2_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_0, GPIO_FAULT0_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_1, GPIO_FAULT1_IN);
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_2, GPIO_FAULT2_IN);
+#else
+    mcpwm_pin_config_t pin_config = {
+        .mcpwm0a_out_num = -1,  //Not used
+        .mcpwm0b_out_num = -1,  //Not used
+        .mcpwm1a_out_num = -1,  //Not used
+        .mcpwm1b_out_num = -1,  //Not used
+        .mcpwm2a_out_num = -1,  //Not used
+        .mcpwm2b_out_num = -1,  //Not used
+        .mcpwm_sync0_in_num  = -1,  //Not used
+        .mcpwm_sync1_in_num  = -1,  //Not used
+        .mcpwm_sync2_in_num  = -1,  //Not used
+        .mcpwm_fault0_in_num = -1,  //Not used
+        .mcpwm_fault1_in_num = -1,  //Not used
+        .mcpwm_fault2_in_num = -1,  //Not used
+        .mcpwm_cap0_in_num   = GPIO_CAP0_IN,
+        .mcpwm_cap1_in_num   = GPIO_CAP1_IN,
+        .mcpwm_cap2_in_num   = GPIO_CAP2_IN
+    };
+    mcpwm_set_pin(MCPWM_UNIT_0, &pin_config);
+#endif
+    gpio_pullup_en((gpio_num_t)GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
+    gpio_pullup_en((gpio_num_t)GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
+    gpio_pullup_en((gpio_num_t)GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
 }
 
 /**
@@ -115,8 +147,9 @@ static void gpio_test_signal(void *arg)
   const int resolution = 8; // number of bits
   const int dutyCycle = downtime_dutyCycle * (1 << resolution) / 100;
 
-  init_blink(ledChannel, freq, LED_BUILTIN, dutyCycle, resolution);
-  init_blink(ledChannel, freq, TEST_TOGGLE_PIN, dutyCycle, resolution);
+  init_blink(ledChannel, 4, LED_BUILTIN, dutyCycle, resolution);
+  init_blink(2, 4, TEST_TOGGLE_PIN_1, 127, resolution);
+  init_blink(3, 3, TEST_TOGGLE_PIN_2, 40, resolution);
 
   vTaskDelete(NULL);
 
@@ -175,9 +208,12 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
       break;
   }
 
-  float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
+  if (edge_direction_value[index] == 1) // TODO: convert this to enum: 1 = positive edge, 2 = negetive edge
+  {
+    float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
+    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
+  }
 
-  Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
 }
 
 static float duty_cycle(int low, int high)
@@ -194,6 +230,18 @@ static void IRAM_ATTR isr_handler(void*)
   uint32_t mcpwm_intr_status;
   capture evt;
   mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
+
+  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
+  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
+  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
+
+
+  #ifdef DEBUG_INTERRUPT
+  Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
+  Serial.println();
+  #endif
+
+
   if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
     evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
     evt.sel_cap_signal = MCPWM_SELECT_CAP0;
@@ -212,7 +260,10 @@ static void IRAM_ATTR isr_handler(void*)
     evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP2);
     xQueueSendFromISR(cap_queue, &evt, NULL);
   }
+
+
   MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+
 }
 #endif
 
@@ -221,11 +272,44 @@ static void IRAM_ATTR isr_handler(void*)
 */
 static void mcpwm_example_config(void *arg)
 {
-  //1. mcpwm gpio initialization
-  mcpwm_example_gpio_initialize();
+    //1. mcpwm gpio initialization
+    mcpwm_example_gpio_initialize();
 
-  //2. initialize mcpwm configuration
-  Serial.print("Configuring Initial Parameters of mcpwm...\n");
+    //2. initialize mcpwm configuration
+    Serial.print("Configuring Initial Parameters of mcpwm...\n");
+    mcpwm_config_t pwm_config;
+    pwm_config.frequency = 10;    //frequency = 1000Hz
+    pwm_config.cmpr_a = 60.0;       //duty cycle of PWMxA = 60.0%
+    pwm_config.cmpr_b = 50.0;       //duty cycle of PWMxb = 50.0%
+    pwm_config.counter_mode = MCPWM_UP_COUNTER;
+    pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
+    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
+    pwm_config.frequency = 500;     //frequency = 500Hz
+    pwm_config.cmpr_a = 45.9;       //duty cycle of PWMxA = 45.9%
+    pwm_config.cmpr_b = 7.0;    //duty cycle of PWMxb = 07.0%
+    pwm_config.counter_mode = MCPWM_UP_COUNTER;
+    pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
+    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_1, &pwm_config);   //Configure PWM1A & PWM1B with above settings
+    pwm_config.frequency = 400;     //frequency = 400Hz
+    pwm_config.cmpr_a = 23.2;       //duty cycle of PWMxA = 23.2%
+    pwm_config.cmpr_b = 97.0;       //duty cycle of PWMxb = 97.0%
+    pwm_config.counter_mode = MCPWM_UP_DOWN_COUNTER; //frequency is half when up down count mode is set i.e. SYMMETRIC PWM
+    pwm_config.duty_mode = MCPWM_DUTY_MODE_1;
+    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &pwm_config);   //Configure PWM2A & PWM2B with above settings
+
+#if MCPWM_EN_CARRIER
+    //3. carrier configuration
+    //comment if you don't want to use carrier mode
+    //in carrier mode very high frequency carrier signal is generated at mcpwm high level signal
+    mcpwm_carrier_config_t chop_config;
+    chop_config.carrier_period = 6;         //carrier period = (6 + 1)*800ns
+    chop_config.carrier_duty = 3;           //carrier duty = (3)*12.5%
+    chop_config.carrier_os_mode = MCPWM_ONESHOT_MODE_EN; //If one shot mode is enabled then set pulse width, if disabled no need to set pulse width
+    chop_config.pulse_width_in_os = 3;      //first pulse width = (3 + 1)*carrier_period
+    chop_config.carrier_ivt_mode = MCPWM_CARRIER_OUT_IVT_EN; //output signal inversion enable
+    mcpwm_carrier_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &chop_config);  //Enable carrier on PWM2A and PWM2B with above settings
+    //use mcpwm_carrier_disable function to disable carrier on mcpwm timer on which it was enabled
+#endif
 
 
 #if MCPWM_EN_CAPTURE
@@ -249,7 +333,7 @@ void setup(void)
 {
   Serial.begin(SERIAL_SPEED);
   Serial.print("Testing MCPWM...\n");
-  cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
+  cap_queue = xQueueCreate(100, sizeof(capture)); //comment if you don't want to use capture module
   xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  // view duty cycle values
   xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to generate test signal on pin 19
   xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);

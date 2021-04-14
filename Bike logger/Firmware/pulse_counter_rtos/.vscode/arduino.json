@@ -1,0 +1,7 @@
+{
+    "configuration": "FlashFreq=80,UploadSpeed=921600,DebugLevel=none,PartitionScheme=default",
+    "board": "espressif:esp32:featheresp32",
+    "port": "COM7",
+    "sketch": "pulse_counter_rtos.ino",
+    "output": "../build"
+}
