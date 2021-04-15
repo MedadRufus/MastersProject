@@ -53,10 +53,31 @@
 #define GPIO_FAULT1_IN 34   //Set GPIO 34 as FAULT1
 #define GPIO_FAULT2_IN 34   //Set GPIO 34 as FAULT2
 
+#define LED_BUILTIN 27
+#define TEST_TOGGLE_PIN_1 16
+#define TEST_TOGGLE_PIN_2 21
+
+
+/* test pulse settings */
+// setting PWM properties
+const int freq = 5;  // set this
+const int hightime_dutyCycle = 17;  // Percentage.Set this
+
 typedef struct {
-    uint32_t capture_signal;
-    mcpwm_capture_signal_t sel_cap_signal;
+  uint32_t capture_signal;
+  mcpwm_capture_signal_t sel_cap_signal;
+  uint32_t edge_direction;
 } capture;
+
+typedef struct {
+  uint32_t high_period;
+  uint32_t low_period;
+} duty_cycle_params_t;
+
+
+
+duty_cycle_params_t dcycle_params[CAP_SIG_NUM];
+
 
 xQueueHandle cap_queue;
 #if MCPWM_EN_CAPTURE
