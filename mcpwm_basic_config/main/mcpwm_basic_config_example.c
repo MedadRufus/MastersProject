@@ -127,14 +127,14 @@ static void gpio_test_signal(void *arg)
     gpio_config_t gp;
     gp.intr_type = GPIO_INTR_DISABLE;
     gp.mode = GPIO_MODE_OUTPUT;
-    gp.pin_bit_mask = GPIO_SEL_12;
+    gp.pin_bit_mask = GPIO_SEL_21;
     gpio_config(&gp);
     while (1) {
         //here the period of test signal is 20ms
-        gpio_set_level(GPIO_NUM_12, 1); //Set high
-        vTaskDelay(10);             //delay of 10ms
-        gpio_set_level(GPIO_NUM_12, 0); //Set low
-        vTaskDelay(10);         //delay of 10ms
+        gpio_set_level(GPIO_NUM_21, 1); //Set high
+        vTaskDelay(pdMS_TO_TICKS(500));          //delay of 500ms
+        gpio_set_level(GPIO_NUM_21, 0); //Set low
+        vTaskDelay(pdMS_TO_TICKS(500));         //delay of 500ms
     }
 }
 
