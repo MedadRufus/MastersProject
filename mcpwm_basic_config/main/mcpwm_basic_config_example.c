@@ -159,30 +159,52 @@ static void gpio_test_signal(void *arg)
  */
 static void disp_captured_signal(void *arg)
 {
-    uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
-    uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM*sizeof(uint32_t));
-    capture evt;
-    while (1) {
-        xQueueReceive(cap_queue, &evt, portMAX_DELAY);
-        if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
-            current_cap_value[0] = evt.capture_signal - previous_cap_value[0];
-            previous_cap_value[0] = evt.capture_signal;
-            current_cap_value[0] = (current_cap_value[0] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            printf("CAP0 : %d us\n", current_cap_value[0]);
-        }
-        if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
-            current_cap_value[1] = evt.capture_signal - previous_cap_value[1];
-            previous_cap_value[1] = evt.capture_signal;
-            current_cap_value[1] = (current_cap_value[1] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            printf("CAP1 : %d us\n", current_cap_value[1]);
-        }
-        if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
-            current_cap_value[2] = evt.capture_signal -  previous_cap_value[2];
-            previous_cap_value[2] = evt.capture_signal;
-            current_cap_value[2] = (current_cap_value[2] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
-            printf("CAP2 : %d us\n", current_cap_value[2]);
-        }
+  uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  uint32_t *edge_direction_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  capture evt;
+  while (1) {
+    xQueueReceive(cap_queue, &evt, portMAX_DELAY);
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
+      log_signal(MCPWM_SELECT_CAP0, evt, current_cap_value, previous_cap_value, edge_direction_value);
     }
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
+      log_signal(MCPWM_SELECT_CAP1, evt, current_cap_value, previous_cap_value, edge_direction_value);
+    }
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
+      log_signal(MCPWM_SELECT_CAP2, evt, current_cap_value, previous_cap_value, edge_direction_value);
+    }
+  }
+}
+
+static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint32_t *previous_cap_value, uint32_t *edge_direction_value)
+{
+  current_cap_value[index] = evt.capture_signal - previous_cap_value[index];
+  previous_cap_value[index] = evt.capture_signal;
+  current_cap_value[index] = (current_cap_value[index] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
+  edge_direction_value[index] = evt.edge_direction;
+
+  switch (evt.edge_direction)
+  {
+    case 1:
+      dcycle_params[index].low_period = current_cap_value[index];
+      break;
+    case 2:
+      dcycle_params[index].high_period = current_cap_value[index];
+      break;
+  }
+
+  if (edge_direction_value[index] == 1) // TODO: convert this to enum: 1 = positive edge, 2 = negetive edge
+  {
+    float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
+    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
+  }
+
+}
+
+static float duty_cycle(int low, int high)
+{
+  return (float)high / (float)(low + high);
 }
 
 #if MCPWM_EN_CAPTURE
@@ -191,25 +213,43 @@ static void disp_captured_signal(void *arg)
  */
 static void IRAM_ATTR isr_handler(void)
 {
-    uint32_t mcpwm_intr_status;
-    capture evt;
-    mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
-    if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
-        evt.sel_cap_signal = MCPWM_SELECT_CAP0;
-        xQueueSendFromISR(cap_queue, &evt, NULL);
-    }
-    if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
-        evt.sel_cap_signal = MCPWM_SELECT_CAP1;
-        xQueueSendFromISR(cap_queue, &evt, NULL);
-    }
-    if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-        evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
-        evt.sel_cap_signal = MCPWM_SELECT_CAP2;
-        xQueueSendFromISR(cap_queue, &evt, NULL);
-    }
-    MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+  uint32_t mcpwm_intr_status;
+  capture evt;
+  mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
+
+  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
+  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
+  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
+
+
+  #ifdef DEBUG_INTERRUPT
+  Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
+  Serial.println();
+  #endif
+
+
+  if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
+    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
+    evt.sel_cap_signal = MCPWM_SELECT_CAP0;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP0);
+    xQueueSendFromISR(cap_queue, &evt, NULL);
+  }
+  if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
+    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
+    evt.sel_cap_signal = MCPWM_SELECT_CAP1;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP1);
+    xQueueSendFromISR(cap_queue, &evt, NULL);
+  }
+  if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
+    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
+    evt.sel_cap_signal = MCPWM_SELECT_CAP2;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP2);
+    xQueueSendFromISR(cap_queue, &evt, NULL);
+  }
+
+
+  MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
+
 }
 #endif
 
