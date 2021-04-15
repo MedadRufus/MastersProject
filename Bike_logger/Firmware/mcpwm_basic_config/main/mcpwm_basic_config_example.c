@@ -25,7 +25,6 @@
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
 #include "soc/mcpwm_periph.h"
-//#define DEBUG_INTERRUPT
 
 
 #define CAP_SIG_NUM 3   //Three capture signals
@@ -60,9 +59,7 @@ duty_cycle_params_t dcycle_params[CAP_SIG_NUM];
 
 
 xQueueHandle cap_queue;
-#if MCPWM_EN_CAPTURE
 static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
-#endif
 
 static void mcpwm_example_gpio_initialize(void)
 {
@@ -178,15 +175,6 @@ static void IRAM_ATTR isr_handler(void)
 
 
 
-
-  #ifdef DEBUG_INTERRUPT
-  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
-  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
-  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
-  printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
-  #endif
-
-
   if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
     evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
     evt.sel_cap_signal = MCPWM_SELECT_CAP0;
@@ -243,4 +231,3 @@ void app_main(void)
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
     xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);
 }
-
