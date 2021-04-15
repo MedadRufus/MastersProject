@@ -132,9 +132,9 @@ static void gpio_test_signal(void *arg)
     while (1) {
         //here the period of test signal is 20ms
         gpio_set_level(GPIO_NUM_21, 1); //Set high
-        vTaskDelay(pdMS_TO_TICKS(500));          //delay of 500ms
+        vTaskDelay(pdMS_TO_TICKS(30));          //delay of 500ms
         gpio_set_level(GPIO_NUM_21, 0); //Set low
-        vTaskDelay(pdMS_TO_TICKS(500));         //delay of 500ms
+        vTaskDelay(pdMS_TO_TICKS(160));         //delay of 500ms
     }
 }
 
