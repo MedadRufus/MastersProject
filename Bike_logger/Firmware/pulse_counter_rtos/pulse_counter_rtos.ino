@@ -24,8 +24,10 @@
 #include "esp_attr.h"
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
-#include "soc/mcpwm_periph.h"
+#include "soc/mcpwm_reg.h"
+#include "soc/mcpwm_struct.h"
 
+const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
 #define CAP_SIG_NUM 3   //Three capture signals
 
