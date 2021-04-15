@@ -22,6 +22,7 @@
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
 #include "soc/mcpwm_periph.h"
+//#define DEBUG_INTERRUPT
 
 #define MCPWM_EN_CARRIER 0   //Make this 1 to test carrier submodule of mcpwm, set high frequency carrier parameters
 #define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
