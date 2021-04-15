@@ -154,27 +154,9 @@ static void gpio_test_signal(void *arg)
     }
 }
 
-/**
- * @brief When interrupt occurs, we receive the counter value and display the time between two rising edge
- */
-static void disp_captured_signal(void *arg)
+static float duty_cycle(int low, int high)
 {
-  uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
-  uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
-  uint32_t *edge_direction_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
-  capture evt;
-  while (1) {
-    xQueueReceive(cap_queue, &evt, portMAX_DELAY);
-    if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
-      log_signal(MCPWM_SELECT_CAP0, evt, current_cap_value, previous_cap_value, edge_direction_value);
-    }
-    if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
-      log_signal(MCPWM_SELECT_CAP1, evt, current_cap_value, previous_cap_value, edge_direction_value);
-    }
-    if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
-      log_signal(MCPWM_SELECT_CAP2, evt, current_cap_value, previous_cap_value, edge_direction_value);
-    }
-  }
+  return (float)high / (float)(low + high);
 }
 
 static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint32_t *previous_cap_value, uint32_t *edge_direction_value)
@@ -202,10 +184,30 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
 
 }
 
-static float duty_cycle(int low, int high)
+/**
+ * @brief When interrupt occurs, we receive the counter value and display the time between two rising edge
+ */
+static void disp_captured_signal(void *arg)
 {
-  return (float)high / (float)(low + high);
+  uint32_t *current_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  uint32_t *previous_cap_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  uint32_t *edge_direction_value = (uint32_t *)malloc(CAP_SIG_NUM * sizeof(uint32_t));
+  capture evt;
+  while (1) {
+    xQueueReceive(cap_queue, &evt, portMAX_DELAY);
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP0) {
+      log_signal(MCPWM_SELECT_CAP0, evt, current_cap_value, previous_cap_value, edge_direction_value);
+    }
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP1) {
+      log_signal(MCPWM_SELECT_CAP1, evt, current_cap_value, previous_cap_value, edge_direction_value);
+    }
+    if (evt.sel_cap_signal == MCPWM_SELECT_CAP2) {
+      log_signal(MCPWM_SELECT_CAP2, evt, current_cap_value, previous_cap_value, edge_direction_value);
+    }
+  }
 }
+
+
 
 #if MCPWM_EN_CAPTURE
 /**
