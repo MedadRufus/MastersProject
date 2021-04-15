@@ -39,22 +39,9 @@
 #define CAP1_INT_EN BIT(28)  //Capture 1 interrupt bit
 #define CAP2_INT_EN BIT(29)  //Capture 2 interrupt bit
 
-
-#define GPIO_PWM0A_OUT 19   //Set GPIO 19 as PWM0A
-#define GPIO_PWM0B_OUT 18   //Set GPIO 18 as PWM0B
-#define GPIO_PWM1A_OUT 17   //Set GPIO 17 as PWM1A
-#define GPIO_PWM1B_OUT 16   //Set GPIO 16 as PWM1B
-#define GPIO_PWM2A_OUT 15   //Set GPIO 15 as PWM2A
-#define GPIO_PWM2B_OUT 14   //Set GPIO 14 as PWM2B
-#define GPIO_CAP0_IN   39   //Set GPIO 23 as  CAP0
+#define GPIO_CAP0_IN   39   //Set GPIO 39 as  CAP0
 #define GPIO_CAP1_IN   25   //Set GPIO 25 as  CAP1
-#define GPIO_CAP2_IN   26   //Set GPIO 26 as  CAP2
-#define GPIO_SYNC0_IN   2   //Set GPIO 02 as SYNC0
-#define GPIO_SYNC1_IN   4   //Set GPIO 04 as SYNC1
-#define GPIO_SYNC2_IN   5   //Set GPIO 05 as SYNC2
-#define GPIO_FAULT0_IN 32   //Set GPIO 32 as FAULT0
-#define GPIO_FAULT1_IN 34   //Set GPIO 34 as FAULT1
-#define GPIO_FAULT2_IN 34   //Set GPIO 34 as FAULT2
+#define GPIO_CAP2_IN   22   //Set GPIO 22 as  CAP2
 
 #define LED_BUILTIN 27
 #define TEST_TOGGLE_PIN_1 16
@@ -108,18 +95,18 @@ static void mcpwm_example_gpio_initialize(void)
     mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_2, GPIO_FAULT2_IN);
 #else
     mcpwm_pin_config_t pin_config = {
-        .mcpwm0a_out_num = GPIO_PWM0A_OUT,
-        .mcpwm0b_out_num = GPIO_PWM0B_OUT,
-        .mcpwm1a_out_num = GPIO_PWM1A_OUT,
-        .mcpwm1b_out_num = GPIO_PWM1B_OUT,
-        .mcpwm2a_out_num = GPIO_PWM2A_OUT,
-        .mcpwm2b_out_num = GPIO_PWM2B_OUT,
-        .mcpwm_sync0_in_num  = GPIO_SYNC0_IN,
-        .mcpwm_sync1_in_num  = GPIO_SYNC1_IN,
-        .mcpwm_sync2_in_num  = GPIO_SYNC2_IN,
-        .mcpwm_fault0_in_num = GPIO_FAULT0_IN,
-        .mcpwm_fault1_in_num = GPIO_FAULT1_IN,
-        .mcpwm_fault2_in_num = GPIO_FAULT2_IN,
+        .mcpwm0a_out_num = -1,
+        .mcpwm0b_out_num = -1,
+        .mcpwm1a_out_num = -1,
+        .mcpwm1b_out_num = -1,
+        .mcpwm2a_out_num = -1,
+        .mcpwm2b_out_num = -1,
+        .mcpwm_sync0_in_num  = -1,
+        .mcpwm_sync1_in_num  = -1,
+        .mcpwm_sync2_in_num  = -1,
+        .mcpwm_fault0_in_num = -1,
+        .mcpwm_fault1_in_num = -1,
+        .mcpwm_fault2_in_num = -1,
         .mcpwm_cap0_in_num   = GPIO_CAP0_IN,
         .mcpwm_cap1_in_num   = GPIO_CAP1_IN,
         .mcpwm_cap2_in_num   = GPIO_CAP2_IN
@@ -129,12 +116,6 @@ static void mcpwm_example_gpio_initialize(void)
     gpio_pulldown_en(GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
     gpio_pulldown_en(GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
     gpio_pulldown_en(GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
-    gpio_pulldown_en(GPIO_SYNC0_IN);   //Enable pull down on SYNC0  signal
-    gpio_pulldown_en(GPIO_SYNC1_IN);   //Enable pull down on SYNC1  signal
-    gpio_pulldown_en(GPIO_SYNC2_IN);   //Enable pull down on SYNC2  signal
-    gpio_pulldown_en(GPIO_FAULT0_IN);  //Enable pull down on FAULT0 signal
-    gpio_pulldown_en(GPIO_FAULT1_IN);  //Enable pull down on FAULT1 signal
-    gpio_pulldown_en(GPIO_FAULT2_IN);  //Enable pull down on FAULT2 signal
 }
 
 /**
@@ -268,24 +249,12 @@ static void mcpwm_example_config(void *arg)
     //2. initialize mcpwm configuration
     printf("Configuring Initial Parameters of mcpwm...\n");
     mcpwm_config_t pwm_config;
-    pwm_config.frequency = 1000;    //frequency = 1000Hz
-    pwm_config.cmpr_a = 60.0;       //duty cycle of PWMxA = 60.0%
+    pwm_config.frequency = 5;    //frequency = 5Hz
+    pwm_config.cmpr_a = 16.0;       //duty cycle of PWMxA = 16.0%
     pwm_config.cmpr_b = 50.0;       //duty cycle of PWMxb = 50.0%
     pwm_config.counter_mode = MCPWM_UP_COUNTER;
     pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
-    pwm_config.frequency = 500;     //frequency = 500Hz
-    pwm_config.cmpr_a = 45.9;       //duty cycle of PWMxA = 45.9%
-    pwm_config.cmpr_b = 7.0;    //duty cycle of PWMxb = 07.0%
-    pwm_config.counter_mode = MCPWM_UP_COUNTER;
-    pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_1, &pwm_config);   //Configure PWM1A & PWM1B with above settings
-    pwm_config.frequency = 400;     //frequency = 400Hz
-    pwm_config.cmpr_a = 23.2;       //duty cycle of PWMxA = 23.2%
-    pwm_config.cmpr_b = 97.0;       //duty cycle of PWMxb = 97.0%
-    pwm_config.counter_mode = MCPWM_UP_DOWN_COUNTER; //frequency is half when up down count mode is set i.e. SYMMETRIC PWM
-    pwm_config.duty_mode = MCPWM_DUTY_MODE_1;
-    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &pwm_config);   //Configure PWM2A & PWM2B with above settings
+    //mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
 
 #if MCPWM_EN_CARRIER
     //3. carrier configuration
