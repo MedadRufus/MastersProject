@@ -27,12 +27,7 @@
 #include "soc/mcpwm_periph.h"
 //#define DEBUG_INTERRUPT
 
-#define MCPWM_EN_CARRIER 0   //Make this 1 to test carrier submodule of mcpwm, set high frequency carrier parameters
-#define MCPWM_EN_DEADTIME 0  //Make this 1 to test deadtime submodule of mcpwm, set deadtime value and deadtime mode
-#define MCPWM_EN_FAULT 0     //Make this 1 to test fault submodule of mcpwm, set action on MCPWM signal on fault occurence like overcurrent, overvoltage, etc
-#define MCPWM_EN_SYNC 0      //Make this 1 to test sync submodule of mcpwm, sync timer signals
-#define MCPWM_EN_CAPTURE 1   //Make this 1 to test capture submodule of mcpwm, measure time between rising/falling edge of captured signal
-#define MCPWM_GPIO_INIT 0    //select which function to use to initialize gpio signals
+
 #define CAP_SIG_NUM 3   //Three capture signals
 
 #define CAP0_INT_EN BIT(27)  //Capture 0 interrupt bit
@@ -47,11 +42,6 @@
 #define TEST_TOGGLE_PIN_1 16
 #define TEST_TOGGLE_PIN_2 21
 
-
-/* test pulse settings */
-// setting PWM properties
-const int freq = 5;  // set this
-const int hightime_dutyCycle = 17;  // Percentage.Set this
 
 typedef struct {
   uint32_t capture_signal;
@@ -77,23 +67,7 @@ static mcpwm_dev_t *MCPWM[2] = {&MCPWM0, &MCPWM1};
 static void mcpwm_example_gpio_initialize(void)
 {
     printf("initializing mcpwm gpio...\n");
-#if MCPWM_GPIO_INIT
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, GPIO_PWM0A_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0B, GPIO_PWM0B_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM1A, GPIO_PWM1A_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM1B, GPIO_PWM1B_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM2A, GPIO_PWM2A_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM2B, GPIO_PWM2B_OUT);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_0, GPIO_CAP0_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_1, GPIO_CAP1_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_2, GPIO_CAP2_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_0, GPIO_SYNC0_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_1, GPIO_SYNC1_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_SYNC_2, GPIO_SYNC2_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_0, GPIO_FAULT0_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_1, GPIO_FAULT1_IN);
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_FAULT_2, GPIO_FAULT2_IN);
-#else
+
     mcpwm_pin_config_t pin_config = {
         .mcpwm0a_out_num = -1,
         .mcpwm0b_out_num = -1,
@@ -112,14 +86,15 @@ static void mcpwm_example_gpio_initialize(void)
         .mcpwm_cap2_in_num   = GPIO_CAP2_IN
     };
     mcpwm_set_pin(MCPWM_UNIT_0, &pin_config);
-#endif
+
+
     gpio_pullup_en(GPIO_CAP0_IN);    //Enable pull down on CAP0   signal
     gpio_pullup_en(GPIO_CAP1_IN);    //Enable pull down on CAP1   signal
     gpio_pullup_en(GPIO_CAP2_IN);    //Enable pull down on CAP2   signal
 }
 
 /**
- * @brief Set gpio 12 as our test signal that generates high-low waveform continuously, connect this gpio to capture pin.
+ * @brief Set gpio 21 as our test signal that generates high-low waveform continuously, connect this gpio to capture pin.
  */
 static void gpio_test_signal(void *arg)
 {
@@ -192,8 +167,6 @@ static void disp_captured_signal(void *arg)
 }
 
 
-
-#if MCPWM_EN_CAPTURE
 /**
  * @brief this is ISR handler function, here we check for interrupt that triggers rising edge on CAP0 signal and according take action
  */
@@ -237,7 +210,6 @@ static void IRAM_ATTR isr_handler(void)
   MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
 
 }
-#endif
 
 /**
  * @brief Configure whole MCPWM module
@@ -247,63 +219,7 @@ static void mcpwm_example_config(void *arg)
     //1. mcpwm gpio initialization
     mcpwm_example_gpio_initialize();
 
-    //2. initialize mcpwm configuration
-    printf("Configuring Initial Parameters of mcpwm...\n");
-    mcpwm_config_t pwm_config;
-    pwm_config.frequency = 5;    //frequency = 5Hz
-    pwm_config.cmpr_a = 16.0;       //duty cycle of PWMxA = 16.0%
-    pwm_config.cmpr_b = 50.0;       //duty cycle of PWMxb = 50.0%
-    pwm_config.counter_mode = MCPWM_UP_COUNTER;
-    pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
-    //mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);   //Configure PWM0A & PWM0B with above settings
-
-#if MCPWM_EN_CARRIER
-    //3. carrier configuration
-    //comment if you don't want to use carrier mode
-    //in carrier mode very high frequency carrier signal is generated at mcpwm high level signal
-    mcpwm_carrier_config_t chop_config;
-    chop_config.carrier_period = 6;         //carrier period = (6 + 1)*800ns
-    chop_config.carrier_duty = 3;           //carrier duty = (3)*12.5%
-    chop_config.carrier_os_mode = MCPWM_ONESHOT_MODE_EN; //If one shot mode is enabled then set pulse width, if disabled no need to set pulse width
-    chop_config.pulse_width_in_os = 3;      //first pulse width = (3 + 1)*carrier_period
-    chop_config.carrier_ivt_mode = MCPWM_CARRIER_OUT_IVT_EN; //output signal inversion enable
-    mcpwm_carrier_init(MCPWM_UNIT_0, MCPWM_TIMER_2, &chop_config);  //Enable carrier on PWM2A and PWM2B with above settings
-    //use mcpwm_carrier_disable function to disable carrier on mcpwm timer on which it was enabled
-#endif
-
-#if MCPWM_EN_DEADTIME
-    //4. deadtime configuration
-    //comment if you don't want to use deadtime submodule
-    //add rising edge delay or falling edge delay. There are 8 different types, each explained in mcpwm_deadtime_type_t in mcpwm.h
-    mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_2, MCPWM_BYPASS_FED, 1000, 1000);   //Enable deadtime on PWM2A and PWM2B with red = (1000)*100ns on PWM2A
-    mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_BYPASS_RED, 300, 2000);        //Enable deadtime on PWM1A and PWM1B with fed = (2000)*100ns on PWM1B
-    mcpwm_deadtime_enable(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_ACTIVE_RED_FED_FROM_PWMXA, 656, 67);  //Enable deadtime on PWM0A and PWM0B with red = (656)*100ns & fed = (67)*100ns on PWM0A and PWM0B generated from PWM0A
-    //use mcpwm_deadtime_disable function to disable deadtime on mcpwm timer on which it was enabled
-#endif
-
-#if MCPWM_EN_FAULT
-    //5. enable fault condition
-    //comment if you don't want to use fault submodule, also u can comment the fault gpio signals
-    //whenever fault occurs you can configure mcpwm signal to either force low, force high or toggle.
-    //in cycmode, as soon as fault condition is over, the mcpwm signal is resumed, whereas in oneshot mode you need to reset.
-    mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F0); //Enable FAULT, when high level occurs on FAULT0 signal
-    mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F1); //Enable FAULT, when high level occurs on FAULT1 signal
-    mcpwm_fault_init(MCPWM_UNIT_0, MCPWM_HIGH_LEVEL_TGR, MCPWM_SELECT_F2); //Enable FAULT, when high level occurs on FAULT2 signal
-    mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_F0, MCPWM_FORCE_MCPWMXA_HIGH, MCPWM_FORCE_MCPWMXB_LOW); //Action taken on PWM1A and PWM1B, when FAULT0 occurs
-    mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_F1, MCPWM_FORCE_MCPWMXA_LOW, MCPWM_FORCE_MCPWMXB_HIGH); //Action taken on PWM1A and PWM1B, when FAULT1 occurs
-    mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_SELECT_F2, MCPWM_FORCE_MCPWMXA_HIGH, MCPWM_FORCE_MCPWMXB_LOW); //Action taken on PWM0A and PWM0B, when FAULT2 occurs
-    mcpwm_fault_set_oneshot_mode(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_SELECT_F1, MCPWM_FORCE_MCPWMXA_LOW, MCPWM_FORCE_MCPWMXB_HIGH); //Action taken on PWM0A and PWM0B, when FAULT1 occurs
-#endif
-
-#if MCPWM_EN_SYNC
-    //6. Syncronization configuration
-    //comment if you don't want to use sync submodule, also u can comment the sync gpio signals
-    //here synchronization occurs on PWM1A and PWM1B
-    mcpwm_sync_enable(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_SYNC0, 200);    //Load counter value with 20% of period counter of mcpwm timer 1 when sync 0 occurs
-#endif
-
-#if MCPWM_EN_CAPTURE
-    //7. Capture configuration
+     //7. Capture configuration
     //comment if you don't want to use capture submodule, also u can comment the capture gpio signals
     //configure CAP0, CAP1 and CAP2 signal to start capture counter on rising edge
     //we generate a gpio_test_signal of 20ms on GPIO 12 and connect it to one of the capture signal, the disp_captured_function displays the time between rising edge
@@ -314,7 +230,8 @@ static void mcpwm_example_config(void *arg)
     //enable interrupt, so each this a rising edge occurs interrupt is triggered
     MCPWM[MCPWM_UNIT_0]->int_ena.val = CAP0_INT_EN | CAP1_INT_EN | CAP2_INT_EN;  //Enable interrupt on  CAP0, CAP1 and CAP2 signal
     mcpwm_isr_register(MCPWM_UNIT_0, isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
-#endif
+
+
     vTaskDelete(NULL);
 }
 
