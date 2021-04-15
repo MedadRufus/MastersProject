@@ -11,6 +11,9 @@
  * This example will show you how to use each submodule of MCPWM unit.
  * The example can't be used without modifying the code first.
  * Edit the macros at the top of mcpwm_example_basic_config.c to enable/disable the submodules which are used in the example.
+ * 
+ * Connect pin 21 to pin 22 to see test signal
+ * Connect 5V pwm pulse to pin 39 to also see test signal
  */
 
 #include <stdio.h>
