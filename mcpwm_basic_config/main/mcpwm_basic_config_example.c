@@ -197,7 +197,7 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
   if (edge_direction_value[index] == 1) // TODO: convert this to enum: 1 = positive edge, 2 = negetive edge
   {
     float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
-    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
+    printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
   }
 
 }
@@ -223,8 +223,7 @@ static void IRAM_ATTR isr_handler(void)
 
 
   #ifdef DEBUG_INTERRUPT
-  Serial.printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
-  Serial.println();
+  printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
   #endif
 
 
