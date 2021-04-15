@@ -203,12 +203,13 @@ static void IRAM_ATTR isr_handler(void)
   capture evt;
   mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
 
-  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
-  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
-  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
+
 
 
   #ifdef DEBUG_INTERRUPT
+  uint32_t cap0_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap0_int_st; //Read interrupt status
+  uint32_t cap1_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap1_int_st; //Read interrupt status
+  uint32_t cap2_int_st = MCPWM[MCPWM_UNIT_0]->int_st.cap2_int_st; //Read interrupt status
   printf("%d,%d,%d,%d\n",mcpwm_intr_status,cap0_int_st,cap1_int_st,cap2_int_st);
   #endif
 
