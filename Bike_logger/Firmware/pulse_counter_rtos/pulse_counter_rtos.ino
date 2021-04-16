@@ -218,7 +218,8 @@ static void mcpwm_example_config(void *arg)
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
     
-    // Enable detect on BOTH edges, not only positive edge.
+    // Enable detect on BOTH edges, not only positive edge. arduino-esp32 v1.0.6 does not have the MCPWM_BOTH_EDGE option,
+    // hence setting it manually here.
     MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[0].mode =  BIT(1)|BIT(0);
     MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[1].mode =  BIT(1)|BIT(0);
     MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[2].mode =  BIT(1)|BIT(0);
