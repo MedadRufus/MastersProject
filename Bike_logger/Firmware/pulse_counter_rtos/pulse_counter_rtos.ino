@@ -24,8 +24,10 @@
 #include "esp_attr.h"
 #include "soc/rtc.h"
 #include "driver/mcpwm.h"
-#include "soc/mcpwm_periph.h"
+#include "soc/mcpwm_reg.h"
+#include "soc/mcpwm_struct.h"
 
+const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
 #define CAP_SIG_NUM 3   //Three capture signals
 
@@ -212,9 +214,17 @@ static void mcpwm_example_config(void *arg)
     //configure CAP0, CAP1 and CAP2 signal to start capture counter on rising edge
     //we generate a gpio_test_signal of 20ms on GPIO 12 and connect it to one of the capture signal, the disp_captured_function displays the time between rising edge
     //In general practice you can connect Capture  to external signal, measure time between rising edge or falling edge and take action accordingly
-    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
-    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
-    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_BOTH_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+    mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+    
+    // Enable detect on BOTH edges, not only positive edge. arduino-esp32 v1.0.6 does not have the MCPWM_BOTH_EDGE option,
+    // hence setting it manually here.
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP0].mode =  BIT(1)|BIT(0);
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP1].mode =  BIT(1)|BIT(0);
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP2].mode =  BIT(1)|BIT(0);
+
+    
     //enable interrupt, so each this a rising edge occurs interrupt is triggered
     MCPWM[MCPWM_UNIT_0]->int_ena.val = CAP0_INT_EN | CAP1_INT_EN | CAP2_INT_EN;  //Enable interrupt on  CAP0, CAP1 and CAP2 signal
     mcpwm_isr_register(MCPWM_UNIT_0, isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
@@ -226,7 +236,8 @@ static void mcpwm_example_config(void *arg)
 void setup(void)
 {
     Serial.printf("Testing MCPWM...\n");
-    cap_queue = xQueueCreate(100, sizeof(capture)); //comment if you don't want to use capture module
+    Serial.begin(SERIAL_SPEED);
+    cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
     xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  //comment if you don't want to use capture module
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
     xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);
