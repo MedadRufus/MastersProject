@@ -27,7 +27,6 @@
 #include "soc/mcpwm_reg.h"
 #include "soc/mcpwm_struct.h"
 
-const uint32_t SERIAL_SPEED = 115200; // Use fast serial speed 2 Mbits/s
 
 #define CAP_SIG_NUM 3   //Three capture signals
 
@@ -236,7 +235,6 @@ static void mcpwm_example_config(void *arg)
 void setup_pulse_counter(void)
 {
     Serial.printf("Testing MCPWM...\n");
-    Serial.begin(SERIAL_SPEED);
     cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
     xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  //comment if you don't want to use capture module
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
