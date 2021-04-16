@@ -233,7 +233,7 @@ static void mcpwm_example_config(void *arg)
     vTaskDelete(NULL);
 }
 
-void setup(void)
+void setup_pulse_counter(void)
 {
     Serial.printf("Testing MCPWM...\n");
     Serial.begin(SERIAL_SPEED);
@@ -243,8 +243,3 @@ void setup(void)
     xTaskCreate(mcpwm_example_config, "mcpwm_example_config", 4096, NULL, 5, NULL);
 }
 
-
-void loop()
-{
-  
-}
