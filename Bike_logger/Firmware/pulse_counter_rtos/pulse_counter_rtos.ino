@@ -220,9 +220,9 @@ static void mcpwm_example_config(void *arg)
     
     // Enable detect on BOTH edges, not only positive edge. arduino-esp32 v1.0.6 does not have the MCPWM_BOTH_EDGE option,
     // hence setting it manually here.
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[0].mode =  BIT(1)|BIT(0);
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[1].mode =  BIT(1)|BIT(0);
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[2].mode =  BIT(1)|BIT(0);
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP0].mode =  BIT(1)|BIT(0);
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP1].mode =  BIT(1)|BIT(0);
+    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP2].mode =  BIT(1)|BIT(0);
 
     
     //enable interrupt, so each this a rising edge occurs interrupt is triggered
