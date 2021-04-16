@@ -165,7 +165,7 @@ static void disp_captured_signal(void *arg)
 }
 
 
-static void set_queue_if_triggered(uint32_t mcpwm_intr_status, mcpwm_capture_signal_t channel, capture evt)
+static void set_queue(uint32_t mcpwm_intr_status, mcpwm_capture_signal_t channel, capture evt)
 {
   evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, channel); //get capture signal counter value
   evt.sel_cap_signal = channel;
@@ -185,17 +185,17 @@ static void IRAM_ATTR isr_handler(void*)
 
   if (mcpwm_intr_status & CAP0_INT_EN) //Check for interrupt on edge of CAP0 signal
   { 
-    set_queue_if_triggered(mcpwm_intr_status, MCPWM_SELECT_CAP0, evt);
+    set_queue(mcpwm_intr_status, MCPWM_SELECT_CAP0, evt);
   }
 
   if (mcpwm_intr_status & CAP1_INT_EN)
   {
-    set_queue_if_triggered(mcpwm_intr_status, MCPWM_SELECT_CAP1, evt);
+    set_queue(mcpwm_intr_status, MCPWM_SELECT_CAP1, evt);
   }
 
   if (mcpwm_intr_status & CAP2_INT_EN)
   {
-    set_queue_if_triggered(mcpwm_intr_status, MCPWM_SELECT_CAP2, evt);
+    set_queue(mcpwm_intr_status, MCPWM_SELECT_CAP2, evt);
   }
 
 
