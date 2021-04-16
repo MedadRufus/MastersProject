@@ -49,14 +49,7 @@ typedef struct {
   uint32_t edge_direction;
 } capture;
 
-typedef struct {
-  uint32_t high_period;
-  uint32_t low_period;
-} duty_cycle_params_t;
 
-
-
-duty_cycle_params_t dcycle_params[CAP_SIG_NUM];
 
 
 xQueueHandle cap_queue;
@@ -111,10 +104,7 @@ static void gpio_test_signal(void *arg)
     }
 }
 
-static float duty_cycle(int low, int high)
-{
-  return (float)high / (float)(low + high);
-}
+
 
 static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint32_t *previous_cap_value, uint32_t *edge_direction_value)
 {
@@ -123,21 +113,7 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
   current_cap_value[index] = (current_cap_value[index] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
   edge_direction_value[index] = evt.edge_direction;
 
-  switch (evt.edge_direction)
-  {
-    case 1:
-      dcycle_params[index].low_period = current_cap_value[index];
-      break;
-    case 2:
-      dcycle_params[index].high_period = current_cap_value[index];
-      break;
-  }
-
-  if (edge_direction_value[index] == 1) // TODO: convert this to enum: 1 = positive edge, 2 = negetive edge
-  {
-    float d_cycle = duty_cycle(dcycle_params[index].low_period, dcycle_params[index].high_period);
-    Serial.printf("CAP%d : %d us DIRECTION : %d Duty_cycle: %f\n", index, current_cap_value[index], edge_direction_value[index], d_cycle);
-  }
+  Serial.printf("CAP%d, Period %d us, DIRECTION : %d\n", index, current_cap_value[index], edge_direction_value[index]);
 
 }
 
@@ -219,14 +195,7 @@ static void mcpwm_example_config(void *arg)
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP1, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
     mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP2, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
-    
-    // Enable detect on BOTH edges, not only positive edge. arduino-esp32 v1.0.6 does not have the MCPWM_BOTH_EDGE option,
-    // hence setting it manually here.
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP0].mode =  BIT(1)|BIT(0);
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP1].mode =  BIT(1)|BIT(0);
-    MCPWM[MCPWM_UNIT_0]->cap_cfg_ch[MCPWM_SELECT_CAP2].mode =  BIT(1)|BIT(0);
 
-    
     //enable interrupt, so each this a rising edge occurs interrupt is triggered
     MCPWM[MCPWM_UNIT_0]->int_ena.val = CAP0_INT_EN | CAP1_INT_EN | CAP2_INT_EN;  //Enable interrupt on  CAP0, CAP1 and CAP2 signal
     mcpwm_isr_register(MCPWM_UNIT_0, isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
