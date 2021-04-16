@@ -235,6 +235,7 @@ static void mcpwm_example_config(void *arg)
 void setup(void)
 {
     Serial.printf("Testing MCPWM...\n");
+    Serial.begin(SERIAL_SPEED);
     cap_queue = xQueueCreate(1, sizeof(capture)); //comment if you don't want to use capture module
     xTaskCreate(disp_captured_signal, "mcpwm_config", 4096, NULL, 5, NULL);  //comment if you don't want to use capture module
     xTaskCreate(gpio_test_signal, "gpio_test_signal", 4096, NULL, 5, NULL); //comment if you don't want to use capture module
