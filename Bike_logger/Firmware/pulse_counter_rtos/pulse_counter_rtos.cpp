@@ -165,6 +165,19 @@ static void disp_captured_signal(void *arg)
 }
 
 
+static void set_queue_if_triggered(uint32_t mcpwm_intr_status, uint32_t mask, mcpwm_capture_signal_t channel, capture evt)
+{
+
+  if (mcpwm_intr_status & mask) { //Check for interrupt on rising edge on CAP0 signal
+    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, channel); //get capture signal counter value
+    evt.sel_cap_signal = channel;
+    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, channel);
+    xQueueSendFromISR(cap_queue, &evt, NULL);
+  }
+
+}
+
+
 /**
  * @brief this is ISR handler function, here we check for interrupt that triggers rising edge on CAP0 signal and according take action
  */
@@ -175,26 +188,9 @@ static void IRAM_ATTR isr_handler(void*)
   mcpwm_intr_status = MCPWM[MCPWM_UNIT_0]->int_st.val; //Read interrupt status
 
 
-
-  if (mcpwm_intr_status & CAP0_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP0); //get capture signal counter value
-    evt.sel_cap_signal = MCPWM_SELECT_CAP0;
-    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP0);
-    xQueueSendFromISR(cap_queue, &evt, NULL);
-  }
-  if (mcpwm_intr_status & CAP1_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP1); //get capture signal counter value
-    evt.sel_cap_signal = MCPWM_SELECT_CAP1;
-    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP1);
-    xQueueSendFromISR(cap_queue, &evt, NULL);
-  }
-  if (mcpwm_intr_status & CAP2_INT_EN) { //Check for interrupt on rising edge on CAP0 signal
-    evt.capture_signal = mcpwm_capture_signal_get_value(MCPWM_UNIT_0, MCPWM_SELECT_CAP2); //get capture signal counter value
-    evt.sel_cap_signal = MCPWM_SELECT_CAP2;
-    evt.edge_direction = mcpwm_capture_signal_get_edge(MCPWM_UNIT_0, MCPWM_SELECT_CAP2);
-    xQueueSendFromISR(cap_queue, &evt, NULL);
-  }
-
+  set_queue_if_triggered(mcpwm_intr_status, CAP0_INT_EN, MCPWM_SELECT_CAP0, evt);
+  set_queue_if_triggered(mcpwm_intr_status, CAP1_INT_EN, MCPWM_SELECT_CAP1, evt);
+  set_queue_if_triggered(mcpwm_intr_status, CAP2_INT_EN, MCPWM_SELECT_CAP2, evt);
 
   MCPWM[MCPWM_UNIT_0]->int_clr.val = mcpwm_intr_status;
 
