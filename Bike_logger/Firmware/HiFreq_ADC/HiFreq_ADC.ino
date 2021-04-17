@@ -48,9 +48,11 @@ void reader(void *pvParameters) {
   uint16_t offset = (int)ADC_INPUT * 0x1000 + 0xFFF;
   size_t bytes_read;
   while(1){
-    uint16_t buffer[2] = {0};
+    uint16_t buffer[1] = {0};
     i2s_read(I2S_NUM_0, &buffer, sizeof(buffer), &bytes_read, 15);
-    Serial.printf("%d\n%d\n", offset - buffer[0], offset - buffer[1]);
+    Serial.printf("%d\n", offset - buffer[0]);
+
+    #if 0
     if (bytes_read == sizeof(buffer)) {
       read_sum += offset - buffer[0];
       read_sum += offset - buffer[1];
@@ -59,7 +61,6 @@ void reader(void *pvParameters) {
       Serial.println("buffer empty");
     }
 
-    #if 0
     if (read_counter == I2S_SAMPLE_RATE) {
       adc_reading = read_sum / I2S_SAMPLE_RATE / 2;
       Serial.printf("avg: %d millis: ", adc_reading);
