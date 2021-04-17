@@ -5,7 +5,7 @@
  */
 #include <driver/i2s.h>
 
-#define I2S_SAMPLE_RATE 1000
+#define I2S_SAMPLE_RATE 2442
 #define ADC_INPUT ADC1_CHANNEL_4 //pin 32
 #define OUTPUT_VALUE 3800
 #define READ_DELAY 9000 //microseconds
