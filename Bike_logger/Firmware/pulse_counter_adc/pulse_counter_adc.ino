@@ -2,15 +2,12 @@
 #include <ESPNtpClient.h>
 #include <driver/i2s.h>
 
-
 #define target_pin 33
-
 
 #ifndef WIFI_CONFIG_H
 #define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
 #define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
 #endif // !WIFI_CONFIG_H
-
 
 /*
  * This is an example to read analog data at high frequency using the I2S peripheral
@@ -31,7 +28,7 @@ const int ledChannel = 0;
 const int resolution = 10;
 const int dutyCycle = 250;
 
-const int ledPin = 33;  // 33 corresponds to GPIO33
+const int ledPin = 33; // 33 corresponds to GPIO33
 
 const float cutoff_freq = 10000.0;   //Cutoff frequency in Hz
 const float sampling_time = 1/2442;  //Sampling time in seconds.
