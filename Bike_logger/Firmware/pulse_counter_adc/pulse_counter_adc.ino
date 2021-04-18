@@ -46,6 +46,13 @@ typedef enum
   NEG,
 } edge_t;
 
+typedef enum
+{
+  LINE_HIGH = 0,
+  LINE_LOW
+
+} line_state_t;
+
 int low_threshold = 400;   //mV
 int high_threshold = 3500; //mV
 
