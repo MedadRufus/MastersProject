@@ -1,3 +1,17 @@
+/**
+ * @file pulse_counter_adc.ino
+ * @author Medad Rufus Newman (mailto@medadnewman.co.uk)
+ * @brief 
+ * @version 0.1
+ * @date 2021-04-19
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ * 
+ * Voltage values are all in milliVolt
+ * 
+ */
+
 #include <filters.h>
 #include <ESPNtpClient.h>
 #include <driver/i2s.h>
