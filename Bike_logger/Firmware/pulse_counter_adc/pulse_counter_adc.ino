@@ -33,6 +33,7 @@
 #define SPEED_LINE_VOLTAGE_MAX 5000 //mV
 
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
+
 // setting PWM properties
 const int freq = 6;
 const int ledChannel = 0;
