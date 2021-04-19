@@ -113,7 +113,7 @@ void reader(void *pvParameters)
 
     uint16_t filtered_adc_voltage = adc_to_voltage(filteredval);
 
-    Serial.printf("%d, %f, %d\n", adc_value, filteredval, adc_voltage);
+    //Serial.printf("%d, %f\n", adc_value, filteredval);
 
     bool is_edge_state = is_edge(&speed_edge_detector, filtered_adc_voltage);
 
