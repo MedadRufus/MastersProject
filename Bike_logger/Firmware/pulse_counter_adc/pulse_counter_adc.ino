@@ -139,7 +139,13 @@ void init_ntp()
 
 uint16_t adc_to_voltage(uint16_t adc_value)
 {
-  return map(adc_value, 2940, 4096, 0, 5000); // TODO: check the resolution of the ADC
+  /**
+   * @brief  TODO: check the resolution of the ADC
+   * TODO: use defined numbers
+   * 
+   */
+  long value = map(adc_value, 2940, 4096, 0, 5000); 
+  return constrain(value, 0, 5000);
 }
 
 /**
