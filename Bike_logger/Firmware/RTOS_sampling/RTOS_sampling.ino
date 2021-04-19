@@ -137,12 +137,12 @@ void setup()
   sd_manager.SD_Manager_init();
   data_file = SD.open("/data.csv", FILE_APPEND);
 
+  init_mutexes();
+
   init_all_sensors();
 
   init_adc_edge_detect();
   setup_pulse_counter();
-
-  init_mutexes();
 
   start_tasks();
 }
@@ -179,7 +179,7 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
-      
+
 #if POLL_GPS
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
@@ -278,7 +278,6 @@ void TaskReopen_File(void *pvParameters)
 #endif
   }
 }
-
 
 void TaskReadImu(void *pvParameters)
 {
