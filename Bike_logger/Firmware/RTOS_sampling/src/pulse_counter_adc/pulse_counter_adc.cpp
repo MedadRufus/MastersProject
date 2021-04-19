@@ -262,7 +262,7 @@ void init_adc_edge_detect()
   i2sInit();
 
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 2, NULL, 1);
+  xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 3, NULL, 0);
 }
 
 #if 0
