@@ -179,29 +179,7 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
-
-#if POLL_BRAKE
-  xTaskCreatePinnedToCore(
-      TaskBrake, "TaskBrake" // A name just for humans
-      ,
-      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
-      ,
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      ,
-      &Handle_brake_Task, ARDUINO_RUNNING_CORE);
-#endif
-
-#if POLL_SPEED
-  xTaskCreatePinnedToCore(
-      TaskSpeed, "TaskSpeed" // A name just for humans
-      ,
-      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
-      ,
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      ,
-      &Handle_speed_Task, ARDUINO_RUNNING_CORE);
-#endif
-
+      
 #if POLL_GPS
   xTaskCreatePinnedToCore(
       TaskManageGPS, "TaskManageGPS" // A name just for humans
@@ -301,41 +279,6 @@ void TaskReopen_File(void *pvParameters)
   }
 }
 
-void TaskSpeed(void *pvParameters)
-{
-  (void)pvParameters;
-
-  TickType_t xLastWakeTime;
-  const TickType_t xFrequency = SPEED_INTERVAL;
-
-  // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount();
-  for (;;)
-  {
-    // Wait for the next cycle.
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
-
-    check_speed();
-  }
-}
-
-void TaskBrake(void *pvParameters)
-{
-  (void)pvParameters;
-
-  TickType_t xLastWakeTime;
-  const TickType_t xFrequency = BRAKE_INTERVAL;
-
-  // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount();
-  for (;;)
-  {
-    // Wait for the next cycle.
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
-
-    check_brake();
-  }
-}
 
 void TaskReadImu(void *pvParameters)
 {
@@ -784,35 +727,6 @@ void poll_ina226(INA226_STATUS ina226_status)
   save_to_sd(sprintfBuffer);
 }
 
-/* Check the speed */
-void check_speed()
-{
-  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
-  float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
-
-  sprintf(buffer_speed, "%s,speed,%f\n",
-          NTP.getTimeDateStringUs(),
-          speed_voltage);
-
-  Serial.print(buffer_speed);
-
-  save_to_sd(buffer_speed);
-}
-
-/* Check the brake */
-void check_brake()
-{
-  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
-  float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
-
-  sprintf(brake_buffer, "%s,brake,%f\n",
-          NTP.getTimeDateStringUs(),
-          brake_voltage);
-
-  Serial.print(brake_buffer);
-
-  save_to_sd(brake_buffer);
-}
 /**
  * @brief Initialise GPS
  * 
