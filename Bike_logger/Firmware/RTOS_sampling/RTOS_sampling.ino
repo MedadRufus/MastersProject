@@ -138,10 +138,8 @@ void setup()
   sd_manager.SD_Manager_init();
   data_file = SD.open("/data.csv", FILE_APPEND);
 
-  init_mutexes();
-
   init_all_sensors();
-
+  init_mutexes();
 #if POLL_MOTOR_SPEED
   init_adc_edge_detect();
 #endif
