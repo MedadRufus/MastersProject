@@ -37,8 +37,6 @@
 #define low_threshold_speed 400   //mV
 #define high_threshold_speed 3500 //mV
 
-uint16_t adc_reading;
-
 // setting PWM properties
 const int freq = 6;
 const int ledChannel = 0;
@@ -47,12 +45,12 @@ const int dutyCycle = 250;
 
 const int ledPin = 33; // 33 corresponds to GPIO33
 
-const float cutoff_freq = 10000.0;   //Cutoff frequency in Hz
-const float sampling_time = 1/2442;  //Sampling time in seconds.
-IIR::ORDER order = IIR::ORDER::OD4; // Order (OD1 to OD4)
 uint16_t offset = (int)ADC_INPUT * 0x1000 + 0xFFF;
 size_t bytes_read;
 
+const float cutoff_freq = 1000.0;                       //Cutoff frequency in Hz
+const float sampling_time = (float)1 / I2S_SAMPLE_RATE; //Sampling time in seconds.
+IIR::ORDER order = IIR::ORDER::OD3;                     // Order (OD1 to OD4)
 
 // Low-pass filter
 Filter f(cutoff_freq, sampling_time, order);
@@ -81,7 +79,6 @@ typedef struct
 
 Edge_detector_t speed_edge_detector;
 
-
 void i2sInit()
 {
   i2s_config_t i2s_config = {
@@ -106,6 +103,7 @@ uint16_t read_adc_value_from_buffer()
   uint16_t buffer[1] = {0};
   i2s_read(I2S_NUM_0, &buffer, sizeof(buffer), &bytes_read, 15);
   uint16_t adc_value = offset - buffer[0];
+  return adc_value;
 }
 
 void reader(void *pvParameters)
@@ -114,15 +112,16 @@ void reader(void *pvParameters)
   {
     uint16_t adc_value = read_adc_value_from_buffer();
     float filteredval = f.filterIn((float)adc_value);
-    Serial.printf("%d, %f\n", adc_value, filteredval);
 
-    uint16_t adc_voltage = adc_to_voltage((uint16_t)filteredval);
+    uint16_t adc_voltage = adc_to_voltage(filteredval);
+
+    Serial.printf("%d, %f, %d\n", adc_value, filteredval, adc_voltage);
 
     bool is_edge_state = is_edge(&speed_edge_detector, adc_voltage);
 
     if (is_edge_state)
     {
-      Serial.printf("edge detected at %s", NTP.getTimeDateStringUs());
+      Serial.printf("edge detected at %s\n", NTP.getTimeDateStringUs());
     }
   }
 }
@@ -140,7 +139,7 @@ void init_ntp()
 
 uint16_t adc_to_voltage(uint16_t adc_value)
 {
-  return map(adc_value, 0, 1023, 0, 5000); // TODO: check the resolution of the ADC
+  return map(adc_value, 2940, 4096, 0, 5000); // TODO: check the resolution of the ADC
 }
 
 /**
