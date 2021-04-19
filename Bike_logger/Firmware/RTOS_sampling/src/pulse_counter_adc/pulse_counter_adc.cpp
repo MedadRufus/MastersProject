@@ -232,6 +232,21 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
   return res;
 }
 
+
+void init_adc_edge_detect()
+{
+  // init the edge detector
+  init_edge_detector(&speed_edge_detector, low_threshold_speed, high_threshold_speed, NEG);
+
+  // Initialize the I2S peripheral
+  i2sInit();
+  
+  // Create a task that will read the data
+  xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 1, NULL, 1);
+
+}
+
+#if 0
 void setup()
 {
   Serial.begin(2000000);
@@ -246,15 +261,9 @@ void setup()
 
   // Generate PWM signal
   ledcWrite(ledChannel, dutyCycle);
-
-  init_edge_detector(&speed_edge_detector, low_threshold_speed, high_threshold_speed, NEG);
-
-  // Initialize the I2S peripheral
-  i2sInit();
-  // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 1, NULL, 1);
 }
 
 void loop()
 {
 }
+#endif
