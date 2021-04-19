@@ -76,15 +76,12 @@ typedef struct
 
 Edge_detector_t speed_edge_detector;
 
-
 /**
  * @brief Function prototypes
  * 
  */
 uint16_t adc_to_voltage(signed adc_value);
 bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
-
-
 
 /**
  * @brief Function definitions
@@ -246,7 +243,6 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
   return res;
 }
 
-
 void init_adc_edge_detect()
 {
   // init the edge detector
@@ -254,10 +250,9 @@ void init_adc_edge_detect()
 
   // Initialize the I2S peripheral
   i2sInit();
-  
+
   // Create a task that will read the data
   xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 1, NULL, 1);
-
 }
 
 #if 0
