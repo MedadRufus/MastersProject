@@ -13,15 +13,11 @@
  */
 
 #include <filters.h>
-#include <ESPNtpClient.h>
 #include <driver/i2s.h>
 
 #define target_pin 33
 
-#ifndef WIFI_CONFIG_H
-#define YOUR_WIFI_SSID "YOUR_WIFI_SSID"
-#define YOUR_WIFI_PASSWD "YOUR_WIFI_PASSWD"
-#endif // !WIFI_CONFIG_H
+
 
 /*
  * This is an example to read analog data at high frequency using the I2S peripheral
@@ -126,7 +122,6 @@ void reader(void *pvParameters)
 
     if (is_edge_state)
     {
-      Serial.printf("edge detected at %s\n", NTP.getTimeDateStringUs());
       unsigned long current_time = micros();
       unsigned long elapsed_time = current_time - startTime;
       startTime = current_time;
@@ -136,16 +131,7 @@ void reader(void *pvParameters)
   }
 }
 
-/**
- * @brief Init ntp
- * 
- */
-void init_ntp()
-{
-  WiFi.begin(YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
-  NTP.setTimeZone(TZ_Etc_UTC);
-  NTP.begin();
-}
+
 
 uint16_t adc_to_voltage(uint16_t adc_value)
 {
@@ -249,9 +235,6 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 void setup()
 {
   Serial.begin(115200);
-
-  // ntp for timestamp
-  init_ntp();
 
   // Put a signal out on pin
 
