@@ -50,6 +50,9 @@ const int ledPin = 33; // 33 corresponds to GPIO33
 const float cutoff_freq = 10000.0;   //Cutoff frequency in Hz
 const float sampling_time = 1/2442;  //Sampling time in seconds.
 IIR::ORDER order = IIR::ORDER::OD4; // Order (OD1 to OD4)
+uint16_t offset = (int)ADC_INPUT * 0x1000 + 0xFFF;
+size_t bytes_read;
+
 
 // Low-pass filter
 Filter f(cutoff_freq, sampling_time, order);
@@ -98,22 +101,19 @@ void i2sInit()
   i2s_adc_enable(I2S_NUM_0);
 }
 
+uint16_t read_adc_value_from_buffer()
+{
+  uint16_t buffer[1] = {0};
+  i2s_read(I2S_NUM_0, &buffer, sizeof(buffer), &bytes_read, 15);
+  uint16_t adc_value = offset - buffer[0];
+}
+
 void reader(void *pvParameters)
 {
-  uint32_t read_counter = 0;
-  uint64_t read_sum = 0;
-  // The 4 high bits are the channel, and the data is inverted
-  uint16_t offset = (int)ADC_INPUT * 0x1000 + 0xFFF;
-  size_t bytes_read;
   while (1)
   {
-    uint16_t buffer[1] = {0};
-    i2s_read(I2S_NUM_0, &buffer, sizeof(buffer), &bytes_read, 15);
-
-    uint16_t adc_value = offset - buffer[0];
-
+    uint16_t adc_value = read_adc_value_from_buffer();
     float filteredval = f.filterIn((float)adc_value);
-
     Serial.printf("%d, %f\n", adc_value, filteredval);
 
     uint16_t adc_voltage = adc_to_voltage((uint16_t)filteredval);
