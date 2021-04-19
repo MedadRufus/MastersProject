@@ -14,6 +14,8 @@
 
 #include <filters.h>
 #include <driver/i2s.h>
+#include <ESPNtpClient.h>
+#include "../../RTOS_sampling.h"
 
 #define target_pin 33
 
@@ -138,6 +140,14 @@ void reader(void *pvParameters)
       if (elapsed_time < MAX_INTERVAL_BETWEEN_PULSES)
       {
         Serial.printf("%d\n", elapsed_time);
+
+        char msg_buffer[100];
+
+        sprintf(msg_buffer, "%s,motor_speed,%d\n",
+                NTP.getTimeDateStringUs(),
+                elapsed_time);
+
+        save_to_sd(msg_buffer);
       }
     }
   }

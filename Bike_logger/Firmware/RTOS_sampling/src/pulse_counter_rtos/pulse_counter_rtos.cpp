@@ -27,6 +27,9 @@
 #include "soc/mcpwm_reg.h"
 #include "soc/mcpwm_struct.h"
 
+#include <ESPNtpClient.h>
+#include "../../RTOS_sampling.h"
+
 #define CAP_SIG_NUM 3 //Three capture signals
 
 #define CAP0_INT_EN BIT(27) //Capture 0 interrupt bit
@@ -105,6 +108,14 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
   edge_direction_value[index] = evt.edge_direction;
 
   Serial.printf("CAP%d, Period %d us, DIRECTION : %d\n", index, current_cap_value[index], edge_direction_value[index]);
+
+  char msg_buffer[100];
+
+  sprintf(msg_buffer, "%s,pas,%d\n",
+          NTP.getTimeDateStringUs(),
+          current_cap_value[index]);
+
+  save_to_sd(msg_buffer);
 }
 
 /**
