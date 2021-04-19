@@ -15,7 +15,7 @@
  * Connect pin 21 to pin 22 to see test signal
  * Connect 5V pwm pulse to pin 39 to also see test signal
  */
-
+#include "Arduino.h"
 #include <stdio.h>
 #include "string.h"
 #include "freertos/FreeRTOS.h"
