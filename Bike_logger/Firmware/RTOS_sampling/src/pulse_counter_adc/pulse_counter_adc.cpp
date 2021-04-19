@@ -76,6 +76,20 @@ typedef struct
 
 Edge_detector_t speed_edge_detector;
 
+
+/**
+ * @brief Function prototypes
+ * 
+ */
+uint16_t adc_to_voltage(signed adc_value);
+bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
+
+
+
+/**
+ * @brief Function definitions
+ * 
+ */
 void i2sInit()
 {
   i2s_config_t i2s_config = {
