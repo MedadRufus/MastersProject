@@ -205,21 +205,24 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
    */
   line_state_t current_line_state = voltage_to_linestate(edge_detector_obj, current_v);
 
+  bool res = false;
+
+
   switch (edge_detector_obj->edge)
   {
   case NEG:
   {
-    if (edge_detector_obj->previous_line_state == LINE_HIGH && current_line_state == LINE_LOW)
+    if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
     {
-      return true;
+      res =  true;
     }
     break;
   }
   case POS:
   {
-    if (edge_detector_obj->previous_line_state == LINE_LOW && current_line_state == LINE_HIGH)
+    if ((edge_detector_obj->previous_line_state == LINE_LOW) && (current_line_state == LINE_HIGH))
     {
-      return true;
+      res = true;
     }
     break;
   }
@@ -231,7 +234,7 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
    */
   edge_detector_obj->previous_line_state = current_line_state;
 
-  return false;
+  return res;
 }
 
 void setup()
