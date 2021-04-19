@@ -450,9 +450,7 @@ void update_baro_data()
   sprintf(buffer1, "%s,baro,%f,%f,%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer1);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(buffer1);
 }
 
 /**
@@ -568,15 +566,21 @@ void update_imu_data()
 
         Serial.print(buffer_imu);
 
-        xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-        sd_manager.appendFile(&data_file, buffer_imu);
-        xSemaphoreGive(SPI_SD_Mutex); // release mutex
+        save_to_sd(buffer_imu);
       }
     }
   }
 
   log_d("IMU read/save duration[ms]:%d", millis() - lastTime);
 }
+
+void save_to_sd(const char *message)
+{
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
+  sd_manager.appendFile(&data_file, message);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+}
+
 /**
  * @brief Convert a 2 byte array into a int16_t
  * 
@@ -620,9 +624,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 
   Serial.print(buffer_gnss);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer_gnss);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(buffer_gnss);
 }
 
 /**
@@ -778,9 +780,8 @@ void poll_ina226(INA226_STATUS ina226_status)
           power_mW);
 
   //Serial.print(sprintfBuffer);
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, sprintfBuffer);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+
+  save_to_sd(sprintfBuffer);
 }
 
 /* Check the speed */
@@ -795,9 +796,7 @@ void check_speed()
 
   Serial.print(buffer_speed);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer_speed);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(buffer_speed);
 }
 
 /* Check the brake */
@@ -812,9 +811,7 @@ void check_brake()
 
   Serial.print(brake_buffer);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, brake_buffer);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(brake_buffer);
 }
 /**
  * @brief Initialise GPS
