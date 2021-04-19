@@ -136,6 +136,16 @@ void setup()
 
   init_all_sensors();
 
+  init_adc_edge_detect();
+  
+  init_mutexes();
+  
+  start_tasks();
+}
+
+
+void init_mutexes()
+{
   I2C1_Mutex = xSemaphoreCreateMutex();
   if (I2C1_Mutex == NULL)
   {
@@ -153,8 +163,6 @@ void setup()
   {
     Serial.println("Mutex can not be created");
   }
-
-  start_tasks();
 }
 
 void start_tasks()
