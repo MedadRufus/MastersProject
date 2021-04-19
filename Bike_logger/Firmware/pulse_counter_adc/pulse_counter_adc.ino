@@ -67,6 +67,16 @@ typedef enum
   UNDEFINED_LINE_STATE
 } line_state_t;
 
+typedef struct
+{
+  uint16_t deadzone_low;
+  uint16_t deadzone_high;
+  line_state_t previous_line_state;
+  edge_t edge;
+
+} Edge_detector_t;
+
+Edge_detector_t speed_edge_detector;
 
 float previous_v = 0;
 
@@ -107,7 +117,7 @@ void reader(void *pvParameters)
 
     Serial.printf("%d, %f\n", adc_value, filteredval);
 
-    bool is_edge_state = is_edge(NEG, previous_v, filteredval);
+    bool is_edge_state = is_edge(&speed_edge_detector, filteredval);
     previous_v = filteredval;
 
     if (is_edge_state)
@@ -128,6 +138,11 @@ void init_ntp()
   NTP.begin();
 }
 
+uint16_t adc_to_voltage(uint16_t adc_value)
+{
+  return map(adc_value, 0, 1023, 0, 5000); // TODO: check the resolution of the ADC
+}
+
 /**
  * @brief Returns true if x is in range [low..high], else false
  * 
@@ -136,47 +151,80 @@ void init_ntp()
  * @param x 
  * @return bool
  */
-bool inRange(signed low, signed high, signed x)
+bool in_range(signed low, signed high, signed x)
 {
   return (low <= x && x <= high);
 }
 
-/**
- * @brief 
- * 
- * @param direction 
- * @param previous_v 
- * @param current_v 
- * @return true 
- * @return false 
- */
-bool is_edge(edge_t direction, float previous_v, float current_v)
+line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed voltage)
 {
-  if (inRange(low_threshold, high_threshold, current_v))
+  if (voltage < edge_detector_obj->deadzone_low)
+  {
+    return LINE_LOW;
+  }
+  else if (voltage > edge_detector_obj->deadzone_high)
+  {
+    return LINE_HIGH;
+  }
+
+  return UNDEFINED_LINE_STATE;
+}
+
+void init_edge_detector(Edge_detector_t *edge_detector_obj, uint16_t deadzone_low_voltage, uint16_t deadzone_high_voltage, edge_t edge)
+{
+  edge_detector_obj->deadzone_high = deadzone_high_voltage;
+  edge_detector_obj->deadzone_low = deadzone_low_voltage;
+  edge_detector_obj->edge = edge;
+}
+/**
+ * @brief Check if an edge occured
+ * 
+ * @param edge_detector_obj Object containing all the edge params
+ * @param current_v in millivolts as float. Must be free of noise.
+ * @return true yes there was an edge
+ * @return false no edge here
+ */
+bool is_edge(Edge_detector_t *edge_detector_obj, float current_v)
+{
+  /**
+   * @brief Reject if voltage is in dead zone.
+   */
+  if (in_range(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
   {
     return false;
   }
 
-  switch (direction)
-  {
-  case POS:
-  {
-    if ((previous_v < low_threshold) && (current_v > high_threshold))
-    {
-      return true;
-    }
-    break;
-  }
+  /**
+   * @brief Check current line state and then check if it is different from previous state
+   * 
+   */
+  line_state_t current_line_state = voltage_to_linestate(edge_detector_obj, current_v);
 
+  switch (edge_detector_obj->edge)
+  {
   case NEG:
   {
-    if ((previous_v > high_threshold) && (current_v < low_threshold))
+    if (edge_detector_obj->previous_line_state == LINE_HIGH && current_line_state == LINE_LOW)
+    {
+      return true;
+    }
+    break;
+  }
+  case POS:
+  {
+    if (edge_detector_obj->previous_line_state == LINE_LOW && current_line_state == LINE_HIGH)
     {
       return true;
     }
     break;
   }
   }
+
+  /**
+   * @brief Update previous line state with current state.
+   * 
+   */
+  edge_detector_obj->previous_line_state = current_line_state;
 
   return false;
 }
@@ -198,6 +246,8 @@ void setup()
 
   // Generate PWM signal
   ledcWrite(ledChannel, dutyCycle);
+
+  init_edge_detector(&speed_edge_detector, low_threshold_speed, high_threshold_speed, NEG);
 
   // Initialize the I2S peripheral
   i2sInit();
