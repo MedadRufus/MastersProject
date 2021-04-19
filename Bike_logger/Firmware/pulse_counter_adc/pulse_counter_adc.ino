@@ -63,8 +63,8 @@ typedef enum
 typedef enum
 {
   LINE_HIGH = 0,
-  LINE_LOW
-
+  LINE_LOW,
+  UNDEFINED_LINE_STATE
 } line_state_t;
 
 
