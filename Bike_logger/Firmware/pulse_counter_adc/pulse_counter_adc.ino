@@ -124,7 +124,10 @@ void reader(void *pvParameters)
       unsigned long elapsed_time = current_time - startTime;
       startTime = current_time;
 
-      Serial.printf("%d\n", elapsed_time);
+      if (elapsed_time < MAX_INTERVAL_BETWEEN_PULSES)
+      {
+        Serial.printf("%d\n", elapsed_time);
+      }
     }
   }
 }
