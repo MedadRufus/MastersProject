@@ -210,14 +210,13 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 
   bool res = false;
 
-
   switch (edge_detector_obj->edge)
   {
   case NEG:
   {
     if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
     {
-      res =  true;
+      res = true;
     }
     break;
   }
