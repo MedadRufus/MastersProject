@@ -393,7 +393,8 @@ void update_baro_data()
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
   /* Write baro data to file */
-  sprintf(buffer1, "%s,baro,%f,%f,%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
+  const char *format = "%s,baro,%f,%f,%f\n";
+  sprintf(buffer1, format, NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
 
   save_to_sd(buffer1);
