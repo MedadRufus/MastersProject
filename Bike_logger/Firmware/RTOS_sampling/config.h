@@ -33,8 +33,8 @@ extern "C"
 #define POLL_GPS (true)
 #define POLL_IMU (false)
 #define POLL_INA226 (true)
-#define POLL_BRAKE (false)
-#define POLL_SPEED (false)
+#define POLL_BRAKE (true)
+#define POLL_SPEED (true)
 
 #define HEAP_ANALYSIS (false)
 #define PERIODIC_CLOSE_FILE (true)
