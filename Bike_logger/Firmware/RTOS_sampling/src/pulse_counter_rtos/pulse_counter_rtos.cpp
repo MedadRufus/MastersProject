@@ -39,9 +39,6 @@
 #define GPIO_CAP2_IN   4   //Set GPIO 4 as  CAP2 Currently not used
 
 #define LED_BUILTIN 27
-#define TEST_TOGGLE_PIN_1 16
-#define TEST_TOGGLE_PIN_2 21
-
 
 typedef struct {
   uint32_t capture_signal;
