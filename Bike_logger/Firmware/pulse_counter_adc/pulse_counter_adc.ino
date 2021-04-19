@@ -17,8 +17,6 @@
 
 #define target_pin 33
 
-
-
 /*
  * This is an example to read analog data at high frequency using the I2S peripheral
  * Run a wire between pins 27 & 32
@@ -131,9 +129,7 @@ void reader(void *pvParameters)
   }
 }
 
-
-
-uint16_t adc_to_voltage(uint16_t adc_value)
+uint16_t adc_to_voltage(signed adc_value)
 {
   /**
    * @brief  TODO: check the resolution of the ADC
@@ -177,6 +173,7 @@ void init_edge_detector(Edge_detector_t *edge_detector_obj, uint16_t deadzone_lo
   edge_detector_obj->deadzone_low = deadzone_low_voltage;
   edge_detector_obj->edge = edge;
 }
+
 /**
  * @brief Check if an edge occured
  * 
