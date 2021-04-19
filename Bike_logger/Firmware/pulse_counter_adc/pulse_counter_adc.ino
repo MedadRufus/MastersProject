@@ -111,6 +111,8 @@ uint16_t read_adc_value_from_buffer()
 
 void reader(void *pvParameters)
 {
+  unsigned long startTime = micros();
+
   while (1)
   {
     uint16_t adc_value = read_adc_value_from_buffer();
@@ -125,6 +127,11 @@ void reader(void *pvParameters)
     if (is_edge_state)
     {
       Serial.printf("edge detected at %s\n", NTP.getTimeDateStringUs());
+      unsigned long current_time = micros();
+      unsigned long elapsed_time = current_time - startTime;
+      startTime = current_time;
+
+      Serial.printf("%d\n", elapsed_time);
     }
   }
 }
