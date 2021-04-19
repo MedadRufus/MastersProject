@@ -24,8 +24,7 @@
  */
 
 #define I2S_SAMPLE_RATE 2442
-#define ADC_INPUT ADC1_CHANNEL_6 //pin 34 Motor B
-
+#define ADC_INPUT ADC1_CHANNEL_7 //pin 35 Motor A
 
 #define low_threshold_speed 400   //mV
 #define high_threshold_speed 4600 //mV
