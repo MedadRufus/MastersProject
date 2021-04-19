@@ -78,7 +78,6 @@ typedef struct
 
 Edge_detector_t speed_edge_detector;
 
-float previous_v = 0;
 
 void i2sInit()
 {
@@ -117,8 +116,9 @@ void reader(void *pvParameters)
 
     Serial.printf("%d, %f\n", adc_value, filteredval);
 
-    bool is_edge_state = is_edge(&speed_edge_detector, filteredval);
-    previous_v = filteredval;
+    uint16_t adc_voltage = adc_to_voltage((uint16_t)filteredval);
+
+    bool is_edge_state = is_edge(&speed_edge_detector, adc_voltage);
 
     if (is_edge_state)
     {
@@ -180,11 +180,11 @@ void init_edge_detector(Edge_detector_t *edge_detector_obj, uint16_t deadzone_lo
  * @brief Check if an edge occured
  * 
  * @param edge_detector_obj Object containing all the edge params
- * @param current_v in millivolts as float. Must be free of noise.
+ * @param current_v in millivolts. Must be free of noise.
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge(Edge_detector_t *edge_detector_obj, float current_v)
+bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
