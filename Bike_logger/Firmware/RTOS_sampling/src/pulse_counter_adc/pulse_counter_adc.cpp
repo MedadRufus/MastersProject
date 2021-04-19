@@ -11,7 +11,7 @@
  * Voltage values are all in milliVolt
  * 
  */
-
+#include "Arduino.h"
 #include <filters.h>
 #include <driver/i2s.h>
 #include <ESPNtpClient.h>
