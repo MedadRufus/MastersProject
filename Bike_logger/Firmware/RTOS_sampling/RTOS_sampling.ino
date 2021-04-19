@@ -29,6 +29,7 @@
 
 #include "src/pulse_counter_adc/pulse_counter_adc.hpp"
 #include "src/pulse_counter_rtos/pulse_counter_rtos.hpp"
+
 /* ==================================================================== */
 /* ============================ constants ============================= */
 /* ==================================================================== */
@@ -140,12 +141,11 @@ void setup()
 
   init_adc_edge_detect();
   setup_pulse_counter();
-  
+
   init_mutexes();
-  
+
   start_tasks();
 }
-
 
 void init_mutexes()
 {
