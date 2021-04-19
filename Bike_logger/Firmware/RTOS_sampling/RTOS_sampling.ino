@@ -27,6 +27,7 @@
 #include "config.h"
 #include <bitset>
 
+#include "src/pulse_counter_rtos/pulse_counter_rtos.hpp"
 /* ==================================================================== */
 /* ============================ constants ============================= */
 /* ==================================================================== */
@@ -137,6 +138,7 @@ void setup()
   init_all_sensors();
 
   init_adc_edge_detect();
+  setup_pulse_counter();
   
   init_mutexes();
   
