@@ -34,8 +34,8 @@
 #define CAP1_INT_EN BIT(28)  //Capture 1 interrupt bit
 #define CAP2_INT_EN BIT(29)  //Capture 2 interrupt bit
 
-#define GPIO_CAP0_IN   39   //Set GPIO 39 as  CAP0 Throttle adc(connected to brake)
-#define GPIO_CAP1_IN   36   //Set GPIO 25 as  CAP1 PAS
+#define GPIO_CAP0_IN   39   //Set GPIO 39(Sensor_VN) as  CAP0 Throttle adc(connected to brake)
+#define GPIO_CAP1_IN   36   //Set GPIO 36(Sensor_VP) as  CAP1 PAS
 #define GPIO_CAP2_IN   4   //Set GPIO 4 as  CAP2 Currently not used
 
 #define LED_BUILTIN 27
