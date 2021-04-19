@@ -26,6 +26,7 @@ extern "C"
 
     extern SemaphoreHandle_t I2C1_Mutex;
 
+    void save_to_sd(const char *message);
 
     /* ==================================================================== */
     /* ======================= public functions =========================== */
