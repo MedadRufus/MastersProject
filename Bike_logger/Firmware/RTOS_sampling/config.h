@@ -6,20 +6,17 @@ extern "C"
 #ifndef Config_h
 #define Config_h
 
+  /* ==================================================================== */
+  /* ========================== include files =========================== */
+  /* ==================================================================== */
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+  /* Inclusion of system and local header files goes here */
 
-/* Inclusion of system and local header files goes here */
+  /* ==================================================================== */
+  /* ============================ constants ============================= */
+  /* ==================================================================== */
 
-
-
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
-
-/* #define and enum statements go here */
+  /* #define and enum statements go here */
 
 #define LED_BUILTIN 27
 #define RXD2 17
@@ -66,28 +63,23 @@ extern "C"
 #define FIXS_PER_SECOND 10
 
 /* INA226 info */
-#define FULL_RANGE_VOLTAGE_DROP (float) 0.08192 // Volts
-#define SHUNT_RESISTANCE (float)0.0024 // Ohms
+#define FULL_RANGE_VOLTAGE_DROP (float)0.08192 // Volts
+#define SHUNT_RESISTANCE (float)0.0024         // Ohms
 
 /* I = V/R */
-#define INA226_FULL_CURRENT_RANGE (float)(FULL_RANGE_VOLTAGE_DROP/SHUNT_RESISTANCE) // Amps
+#define INA226_FULL_CURRENT_RANGE (float)(FULL_RANGE_VOLTAGE_DROP / SHUNT_RESISTANCE) // Amps
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+  /* ==================================================================== */
+  /* ========================== public data ============================= */
+  /* ==================================================================== */
 
-/* Definition of public (external) data types go here */
+  /* Definition of public (external) data types go here */
 
+  /* ==================================================================== */
+  /* ======================= public functions =========================== */
+  /* ==================================================================== */
 
-
-
-
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
-
-/* Function prototypes for public (external) functions go here */
-
+  /* Function prototypes for public (external) functions go here */
 
 #endif
 #ifdef __cplusplus
