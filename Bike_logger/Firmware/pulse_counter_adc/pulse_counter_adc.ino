@@ -24,16 +24,16 @@
  */
 
 #define I2S_SAMPLE_RATE 2442
-#define ADC_INPUT ADC1_CHANNEL_4 //pin 32
-#define OUTPUT_VALUE 3800
-#define READ_DELAY 9000 //microseconds
+#define ADC_INPUT ADC1_CHANNEL_6 //pin 34 Motor B
+
 
 #define low_threshold_speed 400   //mV
-#define high_threshold_speed 3500 //mV
+#define high_threshold_speed 4600 //mV
 
 #define SPEED_LINE_VOLTAGE_MIN 0    //mV
 #define SPEED_LINE_VOLTAGE_MAX 5000 //mV
 
+#define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
 // setting PWM properties
 const int freq = 6;
 const int ledChannel = 0;
@@ -136,8 +136,8 @@ uint16_t adc_to_voltage(signed adc_value)
    * TODO: use defined numbers
    * 
    */
-  long value = map(adc_value, 2940, 4096, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
-  return constrain(value, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
+  adc_value = constrain(adc_value, 1876, 4096);
+  return map(adc_value, 1876, 4096, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
 }
 
 /**
