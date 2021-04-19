@@ -142,8 +142,13 @@ void setup()
 
   init_all_sensors();
 
+#if POLL_SPEED
   init_adc_edge_detect();
+#endif
+
+#if POLL_BRAKE
   setup_pulse_counter();
+#endif
 
   start_tasks();
 }
