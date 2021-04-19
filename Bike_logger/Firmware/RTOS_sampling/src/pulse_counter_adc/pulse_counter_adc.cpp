@@ -263,6 +263,7 @@ void init_adc_edge_detect()
 
   // Create a task that will read the data
   xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 2, NULL, 1);
+
 }
 
 #if 0
