@@ -34,6 +34,9 @@
 #define OUTPUT_VALUE 3800
 #define READ_DELAY 9000 //microseconds
 
+#define low_threshold_speed 400   //mV
+#define high_threshold_speed 3500 //mV
+
 uint16_t adc_reading;
 
 // setting PWM properties
@@ -64,8 +67,6 @@ typedef enum
 
 } line_state_t;
 
-int low_threshold = 400;   //mV
-int high_threshold = 3500; //mV
 
 float previous_v = 0;
 
