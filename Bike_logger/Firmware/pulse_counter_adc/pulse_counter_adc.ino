@@ -34,7 +34,7 @@
 
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
 
-// setting PWM properties
+// setting PWM properties for test pwm signal
 const int freq = 6;
 const int ledChannel = 0;
 const int resolution = 10;
