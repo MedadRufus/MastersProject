@@ -26,6 +26,10 @@
 #include "WifiConfig.h"
 #include "config.h"
 #include <bitset>
+#include "heap_analysis.hpp"
+
+#include "src/pulse_counter_adc/pulse_counter_adc.hpp"
+#include "src/pulse_counter_rtos/pulse_counter_rtos.hpp"
 
 /* ==================================================================== */
 /* ============================ constants ============================= */
@@ -135,7 +139,20 @@ void setup()
   data_file = SD.open("/data.csv", FILE_APPEND);
 
   init_all_sensors();
+  init_mutexes();
+#if POLL_MOTOR_SPEED
+  init_adc_edge_detect();
+#endif
 
+#if POLL_PAS
+  setup_pulse_counter();
+#endif
+
+  start_tasks();
+}
+
+void init_mutexes()
+{
   I2C1_Mutex = xSemaphoreCreateMutex();
   if (I2C1_Mutex == NULL)
   {
@@ -153,8 +170,6 @@ void setup()
   {
     Serial.println("Mutex can not be created");
   }
-
-  start_tasks();
 }
 
 void start_tasks()
@@ -168,28 +183,6 @@ void start_tasks()
       NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
       ,
       &Handle_blink_Task, ARDUINO_RUNNING_CORE);
-
-#if POLL_BRAKE
-  xTaskCreatePinnedToCore(
-      TaskBrake, "TaskBrake" // A name just for humans
-      ,
-      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
-      ,
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      ,
-      &Handle_brake_Task, ARDUINO_RUNNING_CORE);
-#endif
-
-#if POLL_SPEED
-  xTaskCreatePinnedToCore(
-      TaskSpeed, "TaskSpeed" // A name just for humans
-      ,
-      10024 // This stack size can be checked & adjusted by reading the Stack Highwater
-      ,
-      NULL, 1 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-      ,
-      &Handle_speed_Task, ARDUINO_RUNNING_CORE);
-#endif
 
 #if POLL_GPS
   xTaskCreatePinnedToCore(
@@ -287,42 +280,6 @@ void TaskReopen_File(void *pvParameters)
     xSemaphoreGive(SPI_SD_Mutex);
 
 #endif
-  }
-}
-
-void TaskSpeed(void *pvParameters)
-{
-  (void)pvParameters;
-
-  TickType_t xLastWakeTime;
-  const TickType_t xFrequency = SPEED_INTERVAL;
-
-  // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount();
-  for (;;)
-  {
-    // Wait for the next cycle.
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
-
-    check_speed();
-  }
-}
-
-void TaskBrake(void *pvParameters)
-{
-  (void)pvParameters;
-
-  TickType_t xLastWakeTime;
-  const TickType_t xFrequency = BRAKE_INTERVAL;
-
-  // Initialise the xLastWakeTime variable with the current time.
-  xLastWakeTime = xTaskGetTickCount();
-  for (;;)
-  {
-    // Wait for the next cycle.
-    vTaskDelayUntil(&xLastWakeTime, xFrequency);
-
-    check_brake();
   }
 }
 
@@ -436,12 +393,11 @@ void update_baro_data()
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
   /* Write baro data to file */
-  sprintf(buffer1, "%s,baro,%f,%f,%f\n", NTP.getTimeDateStringUs(), temperature, pressure, humidity);
+  const char *format = "%s,baro,%f,%f,%f\n";
+  sprintf(buffer1, format, NTP.getTimeDateStringUs(), temperature, pressure, humidity);
   Serial.print(buffer1);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer1);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(buffer1);
 }
 
 /**
@@ -557,15 +513,21 @@ void update_imu_data()
 
         Serial.print(buffer_imu);
 
-        xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-        sd_manager.appendFile(&data_file, buffer_imu);
-        xSemaphoreGive(SPI_SD_Mutex); // release mutex
+        save_to_sd(buffer_imu);
       }
     }
   }
 
   log_d("IMU read/save duration[ms]:%d", millis() - lastTime);
 }
+
+void save_to_sd(const char *message)
+{
+  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
+  sd_manager.appendFile(&data_file, message);
+  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+}
+
 /**
  * @brief Convert a 2 byte array into a int16_t
  * 
@@ -609,9 +571,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
 
   Serial.print(buffer_gnss);
 
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer_gnss);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+  save_to_sd(buffer_gnss);
 }
 
 /**
@@ -767,44 +727,10 @@ void poll_ina226(INA226_STATUS ina226_status)
           power_mW);
 
   //Serial.print(sprintfBuffer);
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, sprintfBuffer);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
+
+  save_to_sd(sprintfBuffer);
 }
 
-/* Check the speed */
-void check_speed()
-{
-  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
-  float speed_voltage = map(analogRead(MOTOR_PULSE_A_PIN), 0, 1023, 0, 5);
-
-  sprintf(buffer_speed, "%s,speed,%f\n",
-          NTP.getTimeDateStringUs(),
-          speed_voltage);
-
-  Serial.print(buffer_speed);
-
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, buffer_speed);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
-}
-
-/* Check the brake */
-void check_brake()
-{
-  // range of 0 - 5 volts, input values of 0 - 1023( must be adjusted)
-  float brake_voltage = map(analogRead(THROTTLE), 0, 1023, 0, 5);
-
-  sprintf(brake_buffer, "%s,brake,%f\n",
-          NTP.getTimeDateStringUs(),
-          brake_voltage);
-
-  Serial.print(brake_buffer);
-
-  xSemaphoreTake(SPI_SD_Mutex, portMAX_DELAY);
-  sd_manager.appendFile(&data_file, brake_buffer);
-  xSemaphoreGive(SPI_SD_Mutex); // release mutex
-}
 /**
  * @brief Initialise GPS
  * 
@@ -887,78 +813,4 @@ void init_ntp()
   WiFi.begin(YOUR_WIFI_SSID, YOUR_WIFI_PASSWD);
   NTP.setTimeZone(TZ_Etc_UTC);
   NTP.begin();
-}
-
-void heap_analysis()
-{
-  int x;
-  int measurement;
-
-  Serial.flush();
-  Serial.println("");
-  Serial.println("****************************************************");
-  Serial.print("Free Heap: ");
-  Serial.print(xPortGetFreeHeapSize());
-  Serial.println(" bytes");
-
-  Serial.print("Min Heap: ");
-  Serial.print(xPortGetMinimumEverFreeHeapSize());
-  Serial.println(" bytes");
-  Serial.flush();
-
-#if 0
-  Serial.println("****************************************************");
-  Serial.println("Task            ABS             %Util");
-  Serial.println("****************************************************");
-
-  //vTaskGetRunTimeStats(ptrTaskList); //save stats to char array
-  Serial.println(ptrTaskList); //prints out already formatted stats
-  Serial.flush();
-
-  Serial.println("****************************************************");
-  Serial.println("Task            State   Prio    Stack   Num     Core" );
-  Serial.println("****************************************************");
-
-  //vTaskList(ptrTaskList); //save stats to char array
-  Serial.println(ptrTaskList); //prints out already formatted stats
-  Serial.flush();
-
-  Serial.println("****************************************************");
-  Serial.println("[Stacks Free Bytes Remaining] ");
-#endif
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_gps_Task);
-  Serial.print("Handle_gps_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_baroTask);
-  Serial.print("Handle_baroTask: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_imu_Task);
-  Serial.print("Handle_imu_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_ina1_Task);
-  Serial.print("Handle_ina1_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_ina2_Task);
-  Serial.print("Handle_ina2_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_blink_Task);
-  Serial.print("Handle_blink_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_speed_Task);
-  Serial.print("Handle_speed_Task: ");
-  Serial.println(measurement);
-
-  measurement = uxTaskGetStackHighWaterMark(Handle_brake_Task);
-  Serial.print("Handle_brake_Task: ");
-  Serial.println(measurement);
-
-  Serial.println("****************************************************");
-  Serial.flush();
 }

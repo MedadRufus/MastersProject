@@ -252,29 +252,29 @@ fp-info-cache
 
 
 # OUtput files for drill
-Bike logger/pcb/output/*
+Bike_logger/pcb/output/*
 
 # Visualisation outputs
 data_analysis_tools_for_gfbs_data/plot.html
 data_analysis_tools_for_gfbs_data/plot_acc.html
 data_analysis_tools_for_gfbs_data/plot_slope.html
 Visualisations/plot.html
-Bike logger/pcb/bom/ibom.html
-Bike logger/Data_analysis/power.html
-Bike logger/Data_analysis/plot.html
-Bike logger/Data_analysis/plot_acc.html
-Bike logger/Data_analysis/power_gps_speed.html
+Bike_logger/pcb/bom/ibom.html
+Bike_logger/Data_analysis/power.html
+Bike_logger/Data_analysis/plot.html
+Bike_logger/Data_analysis/plot_acc.html
+Bike_logger/Data_analysis/power_gps_speed.html
 
 # Mapbox tokens
 *.mapbox_token
 
 
 # Wifi config info
-Bike logger/Firmware/RTOS_sampling/WifiConfig.h
-Bike logger/Firmware/ntp_microsecond_example/WifiConfig.h
-Bike logger/Firmware/advancedExample_ntplib/WifiConfig.h
-Bike logger/Data_analysis/.mapbox_token
-Bike logger/Data_analysis/output/*
+Bike_logger/Firmware/RTOS_sampling/WifiConfig.h
+Bike_logger/Firmware/ntp_microsecond_example/WifiConfig.h
+Bike_logger/Firmware/advancedExample_ntplib/WifiConfig.h
+Bike_logger/Data_analysis/.mapbox_token
+Bike_logger/Data_analysis/output/*
 
 
 # platform.io gitignore
