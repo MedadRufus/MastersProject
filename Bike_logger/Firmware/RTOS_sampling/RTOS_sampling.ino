@@ -449,7 +449,7 @@ void update_imu_data()
 
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
-  Serial.print(buffer_imu);
+  //Serial.print(buffer_imu);
 
   save_to_sd(buffer_imu);
 }
