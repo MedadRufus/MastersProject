@@ -17,7 +17,6 @@
 #include <ESPNtpClient.h>
 #include "../../RTOS_sampling.h"
 
-#define target_pin 33
 
 /*
  * This is an example to read analog data at high frequency using the I2S peripheral
