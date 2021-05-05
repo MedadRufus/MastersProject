@@ -406,37 +406,6 @@ void update_baro_data()
  */
 void init_imu()
 {
-
-  //Over-ride default settings if desired
-  myIMU.settings.gyroEnabled = 1;        //Can be 0 or 1
-  myIMU.settings.gyroRange = 2000;       //Max deg/s.  Can be: 125, 245, 500, 1000, 2000
-  myIMU.settings.gyroSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666
-  myIMU.settings.gyroBandWidth = 200;    //Hz.  Can be: 50, 100, 200, 400;
-  myIMU.settings.gyroFifoEnabled = 1;    //Set to include gyro in FIFO
-  myIMU.settings.gyroFifoDecimation = 1; //set 1 for on /1
-
-  myIMU.settings.accelEnabled = 1;
-  myIMU.settings.accelRange = 16;         //Max G force readable.  Can be: 2, 4, 8, 16
-  myIMU.settings.accelSampleRate = 833;   //Hz.  Can be: 13, 26, 52, 104, 208, 416, 833, 1666, 3332, 6664, 13330
-  myIMU.settings.accelBandWidth = 200;    //Hz.  Can be: 50, 100, 200, 400;
-  myIMU.settings.accelFifoEnabled = 1;    //Set to include accelerometer in the FIFO
-  myIMU.settings.accelFifoDecimation = 1; //set 1 for on /1
-  myIMU.settings.tempEnabled = 0;
-
-  //Non-basic mode settings
-  myIMU.settings.commMode = 1;
-
-  //FIFO control settings
-  myIMU.settings.fifoThreshold = fifo_capacity; //Can be 0 to 4095 (16 bit bytes)
-  myIMU.settings.fifoSampleRate = 100;          //Hz.  Can be: 10, 25, 50, 100, 200, 400, 800, 1600, 3300, 6600
-  myIMU.settings.fifoModeWord = 1;              //FIFO mode.
-  //FIFO mode.  Can be:
-  //  0 (Bypass mode, FIFO off)
-  //  1 (Stop when full)
-  //  3 (Continuous during trigger)
-  //  4 (Bypass until trigger)
-  //  6 (Continous mode)
-
   //Call .begin() to configure the IMUs
   if (myIMU.begin() != 0)
   {
@@ -447,78 +416,42 @@ void init_imu()
     Serial.println("Sensor with CS @ Pin 10 started.");
   }
 
-  Serial.print("Configuring FIFO with no error checking...");
-  myIMU.fifoBegin();
-  Serial.print("Done!\n");
+  /**
+   * @brief Pull-up is enabled if bit SIM = 1 (SPI 3-wire) in reg 12h.
+   * force pull up the SD0 pin for I2C to ensure its least significant bit is always 1, not floating
+   * IN the hardware, it was not pulled up(or down), which it should have been.
+   */
+  myIMU.LSM6DS3_ACC_GYRO_W_SPI_Mode(LSM6DS3_ACC_GYRO_SIM_3_WIRE);
 
-  Serial.print("Clearing out the FIFO...");
-  myIMU.fifoClear();
-  Serial.print("Done!\n");
+  /**
+   * @brief Pull-up is enabled if bit PULL_UP_EN = 1 in reg 1Ah
+   * It is necessary to pull up the SDx and SCx pins, to save power. However, it was
+   * not done in the hardware, hence doing by software workaround.   * 
+   */
+  myIMU.LSM6DS3_ACC_GYRO_W_PULL_UP_EN(LSM6DS3_ACC_GYRO_PULL_UP_EN_ENABLED);
 }
 
 /* Update the sensor data struct with imu values
 */
 void update_imu_data()
 {
-  float temp; //This is to hold read data
-
-  log_d("%s", "START SAVING IMU DATA");
-
-  //Now loop until FIFO is empty.  NOTE:  As the FIFO is only 8 bits wide,
-  //the channels must be synchronized to a known position for the data to align
-  //properly.  Emptying the fifo is one way of doing this (this example)
-  uint16_t bytes_left;
 
   xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
-  uint16_t fifo_status = myIMU.fifoGetStatus();
+
+  sprintf(buffer_imu, "%s,imu,%f,%f,%f,%f,%f,%f\n",
+          NTP.getTimeDateStringUs(),
+          myIMU.readFloatAccelX(),
+          myIMU.readFloatAccelY(),
+          myIMU.readFloatAccelZ(),
+          myIMU.readFloatGyroX(),
+          myIMU.readFloatGyroY(),
+          myIMU.readFloatGyroZ());
+
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
-  // uses binary print out implementation from : https://stackoverflow.com/a/31660310/13737285
-  log_d("fifo_Status : %s", std::bitset<sizeof(fifo_status) * 8>(fifo_status).to_string().insert(0, "0b").c_str());
+  //Serial.print(buffer_imu);
 
-  lastTime = millis(); //Update the timer
-
-  if ((fifo_status & 0b0001000000000000) == 0) // not empty
-  {
-    bytes_left = (fifo_status & 0x7FF);
-
-    log_d("bytes in fifo:%d", bytes_left);
-
-    bytes_left = (bytes_left == 0) ? fifo_capacity / 2 : bytes_left;
-
-    for (bytes_left; bytes_left > bytes_to_read * 4; bytes_left = bytes_left - bytes_to_read)
-    {
-      uint8_t data_bytes[bytes_to_read];
-      xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
-      myIMU.readRegisterRegion(data_bytes, LSM6DS3_ACC_GYRO_FIFO_DATA_OUT_L, sizeof(data_bytes));
-      xSemaphoreGive(I2C1_Mutex); // release mutex
-
-      for (int i = 0; i < readings_in_one_go; i++)
-      {
-        int16_t x_acc = convert(data_bytes, i * bytes_in_one_reading + 0);
-        int16_t y_acc = convert(data_bytes, i * bytes_in_one_reading + 2);
-        int16_t z_acc = convert(data_bytes, i * bytes_in_one_reading + 4);
-        int16_t x_gyro = convert(data_bytes, i * bytes_in_one_reading + 6);
-        int16_t y_gyro = convert(data_bytes, i * bytes_in_one_reading + 8);
-        int16_t z_gyro = convert(data_bytes, i * bytes_in_one_reading + 10);
-
-        sprintf(buffer_imu, "%s,imu,%d,%d,%d,%d,%d,%d\n",
-                NTP.getTimeDateStringUs(),
-                x_acc,
-                y_acc,
-                z_acc,
-                x_gyro,
-                y_gyro,
-                z_gyro);
-
-        Serial.print(buffer_imu);
-
-        save_to_sd(buffer_imu);
-      }
-    }
-  }
-
-  log_d("IMU read/save duration[ms]:%d", millis() - lastTime);
+  save_to_sd(buffer_imu);
 }
 
 void save_to_sd(const char *message)
