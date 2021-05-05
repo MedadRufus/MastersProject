@@ -33,6 +33,8 @@
 
 #define SPEED_LINE_VOLTAGE_MIN 0    //mV
 #define SPEED_LINE_VOLTAGE_MAX 5000 //mV
+#define SPEED_LINE_ADC_MIN 1876
+#define SPEED_LINE_ADC_MAX 4096
 
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
 
@@ -160,8 +162,9 @@ uint16_t adc_to_voltage(signed adc_value)
    * TODO: use defined numbers
    * 
    */
-  adc_value = constrain(adc_value, 1876, 4096);
-  return map(adc_value, 1876, 4096, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
+
+  adc_value = constrain(adc_value, SPEED_LINE_ADC_MIN, SPEED_LINE_ADC_MAX);
+  return map(adc_value, SPEED_LINE_ADC_MIN, SPEED_LINE_ADC_MAX, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
 }
 
 /**
