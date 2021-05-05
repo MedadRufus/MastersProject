@@ -31,7 +31,7 @@ extern "C"
 */
 #define POLL_BARO (true)
 #define POLL_GPS (true)
-#define POLL_IMU (false)
+#define POLL_IMU (true)
 #define POLL_INA226 (true)
 #define POLL_PAS (true)
 #define POLL_MOTOR_SPEED (true)
