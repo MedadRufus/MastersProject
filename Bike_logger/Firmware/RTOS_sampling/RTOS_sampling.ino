@@ -447,6 +447,21 @@ void init_imu()
     Serial.println("Sensor with CS @ Pin 10 started.");
   }
 
+  /**
+   * @brief Pull-up is enabled if bit SIM = 1 (SPI 3-wire) in reg 12h.
+   * force pull up the SD0 pin for I2C to ensure its least significant bit is always 1, not floating
+   * IN the hardware, it was not pulled up(or down), which it should have been.
+   */
+  myIMU.LSM6DS3_ACC_GYRO_W_SPI_Mode(LSM6DS3_ACC_GYRO_SIM_3_WIRE);
+
+  /**
+   * @brief Pull-up is enabled if bit PULL_UP_EN = 1 in reg 1Ah
+   * It is necessary to pull up the SDx and SCx pins, to save power. However, it was
+   * not done in the hardware, hence doing by software workaround.   * 
+   */
+  myIMU.LSM6DS3_ACC_GYRO_W_PULL_UP_EN(LSM6DS3_ACC_GYRO_PULL_UP_EN_ENABLED);
+
+
   Serial.print("Configuring FIFO with no error checking...");
   myIMU.fifoBegin();
   Serial.print("Done!\n");
