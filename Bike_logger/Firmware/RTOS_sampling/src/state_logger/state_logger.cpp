@@ -72,8 +72,8 @@ typedef enum
 
 typedef struct
 {
-  uint16_t deadzone_low;
-  uint16_t deadzone_high;
+  float deadzone_low;
+  float deadzone_high;
   edge_t edge;
   i2s_port_t i2s_num;
   adc_unit_t adc_unit;
@@ -87,8 +87,8 @@ typedef struct
 } Digital_Edge_detector_t;
 
 Digital_Edge_detector_t brake_edge_detector{
-    .deadzone_low = LOW_THRESHOLD_SPEED,
-    .deadzone_high = HIGH_THRESHOLD_SPEED,
+    .deadzone_low = 0.1,
+    .deadzone_high = 0.9,
     .edge = NEG,
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
