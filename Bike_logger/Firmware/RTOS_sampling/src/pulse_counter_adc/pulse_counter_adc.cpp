@@ -154,7 +154,7 @@ void reader(void *pvParameters)
 
     //Serial.printf("%d, %f\n", adc_value, filteredval);
 
-    bool is_edge_state = is_edge_b(&edge_detector, filtered_adc_voltage);
+    bool is_edge_state = is_edge(&edge_detector, filtered_adc_voltage);
 
     if (is_edge_state)
     {
@@ -178,7 +178,7 @@ void reader(void *pvParameters)
   }
 }
 
-uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max)
+uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max)
 {
   adc_value = constrain(adc_value, adc_min, adc_max);
   return map(adc_value, adc_value, adc_min, voltage_min, voltage_max);
@@ -197,7 +197,7 @@ bool in_range(signed low, signed high, signed x)
   return (low <= x && x <= high);
 }
 
-line_state_t voltage_to_linestate_b(Edge_detector_t *edge_detector_obj, signed voltage)
+line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed voltage)
 {
   if (voltage < edge_detector_obj->deadzone_low)
   {
@@ -219,7 +219,7 @@ line_state_t voltage_to_linestate_b(Edge_detector_t *edge_detector_obj, signed v
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v)
+bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
@@ -233,7 +233,7 @@ bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v)
    * @brief Check current line state and then check if it is different from previous state
    * 
    */
-  line_state_t current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
+  line_state_t current_line_state = voltage_to_linestate(edge_detector_obj, current_v);
 
   bool res = false;
 
