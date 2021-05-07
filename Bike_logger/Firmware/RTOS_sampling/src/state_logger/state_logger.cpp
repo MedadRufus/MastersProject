@@ -207,10 +207,10 @@ bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, uint16_t current_v)
   /**
    * @brief Reject if voltage is in dead zone.
    */
-  // if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
-  // {
-  //   return false;
-  // }
+  if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
+  {
+    return false;
+  }
 
   /**
    * @brief Check current line state and then check if it is different from previous state
