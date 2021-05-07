@@ -34,7 +34,8 @@ extern "C"
 #define POLL_IMU (true)
 #define POLL_INA226 (true)
 #define POLL_PAS (true)
-#define POLL_MOTOR_SPEED_AND_BRAKE (true)
+#define POLL_MOTOR_SPEED (true)
+#define POLL_BRAKE (true)
 
 #define HEAP_ANALYSIS (false)
 #define PERIODIC_CLOSE_FILE (true)
