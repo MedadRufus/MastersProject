@@ -95,7 +95,7 @@ Digital_Edge_detector_t brake_edge_detector{
  * 
  */
 uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
-bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, uint16_t current_v);
+bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v);
 
 /**
  * @brief Function definitions
@@ -203,7 +203,7 @@ line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, 
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, uint16_t current_v)
+bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
