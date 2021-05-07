@@ -30,6 +30,7 @@
 
 #include "src/pulse_counter_adc/pulse_counter_adc.hpp"
 #include "src/pulse_counter_rtos/pulse_counter_rtos.hpp"
+#include "src/state_logger/state_logger.hpp"
 
 /* ==================================================================== */
 /* ============================ constants ============================= */
