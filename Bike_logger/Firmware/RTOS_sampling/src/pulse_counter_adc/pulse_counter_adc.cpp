@@ -180,7 +180,6 @@ uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed
 {
   /**
    * @brief  TODO: check the resolution of the ADC
-   * TODO: use defined numbers
    * 
    */
 
@@ -213,13 +212,6 @@ line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed vol
   }
 
   return UNDEFINED_LINE_STATE;
-}
-
-void init_edge_detector(Edge_detector_t *edge_detector_obj, uint16_t deadzone_low_voltage, uint16_t deadzone_high_voltage, edge_t edge)
-{
-  edge_detector_obj->deadzone_high = deadzone_high_voltage;
-  edge_detector_obj->deadzone_low = deadzone_low_voltage;
-  edge_detector_obj->edge = edge;
 }
 
 /**
