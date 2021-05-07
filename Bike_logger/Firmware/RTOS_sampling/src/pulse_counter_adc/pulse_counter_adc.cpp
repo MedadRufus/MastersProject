@@ -169,7 +169,7 @@ void reader(void *pvParameters)
 
     //Serial.printf("%d, %f\n", adc_value, filteredval);
 
-    bool is_edge_state = is_edge(&speed_edge_detector, filtered_adc_voltage);
+    bool is_edge_state = is_edge(&edge_detector, filtered_adc_voltage);
 
     if (is_edge_state)
     {
