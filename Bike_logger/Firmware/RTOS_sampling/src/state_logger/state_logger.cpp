@@ -84,9 +84,9 @@ typedef struct
   uint16_t line_adc_max;
   uint16_t offset;
   line_state_t previous_line_state;
-} Edge_detector_t;
+} Digital_Edge_detector_t;
 
-Edge_detector_t brake_edge_detector{
+Digital_Edge_detector_t brake_edge_detector{
     .deadzone_low = LOW_THRESHOLD_SPEED,
     .deadzone_high = HIGH_THRESHOLD_SPEED,
     .edge = NEG,
@@ -106,7 +106,7 @@ Edge_detector_t brake_edge_detector{
  * 
  */
 uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
-bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v);
+bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, uint16_t current_v);
 
 /**
  * @brief Function definitions
@@ -126,7 +126,7 @@ uint16_t read_gpio_value()
 void reader_b(void *pvParameters)
 {
 
-  Edge_detector_t edge_detector = *(Edge_detector_t *)pvParameters;
+  Digital_Edge_detector_t edge_detector = *(Digital_Edge_detector_t *)pvParameters;
 
   // Initialize the I2S peripheral
   gpio_input_pin_init();
@@ -191,7 +191,7 @@ bool in_range_b(signed low, signed high, signed x)
   return (low <= x && x <= high);
 }
 
-line_state_t voltage_to_linestate_b(Edge_detector_t *edge_detector_obj, signed voltage)
+line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, signed voltage)
 {
   if (voltage == 0)
   {
@@ -213,7 +213,7 @@ line_state_t voltage_to_linestate_b(Edge_detector_t *edge_detector_obj, signed v
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v)
+bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, uint16_t current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
