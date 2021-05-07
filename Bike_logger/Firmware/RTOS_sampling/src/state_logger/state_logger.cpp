@@ -61,6 +61,7 @@ typedef enum
 {
   POS = 0,
   NEG,
+  NO_EDGE
 } edge_t;
 
 typedef enum
@@ -95,7 +96,7 @@ Digital_Edge_detector_t brake_edge_detector{
  * 
  */
 uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
-bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v);
+edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v);
 
 /**
  * @brief Function definitions
@@ -135,11 +136,11 @@ void reader_b(void *pvParameters)
     uint16_t gpio_value = read_gpio_value();
     float filteredval = f_b.filterIn((float)gpio_value);
 
-    bool is_edge_state = is_edge_b(&edge_detector, filteredval);
+    edge_t edge_state = is_edge_b(&edge_detector, filteredval);
 
-    Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, is_edge_state);
+    //Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, edge_state);
 
-    if (is_edge_state)
+    if ((edge_state == POS) || (edge_state == NEG))
     {
       unsigned long current_time = micros();
       unsigned long elapsed_time = current_time - startTime;
@@ -147,15 +148,14 @@ void reader_b(void *pvParameters)
 
       if (elapsed_time > MIN_INTERVAL_BETWEEN_PULSES)
       {
-        Serial.printf("%d\n", elapsed_time);
-
         char msg_buffer[100];
 
-        sprintf(msg_buffer, "%s,motor_speed,%d\n",
+        sprintf(msg_buffer, "%s,brake_state,%d\n",
                 NTP.getTimeDateStringUs(),
-                elapsed_time);
+                edge_state);
 
-        //save_to_sd(msg_buffer);
+        Serial.print(msg_buffer);
+        save_to_sd(msg_buffer);
       }
     }
   }
@@ -203,14 +203,14 @@ line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, 
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
+edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
    */
   if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
   {
-    return false;
+    return NO_EDGE;
   }
 
   /**
@@ -219,26 +219,16 @@ bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
    */
   line_state_t current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
 
-  bool res = false;
+  edge_t res = NO_EDGE;
 
-  switch (edge_detector_obj->edge)
+  if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
   {
-  case NEG:
-  {
-    if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
-    {
-      res = true;
-    }
-    break;
+    res = NEG;
   }
-  case POS:
+
+  if ((edge_detector_obj->previous_line_state == LINE_LOW) && (current_line_state == LINE_HIGH))
   {
-    if ((edge_detector_obj->previous_line_state == LINE_LOW) && (current_line_state == LINE_HIGH))
-    {
-      res = true;
-    }
-    break;
-  }
+    res = POS;
   }
 
   /**
