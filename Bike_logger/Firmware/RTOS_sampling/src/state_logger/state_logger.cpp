@@ -253,7 +253,7 @@ bool is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader_b, "ADC_reader_MOTOR", 2048, &brake_edge_detector, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader_b, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 4, NULL, 0);
 }
 
 #if 0
