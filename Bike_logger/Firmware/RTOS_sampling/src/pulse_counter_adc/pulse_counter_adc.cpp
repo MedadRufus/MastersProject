@@ -71,12 +71,29 @@ typedef struct
 {
   uint16_t deadzone_low;
   uint16_t deadzone_high;
-  line_state_t previous_line_state;
   edge_t edge;
-
+  i2s_port_t i2s_num;
+  adc_unit_t adc_unit;
+  adc1_channel_t adc_channel;
+  uint16_t line_voltage_min;
+  uint16_t line_voltage_max;
+  uint16_t line_adc_min;
+  uint16_t line_adc_max;
+  line_state_t previous_line_state;
 } Edge_detector_t;
 
-Edge_detector_t speed_edge_detector;
+Edge_detector_t speed_edge_detector{
+    .deadzone_low = low_threshold_speed,
+    .deadzone_high = high_threshold_speed,
+    .edge = NEG,
+    .i2s_num = I2S_NUM_0,
+    .adc_unit = ADC_UNIT_1,
+    .adc_channel = ADC_INPUT,
+    .line_voltage_min = SPEED_LINE_VOLTAGE_MIN,
+    .line_voltage_max = SPEED_LINE_VOLTAGE_MAX,
+    .line_adc_min = SPEED_LINE_ADC_MIN,
+    .line_adc_max = SPEED_LINE_ADC_MAX,
+};
 
 /**
  * @brief Function prototypes
@@ -89,7 +106,7 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
  * @brief Function definitions
  * 
  */
-void i2sInit()
+void i2sInit(i2s_port_t i2s_num, adc_unit_t adc_unit, adc1_channel_t adc_channel)
 {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_ADC_BUILT_IN),
@@ -103,29 +120,35 @@ void i2sInit()
       .use_apll = false,
       .tx_desc_auto_clear = false,
       .fixed_mclk = 0};
-  i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
-  i2s_set_adc_mode(ADC_UNIT_1, ADC_INPUT);
-  i2s_adc_enable(I2S_NUM_0);
+  i2s_driver_install(i2s_num, &i2s_config, 0, NULL);
+  i2s_set_adc_mode(adc_unit, adc_channel);
+  i2s_adc_enable(i2s_num);
 }
 
-uint16_t read_adc_value_from_buffer()
+uint16_t read_adc_value_from_buffer(i2s_port_t i2s_num)
 {
   uint16_t buffer[1] = {0};
-  i2s_read(I2S_NUM_0, &buffer, sizeof(buffer), &bytes_read, 15);
+  i2s_read(i2s_num, &buffer, sizeof(buffer), &bytes_read, 15);
   uint16_t adc_value = offset - buffer[0];
   return adc_value;
 }
 
 void reader(void *pvParameters)
 {
+
+  Edge_detector_t edge_detector = *(Edge_detector_t *)pvParameters;
+
+  // Initialize the I2S peripheral
+  i2sInit(edge_detector.i2s_num, edge_detector.adc_unit, edge_detector.adc_channel);
+
   unsigned long startTime = micros();
 
   while (1)
   {
-    uint16_t adc_value = read_adc_value_from_buffer();
+    uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num);
     float filteredval = f.filterIn((float)adc_value);
 
-    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, SPEED_LINE_ADC_MIN, SPEED_LINE_ADC_MAX, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
+    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, edge_detector.line_adc_min, edge_detector.line_adc_max, edge_detector.line_voltage_min, edge_detector.line_voltage_max);
 
     //Serial.printf("%d, %f\n", adc_value, filteredval);
 
@@ -256,14 +279,8 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 
 void init_adc_edge_detect()
 {
-  // init the edge detector
-  init_edge_detector(&speed_edge_detector, low_threshold_speed, high_threshold_speed, NEG);
-
-  // Initialize the I2S peripheral
-  i2sInit();
-
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader, "ADC_reader", 2048, NULL, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader, "ADC_reader_MOTOR", 2048, &speed_edge_detector, 4, NULL, 0);
 }
 
 #if 0
