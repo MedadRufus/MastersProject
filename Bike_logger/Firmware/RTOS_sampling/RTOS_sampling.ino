@@ -140,7 +140,7 @@ void setup()
 
   init_all_sensors();
   init_mutexes();
-#if POLL_MOTOR_SPEED
+#if POLL_MOTOR_SPEED_AND_BRAKE
   init_adc_edge_detect();
 #endif
 
