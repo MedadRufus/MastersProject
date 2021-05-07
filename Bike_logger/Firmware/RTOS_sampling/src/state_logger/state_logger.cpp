@@ -78,11 +78,6 @@ typedef struct
   i2s_port_t i2s_num;
   adc_unit_t adc_unit;
   adc1_channel_t adc_channel;
-  uint16_t line_voltage_min;
-  uint16_t line_voltage_max;
-  uint16_t line_adc_min;
-  uint16_t line_adc_max;
-  uint16_t offset;
   line_state_t previous_line_state;
 } Digital_Edge_detector_t;
 
@@ -93,12 +88,6 @@ Digital_Edge_detector_t brake_edge_detector{
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
     .adc_channel = BRAKE_ADC_CHANNEL,
-    .line_voltage_min = SPEED_LINE_VOLTAGE_MIN,
-    .line_voltage_max = SPEED_LINE_VOLTAGE_MAX,
-    .line_adc_min = SPEED_LINE_ADC_MIN,
-    .line_adc_max = SPEED_LINE_ADC_MAX,
-    .offset = (int)BRAKE_ADC_CHANNEL * 0x1000 + 0xFFF,
-
 };
 
 /**
