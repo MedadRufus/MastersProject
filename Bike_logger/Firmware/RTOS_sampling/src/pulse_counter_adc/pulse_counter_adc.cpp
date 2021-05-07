@@ -142,7 +142,7 @@ void i2sInit(i2s_port_t i2s_num, adc_unit_t adc_unit, adc1_channel_t adc_channel
   i2s_adc_enable(i2s_num);
 }
 
-uint16_t read_adc_value_from_buffer(i2s_port_t i2s_num)
+uint16_t read_adc_value_from_buffer(i2s_port_t i2s_num, uint16_t offset)
 {
   uint16_t buffer[1] = {0};
   i2s_read(i2s_num, &buffer, sizeof(buffer), &bytes_read, 15);
@@ -162,7 +162,7 @@ void reader(void *pvParameters)
 
   while (1)
   {
-    uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num);
+    uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num, edge_detector.offset);
     float filteredval = f.filterIn((float)adc_value);
 
     uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, edge_detector.line_adc_min, edge_detector.line_adc_max, edge_detector.line_voltage_min, edge_detector.line_voltage_max);
