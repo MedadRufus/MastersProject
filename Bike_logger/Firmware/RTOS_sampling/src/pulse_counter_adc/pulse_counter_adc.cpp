@@ -24,7 +24,8 @@
  */
 
 #define I2S_SAMPLE_RATE 2442
-#define ADC_INPUT ADC1_CHANNEL_7 //pin 35 Motor A
+#define SPEED_ADC_CHANNEL ADC1_CHANNEL_7 //pin 35 Motor A
+#define BRAKE_ADC_CHANNEL ADC1_CHANNEL_3 //pin 39 Throttle
 
 #define LOW_THRESHOLD_SPEED 400   //mV
 #define HIGH_THRESHOLD_SPEED 4600 //mV
@@ -88,13 +89,27 @@ Edge_detector_t speed_edge_detector{
     .edge = NEG,
     .i2s_num = I2S_NUM_0,
     .adc_unit = ADC_UNIT_1,
-    .adc_channel = ADC_INPUT,
+    .adc_channel = SPEED_ADC_CHANNEL,
     .line_voltage_min = SPEED_LINE_VOLTAGE_MIN,
     .line_voltage_max = SPEED_LINE_VOLTAGE_MAX,
     .line_adc_min = SPEED_LINE_ADC_MIN,
     .line_adc_max = SPEED_LINE_ADC_MAX,
     .offset = (int)SPEED_ADC_CHANNEL * 0x1000 + 0xFFF,
 };
+
+Edge_detector_t brake_edge_detector{
+    .deadzone_low = LOW_THRESHOLD_SPEED,
+    .deadzone_high = HIGH_THRESHOLD_SPEED,
+    .edge = NEG,
+    .i2s_num = I2S_NUM_1,
+    .adc_unit = ADC_UNIT_1,
+    .adc_channel = BRAKE_ADC_CHANNEL,
+    .line_voltage_min = SPEED_LINE_VOLTAGE_MIN,
+    .line_voltage_max = SPEED_LINE_VOLTAGE_MAX,
+    .line_adc_min = SPEED_LINE_ADC_MIN,
+    .line_adc_max = SPEED_LINE_ADC_MAX,
+    .offset = (int)BRAKE_ADC_CHANNEL * 0x1000 + 0xFFF,
+
 };
 
 /**
