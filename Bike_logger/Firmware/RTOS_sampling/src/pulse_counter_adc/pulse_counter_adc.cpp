@@ -101,8 +101,8 @@ Edge_detector_t speed_edge_detector{
  * @brief Function prototypes
  * 
  */
-uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
-bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v);
+uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
+bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
 
 /**
  * @brief Function definitions
@@ -150,7 +150,7 @@ void reader(void *pvParameters)
     uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num, edge_detector.offset);
     float filteredval = f.filterIn((float)adc_value);
 
-    uint16_t filtered_adc_voltage = adc_to_voltage_b(filteredval, edge_detector.line_adc_min, edge_detector.line_adc_max, edge_detector.line_voltage_min, edge_detector.line_voltage_max);
+    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, edge_detector.line_adc_min, edge_detector.line_adc_max, edge_detector.line_voltage_min, edge_detector.line_voltage_max);
 
     //Serial.printf("%d, %f\n", adc_value, filteredval);
 
