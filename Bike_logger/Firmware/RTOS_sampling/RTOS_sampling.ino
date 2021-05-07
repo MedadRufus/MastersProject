@@ -141,12 +141,16 @@ void setup()
 
   init_all_sensors();
   init_mutexes();
-#if POLL_MOTOR_SPEED_AND_BRAKE
+#if POLL_MOTOR_SPEED
   init_adc_edge_detect();
 #endif
 
 #if POLL_PAS
   setup_pulse_counter();
+#endif
+
+#if POLL_BRAKE
+  init_state_logger();
 #endif
 
   start_tasks();
