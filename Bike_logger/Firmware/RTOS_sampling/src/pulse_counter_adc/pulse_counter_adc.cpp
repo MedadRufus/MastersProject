@@ -290,6 +290,7 @@ void init_adc_edge_detect()
 {
   // Create a task that will read the data
   xTaskCreatePinnedToCore(reader, "ADC_reader_MOTOR", 2048, &speed_edge_detector, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 4, NULL, 0);
 }
 
 #if 0
