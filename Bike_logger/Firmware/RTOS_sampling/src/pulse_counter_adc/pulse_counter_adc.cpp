@@ -44,7 +44,6 @@ const int dutyCycle = 250;
 
 const int ledPin = 33; // 33 corresponds to GPIO33
 
-uint16_t offset = (int)ADC_INPUT * 0x1000 + 0xFFF;
 size_t bytes_read;
 
 const float cutoff_freq = 1000.0;                       //Cutoff frequency in Hz
@@ -79,6 +78,7 @@ typedef struct
   uint16_t line_voltage_max;
   uint16_t line_adc_min;
   uint16_t line_adc_max;
+  uint16_t offset;
   line_state_t previous_line_state;
 } Edge_detector_t;
 
@@ -93,6 +93,8 @@ Edge_detector_t speed_edge_detector{
     .line_voltage_max = SPEED_LINE_VOLTAGE_MAX,
     .line_adc_min = SPEED_LINE_ADC_MIN,
     .line_adc_max = SPEED_LINE_ADC_MAX,
+    .offset = (int)SPEED_ADC_CHANNEL * 0x1000 + 0xFFF,
+};
 };
 
 /**
