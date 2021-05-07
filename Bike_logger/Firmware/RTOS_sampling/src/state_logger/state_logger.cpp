@@ -155,6 +155,11 @@ void reader(void *pvParameters)
 
   Edge_detector_t edge_detector = *(Edge_detector_t *)pvParameters;
 
+  // Initialize the I2S peripheral
+  i2sInit(edge_detector.i2s_num, edge_detector.adc_unit, edge_detector.adc_channel);
+
+  unsigned long startTime = micros();
+
   while (1)
   {
     uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num, edge_detector.offset);
@@ -279,7 +284,7 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader, "ADC_reader_MOTOR", 2048, NULL, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader, "ADC_reader_MOTOR", 2048, &speed_edge_detector, 4, NULL, 0);
 }
 
 #if 0
