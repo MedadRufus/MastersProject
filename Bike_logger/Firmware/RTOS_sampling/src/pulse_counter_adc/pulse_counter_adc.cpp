@@ -26,8 +26,8 @@
 #define I2S_SAMPLE_RATE 2442
 #define ADC_INPUT ADC1_CHANNEL_7 //pin 35 Motor A
 
-#define low_threshold_speed 400   //mV
-#define high_threshold_speed 4600 //mV
+#define LOW_THRESHOLD_SPEED 400   //mV
+#define HIGH_THRESHOLD_SPEED 4600 //mV
 
 #define SPEED_LINE_VOLTAGE_MIN 0    //mV
 #define SPEED_LINE_VOLTAGE_MAX 5000 //mV
@@ -83,8 +83,8 @@ typedef struct
 } Edge_detector_t;
 
 Edge_detector_t speed_edge_detector{
-    .deadzone_low = low_threshold_speed,
-    .deadzone_high = high_threshold_speed,
+    .deadzone_low = LOW_THRESHOLD_SPEED,
+    .deadzone_high = HIGH_THRESHOLD_SPEED,
     .edge = NEG,
     .i2s_num = I2S_NUM_0,
     .adc_unit = ADC_UNIT_1,
