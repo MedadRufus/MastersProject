@@ -17,7 +17,6 @@
 #include <ESPNtpClient.h>
 #include "../../RTOS_sampling.h"
 
-
 /*
  * This is an example to read analog data at high frequency using the I2S peripheral
  * Run a wire between pins 27 & 32
@@ -126,7 +125,7 @@ void reader(void *pvParameters)
     uint16_t adc_value = read_adc_value_from_buffer();
     float filteredval = f.filterIn((float)adc_value);
 
-    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, SPEED_LINE_ADC_MIN, SPEED_LINE_ADC_MAX, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX );
+    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, SPEED_LINE_ADC_MIN, SPEED_LINE_ADC_MAX, SPEED_LINE_VOLTAGE_MIN, SPEED_LINE_VOLTAGE_MAX);
 
     //Serial.printf("%d, %f\n", adc_value, filteredval);
 
