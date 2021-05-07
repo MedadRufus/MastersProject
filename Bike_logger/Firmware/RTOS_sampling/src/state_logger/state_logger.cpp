@@ -82,8 +82,8 @@ typedef struct
 } Digital_Edge_detector_t;
 
 Digital_Edge_detector_t brake_edge_detector{
-    .deadzone_low = 0.1,
-    .deadzone_high = 0.9,
+    .deadzone_low = 0.1f,
+    .deadzone_high = 0.9f,
     .edge = NEG,
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
@@ -175,12 +175,12 @@ uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, sign
  * @param x 
  * @return bool
  */
-bool in_range_b(signed low, signed high, signed x)
+bool in_range_b(float low, float high, float x)
 {
   return (low <= x && x <= high);
 }
 
-line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, signed voltage)
+line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, float voltage)
 {
 
   if (voltage < edge_detector_obj->deadzone_low)
