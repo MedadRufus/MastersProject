@@ -36,6 +36,9 @@
 #define SPEED_LINE_ADC_MAX 4096
 
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
+#define MIN_INTERVAL_BETWEEN_PULSES 10000   // microseconds
+
+#define BRAKE_CHECK_INTERVAL 1 // millisecond
 
 // setting PWM properties for test pwm signal
 const int freq = 6;
@@ -44,6 +47,8 @@ const int resolution = 10;
 const int dutyCycle = 250;
 
 const int ledPin = 33; // 33 corresponds to GPIO33
+
+const int brakePin = 39;
 
 size_t bytes_read;
 
@@ -123,31 +128,15 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
  * @brief Function definitions
  * 
  */
-void i2sInit(i2s_port_t i2s_num, adc_unit_t adc_unit, adc1_channel_t adc_channel)
+void gpio_input_pin_init()
 {
-  i2s_config_t i2s_config = {
-      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_ADC_BUILT_IN),
-      .sample_rate = I2S_SAMPLE_RATE,               // The format of the signal using ADC_BUILT_IN
-      .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT, // is fixed at 12bit, stereo, MSB
-      .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
-      .communication_format = I2S_COMM_FORMAT_I2S_MSB,
-      .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-      .dma_buf_count = 4,
-      .dma_buf_len = 8,
-      .use_apll = false,
-      .tx_desc_auto_clear = false,
-      .fixed_mclk = 0};
-  i2s_driver_install(i2s_num, &i2s_config, 0, NULL);
-  i2s_set_adc_mode(adc_unit, adc_channel);
-  i2s_adc_enable(i2s_num);
+  // initialize the pushbutton pin as an input
+  pinMode(brakePin, INPUT);
 }
 
-uint16_t read_adc_value_from_buffer(i2s_port_t i2s_num, uint16_t offset)
+uint16_t read_gpio_value()
 {
-  uint16_t buffer[1] = {0};
-  i2s_read(i2s_num, &buffer, sizeof(buffer), &bytes_read, 15);
-  uint16_t adc_value = offset - buffer[0];
-  return adc_value;
+  return digitalRead(brakePin);
 }
 
 void reader(void *pvParameters)
@@ -156,20 +145,26 @@ void reader(void *pvParameters)
   Edge_detector_t edge_detector = *(Edge_detector_t *)pvParameters;
 
   // Initialize the I2S peripheral
-  i2sInit(edge_detector.i2s_num, edge_detector.adc_unit, edge_detector.adc_channel);
+  gpio_input_pin_init();
 
   unsigned long startTime = micros();
 
-  while (1)
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = BRAKE_CHECK_INTERVAL;
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
   {
-    uint16_t adc_value = read_adc_value_from_buffer(edge_detector.i2s_num, edge_detector.offset);
-    float filteredval = f.filterIn((float)adc_value);
+    // Wait for the next cycle.
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
-    uint16_t filtered_adc_voltage = adc_to_voltage(filteredval, edge_detector.line_adc_min, edge_detector.line_adc_max, edge_detector.line_voltage_min, edge_detector.line_voltage_max);
+    uint16_t gpio_value = read_gpio_value();
+    float filteredval = f.filterIn((float)gpio_value);
 
-    //Serial.printf("%d, %f\n", adc_value, filteredval);
+    bool is_edge_state = is_edge(&edge_detector, filteredval);
 
-    bool is_edge_state = is_edge(&speed_edge_detector, filtered_adc_voltage);
+    Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, is_edge_state);
 
     if (is_edge_state)
     {
@@ -177,7 +172,7 @@ void reader(void *pvParameters)
       unsigned long elapsed_time = current_time - startTime;
       startTime = current_time;
 
-      if (elapsed_time < MAX_INTERVAL_BETWEEN_PULSES)
+      if (elapsed_time > MIN_INTERVAL_BETWEEN_PULSES)
       {
         Serial.printf("%d\n", elapsed_time);
 
@@ -187,7 +182,7 @@ void reader(void *pvParameters)
                 NTP.getTimeDateStringUs(),
                 elapsed_time);
 
-        save_to_sd(msg_buffer);
+        //save_to_sd(msg_buffer);
       }
     }
   }
@@ -214,11 +209,11 @@ bool in_range(signed low, signed high, signed x)
 
 line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed voltage)
 {
-  if (voltage < edge_detector_obj->deadzone_low)
+  if (voltage == 0)
   {
     return LINE_LOW;
   }
-  else if (voltage > edge_detector_obj->deadzone_high)
+  else if (voltage == 1)
   {
     return LINE_HIGH;
   }
@@ -239,10 +234,10 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
   /**
    * @brief Reject if voltage is in dead zone.
    */
-  if (in_range(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
-  {
-    return false;
-  }
+  // if (in_range(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
+  // {
+  //   return false;
+  // }
 
   /**
    * @brief Check current line state and then check if it is different from previous state
