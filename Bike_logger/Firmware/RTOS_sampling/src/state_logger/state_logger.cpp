@@ -182,11 +182,12 @@ bool in_range_b(signed low, signed high, signed x)
 
 line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, signed voltage)
 {
-  if (voltage == 0)
+
+  if (voltage < edge_detector_obj->deadzone_low)
   {
     return LINE_LOW;
   }
-  else if (voltage == 1)
+  else if (voltage > edge_detector_obj->deadzone_high)
   {
     return LINE_HIGH;
   }
