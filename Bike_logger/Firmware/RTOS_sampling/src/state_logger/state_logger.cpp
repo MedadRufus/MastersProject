@@ -50,14 +50,12 @@ const int ledPin = 33; // 33 corresponds to GPIO33
 
 const int brakePin = 39;
 
-size_t bytes_read;
-
 const float cutoff_freq = 1000.0;                       //Cutoff frequency in Hz
 const float sampling_time = (float)1 / I2S_SAMPLE_RATE; //Sampling time in seconds.
-IIR::ORDER order = IIR::ORDER::OD3;                     // Order (OD1 to OD4)
+IIR::ORDER order_brake = IIR::ORDER::OD3;               // Order (OD1 to OD4)
 
 // Low-pass filter
-Filter f(cutoff_freq, sampling_time, order);
+Filter f_b(cutoff_freq, sampling_time, order_brake);
 
 typedef enum
 {
@@ -107,8 +105,8 @@ Edge_detector_t brake_edge_detector{
  * @brief Function prototypes
  * 
  */
-uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
-bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v);
+uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
+bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v);
 
 /**
  * @brief Function definitions
@@ -125,7 +123,7 @@ uint16_t read_gpio_value()
   return digitalRead(brakePin);
 }
 
-void reader(void *pvParameters)
+void reader_b(void *pvParameters)
 {
 
   Edge_detector_t edge_detector = *(Edge_detector_t *)pvParameters;
@@ -146,9 +144,9 @@ void reader(void *pvParameters)
     vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
     uint16_t gpio_value = read_gpio_value();
-    float filteredval = f.filterIn((float)gpio_value);
+    float filteredval = f_b.filterIn((float)gpio_value);
 
-    bool is_edge_state = is_edge(&edge_detector, filteredval);
+    bool is_edge_state = is_edge_b(&edge_detector, filteredval);
 
     Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, is_edge_state);
 
@@ -174,7 +172,7 @@ void reader(void *pvParameters)
   }
 }
 
-uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max)
+uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max)
 {
   adc_value = constrain(adc_value, adc_min, adc_max);
   return map(adc_value, adc_value, adc_min, voltage_min, voltage_max);
@@ -188,12 +186,12 @@ uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed
  * @param x 
  * @return bool
  */
-bool in_range(signed low, signed high, signed x)
+bool in_range_b(signed low, signed high, signed x)
 {
   return (low <= x && x <= high);
 }
 
-line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed voltage)
+line_state_t voltage_to_linestate_b(Edge_detector_t *edge_detector_obj, signed voltage)
 {
   if (voltage == 0)
   {
@@ -215,12 +213,12 @@ line_state_t voltage_to_linestate(Edge_detector_t *edge_detector_obj, signed vol
  * @return true yes there was an edge
  * @return false no edge here
  */
-bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
+bool is_edge_b(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 {
   /**
    * @brief Reject if voltage is in dead zone.
    */
-  // if (in_range(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
+  // if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
   // {
   //   return false;
   // }
@@ -229,7 +227,7 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
    * @brief Check current line state and then check if it is different from previous state
    * 
    */
-  line_state_t current_line_state = voltage_to_linestate(edge_detector_obj, current_v);
+  line_state_t current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
 
   bool res = false;
 
@@ -265,7 +263,7 @@ bool is_edge(Edge_detector_t *edge_detector_obj, uint16_t current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader, "ADC_reader_MOTOR", 2048, &speed_edge_detector, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader_b, "ADC_reader_MOTOR", 2048, &brake_edge_detector, 4, NULL, 0);
 }
 
 #if 0
