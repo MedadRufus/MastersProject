@@ -195,11 +195,6 @@ void reader(void *pvParameters)
 
 uint16_t adc_to_voltage(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max)
 {
-  /**
-   * @brief  TODO: check the resolution of the ADC
-   * 
-   */
-
   adc_value = constrain(adc_value, adc_min, adc_max);
   return map(adc_value, adc_value, adc_min, voltage_min, voltage_max);
 }
