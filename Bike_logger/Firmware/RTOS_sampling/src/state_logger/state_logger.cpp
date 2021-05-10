@@ -80,6 +80,9 @@ typedef struct
   adc_unit_t adc_unit;
   adc1_channel_t adc_channel;
   line_state_t previous_line_state;
+  line_state_t current_line_state;
+  line_state_t last_recorded_line_state;
+
 } Digital_Edge_detector_t;
 
 Digital_Edge_detector_t brake_edge_detector{
@@ -97,6 +100,7 @@ Digital_Edge_detector_t brake_edge_detector{
  */
 uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
 edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v);
+bool is_linestate_changed(Digital_Edge_detector_t *edge_detector_obj);
 
 /**
  * @brief Function definitions
@@ -111,6 +115,16 @@ void gpio_input_pin_init()
 uint16_t read_gpio_value()
 {
   return digitalRead(brakePin);
+}
+
+bool is_linestate_changed(Digital_Edge_detector_t *edge_detector_obj)
+{
+  if (edge_detector_obj->last_recorded_line_state != edge_detector_obj->current_line_state)
+  {
+    return true;
+  }
+
+  return false;
 }
 
 void reader_b(void *pvParameters)
@@ -137,26 +151,22 @@ void reader_b(void *pvParameters)
     float filteredval = f_b.filterIn((float)gpio_value);
 
     edge_t edge_state = is_edge_b(&edge_detector, filteredval);
+    bool linestate_changed = is_linestate_changed(&edge_detector);
 
     //Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, edge_state);
 
-    if ((edge_state == POS) || (edge_state == NEG))
+    if ((edge_state == POS) || (edge_state == NEG) || (linestate_changed == true))
     {
-      unsigned long current_time = micros();
-      unsigned long elapsed_time = current_time - startTime;
-      startTime = current_time;
+      char msg_buffer[100];
 
-      if (elapsed_time > MIN_INTERVAL_BETWEEN_PULSES)
-      {
-        char msg_buffer[100];
+      sprintf(msg_buffer, "%s,brake_state,%d\n",
+              NTP.getTimeDateStringUs(),
+              edge_detector.current_line_state);
 
-        sprintf(msg_buffer, "%s,brake_state,%d\n",
-                NTP.getTimeDateStringUs(),
-                edge_state);
+      Serial.print(msg_buffer);
+      save_to_sd(msg_buffer);
 
-        Serial.print(msg_buffer);
-        save_to_sd(msg_buffer);
-      }
+      edge_detector.last_recorded_line_state = edge_detector.current_line_state;
     }
   }
 }
@@ -217,16 +227,16 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
    * @brief Check current line state and then check if it is different from previous state
    * 
    */
-  line_state_t current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
+  edge_detector_obj->current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
 
   edge_t res = NO_EDGE;
 
-  if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
+  if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (edge_detector_obj->current_line_state == LINE_LOW))
   {
     res = NEG;
   }
 
-  if ((edge_detector_obj->previous_line_state == LINE_LOW) && (current_line_state == LINE_HIGH))
+  if ((edge_detector_obj->previous_line_state == LINE_LOW) && (edge_detector_obj->current_line_state == LINE_HIGH))
   {
     res = POS;
   }
@@ -235,7 +245,7 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
    * @brief Update previous line state with current state.
    * 
    */
-  edge_detector_obj->previous_line_state = current_line_state;
+  edge_detector_obj->previous_line_state = edge_detector_obj->current_line_state;
 
   return res;
 }
@@ -243,7 +253,7 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader_b, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 4, NULL, 0);
+  xTaskCreatePinnedToCore(reader_b, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 3, NULL, 0);
 }
 
 #if 0
