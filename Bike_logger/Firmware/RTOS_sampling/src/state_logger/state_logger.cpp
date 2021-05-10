@@ -86,8 +86,8 @@ typedef struct
 } Digital_Edge_detector_t;
 
 Digital_Edge_detector_t brake_edge_detector{
-    .deadzone_low = 0.1f,
-    .deadzone_high = 0.9f,
+    .deadzone_low = 0.3f,
+    .deadzone_high = 0.7f,
     .edge = NEG,
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
