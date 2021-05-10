@@ -92,6 +92,9 @@ Digital_Edge_detector_t brake_edge_detector{
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
     .adc_channel = BRAKE_ADC_CHANNEL,
+    .previous_line_state = LINE_HIGH,
+    .current_line_state = LINE_HIGH,
+    .last_recorded_line_state = LINE_HIGH,
 };
 
 /**
@@ -155,7 +158,7 @@ void reader_b(void *pvParameters)
 
     //Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, edge_state);
 
-    if ((edge_state == POS) || (edge_state == NEG) || (linestate_changed == true))
+    if (linestate_changed == true)
     {
       char msg_buffer[100];
 
@@ -215,13 +218,6 @@ line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, 
  */
 edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 {
-  /**
-   * @brief Reject if voltage is in dead zone.
-   */
-  if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
-  {
-    return NO_EDGE;
-  }
 
   /**
    * @brief Check current line state and then check if it is different from previous state
