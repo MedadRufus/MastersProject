@@ -38,7 +38,8 @@
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
 #define MIN_INTERVAL_BETWEEN_PULSES 10000   // microseconds
 
-#define BRAKE_CHECK_INTERVAL 1 // millisecond
+#define BRAKE_CHECK_INTERVAL 10 // millisecond
+#define EDGE_CHECK_INTERVAL 1   // millisecond
 
 // setting PWM properties for test pwm signal
 const int freq = 6;
@@ -80,15 +81,21 @@ typedef struct
   adc_unit_t adc_unit;
   adc1_channel_t adc_channel;
   line_state_t previous_line_state;
+  line_state_t current_line_state;
+  line_state_t last_recorded_line_state;
+
 } Digital_Edge_detector_t;
 
 Digital_Edge_detector_t brake_edge_detector{
-    .deadzone_low = 0.1f,
-    .deadzone_high = 0.9f,
+    .deadzone_low = 0.3f,
+    .deadzone_high = 0.7f,
     .edge = NEG,
     .i2s_num = I2S_NUM_1,
     .adc_unit = ADC_UNIT_1,
     .adc_channel = BRAKE_ADC_CHANNEL,
+    .previous_line_state = LINE_HIGH,
+    .current_line_state = LINE_HIGH,
+    .last_recorded_line_state = LINE_HIGH,
 };
 
 /**
@@ -97,6 +104,7 @@ Digital_Edge_detector_t brake_edge_detector{
  */
 uint16_t adc_to_voltage_b(signed adc_value, signed adc_min, signed adc_max, signed voltage_min, signed voltage_max);
 edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v);
+bool is_linestate_changed(Digital_Edge_detector_t *edge_detector_obj);
 
 /**
  * @brief Function definitions
@@ -113,7 +121,17 @@ uint16_t read_gpio_value()
   return digitalRead(brakePin);
 }
 
-void reader_b(void *pvParameters)
+bool is_linestate_changed(Digital_Edge_detector_t *edge_detector_obj)
+{
+  if (edge_detector_obj->last_recorded_line_state != edge_detector_obj->current_line_state)
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void edge_updater_b(void *pvParameters)
 {
 
   Digital_Edge_detector_t edge_detector = *(Digital_Edge_detector_t *)pvParameters;
@@ -121,7 +139,44 @@ void reader_b(void *pvParameters)
   // Initialize the I2S peripheral
   gpio_input_pin_init();
 
-  unsigned long startTime = micros();
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = EDGE_CHECK_INTERVAL;
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
+  {
+    // Wait for the next cycle.
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    uint16_t gpio_value = read_gpio_value();
+    float filteredval = f_b.filterIn((float)gpio_value);
+
+    edge_t edge_state = is_edge_b(&edge_detector, filteredval);
+    bool linestate_changed = is_linestate_changed(&edge_detector);
+
+    //Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, edge_state);
+
+    if (linestate_changed == true)
+    {
+      char msg_buffer[100];
+
+      sprintf(msg_buffer, "%s,brake_state,%d\n",
+              NTP.getTimeDateStringUs(),
+              edge_detector.current_line_state);
+
+      Serial.print(msg_buffer);
+      save_to_sd(msg_buffer);
+
+      edge_detector.last_recorded_line_state = edge_detector.current_line_state;
+    }
+  }
+}
+
+void state_updater_b(void *pvParameters)
+{
+
+  Digital_Edge_detector_t edge_detector = *(Digital_Edge_detector_t *)pvParameters;
 
   TickType_t xLastWakeTime;
   const TickType_t xFrequency = BRAKE_CHECK_INTERVAL;
@@ -135,29 +190,18 @@ void reader_b(void *pvParameters)
 
     uint16_t gpio_value = read_gpio_value();
     float filteredval = f_b.filterIn((float)gpio_value);
-
     edge_t edge_state = is_edge_b(&edge_detector, filteredval);
 
-    //Serial.printf("Filtered value: %f Edge_state:%d\n", filteredval, edge_state);
+    char msg_buffer[100];
 
-    if ((edge_state == POS) || (edge_state == NEG))
-    {
-      unsigned long current_time = micros();
-      unsigned long elapsed_time = current_time - startTime;
-      startTime = current_time;
+    sprintf(msg_buffer, "%s,brake_state,%d\n",
+            NTP.getTimeDateStringUs(),
+            edge_detector.current_line_state);
 
-      if (elapsed_time > MIN_INTERVAL_BETWEEN_PULSES)
-      {
-        char msg_buffer[100];
+    Serial.print(msg_buffer);
+    save_to_sd(msg_buffer);
 
-        sprintf(msg_buffer, "%s,brake_state,%d\n",
-                NTP.getTimeDateStringUs(),
-                edge_state);
-
-        Serial.print(msg_buffer);
-        save_to_sd(msg_buffer);
-      }
-    }
+    edge_detector.last_recorded_line_state = edge_detector.current_line_state;
   }
 }
 
@@ -205,28 +249,21 @@ line_state_t voltage_to_linestate_b(Digital_Edge_detector_t *edge_detector_obj, 
  */
 edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 {
-  /**
-   * @brief Reject if voltage is in dead zone.
-   */
-  if (in_range_b(edge_detector_obj->deadzone_low, edge_detector_obj->deadzone_high, current_v))
-  {
-    return NO_EDGE;
-  }
 
   /**
    * @brief Check current line state and then check if it is different from previous state
    * 
    */
-  line_state_t current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
+  edge_detector_obj->current_line_state = voltage_to_linestate_b(edge_detector_obj, current_v);
 
   edge_t res = NO_EDGE;
 
-  if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (current_line_state == LINE_LOW))
+  if ((edge_detector_obj->previous_line_state == LINE_HIGH) && (edge_detector_obj->current_line_state == LINE_LOW))
   {
     res = NEG;
   }
 
-  if ((edge_detector_obj->previous_line_state == LINE_LOW) && (current_line_state == LINE_HIGH))
+  if ((edge_detector_obj->previous_line_state == LINE_LOW) && (edge_detector_obj->current_line_state == LINE_HIGH))
   {
     res = POS;
   }
@@ -235,7 +272,7 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
    * @brief Update previous line state with current state.
    * 
    */
-  edge_detector_obj->previous_line_state = current_line_state;
+  edge_detector_obj->previous_line_state = edge_detector_obj->current_line_state;
 
   return res;
 }
@@ -243,7 +280,8 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader_b, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 4, NULL, 0);
+  xTaskCreatePinnedToCore(edge_updater_b, "edge_reader_BRAKE", 2048, &brake_edge_detector, 3, NULL, 0);
+  xTaskCreatePinnedToCore(state_updater_b, "state_reader_BRAKE", 2048, &brake_edge_detector, 2, NULL, 0);
 }
 
 #if 0
