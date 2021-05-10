@@ -38,8 +38,8 @@
 #define MAX_INTERVAL_BETWEEN_PULSES 2400000 // microseconds
 #define MIN_INTERVAL_BETWEEN_PULSES 10000   // microseconds
 
-#define BRAKE_CHECK_INTERVAL 1 // millisecond
-#define EDGE_CHECK_INTERVAL 10 // millisecond
+#define BRAKE_CHECK_INTERVAL 10 // millisecond
+#define EDGE_CHECK_INTERVAL 1   // millisecond
 
 // setting PWM properties for test pwm signal
 const int freq = 6;
