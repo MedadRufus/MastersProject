@@ -39,6 +39,7 @@
 #define MIN_INTERVAL_BETWEEN_PULSES 10000   // microseconds
 
 #define BRAKE_CHECK_INTERVAL 1 // millisecond
+#define EDGE_CHECK_INTERVAL 10 // millisecond
 
 // setting PWM properties for test pwm signal
 const int freq = 6;
@@ -130,7 +131,7 @@ bool is_linestate_changed(Digital_Edge_detector_t *edge_detector_obj)
   return false;
 }
 
-void reader_b(void *pvParameters)
+void edge_updater_b(void *pvParameters)
 {
 
   Digital_Edge_detector_t edge_detector = *(Digital_Edge_detector_t *)pvParameters;
@@ -138,10 +139,8 @@ void reader_b(void *pvParameters)
   // Initialize the I2S peripheral
   gpio_input_pin_init();
 
-  unsigned long startTime = micros();
-
   TickType_t xLastWakeTime;
-  const TickType_t xFrequency = BRAKE_CHECK_INTERVAL;
+  const TickType_t xFrequency = EDGE_CHECK_INTERVAL;
 
   // Initialise the xLastWakeTime variable with the current time.
   xLastWakeTime = xTaskGetTickCount();
@@ -171,6 +170,38 @@ void reader_b(void *pvParameters)
 
       edge_detector.last_recorded_line_state = edge_detector.current_line_state;
     }
+  }
+}
+
+void state_updater_b(void *pvParameters)
+{
+
+  Digital_Edge_detector_t edge_detector = *(Digital_Edge_detector_t *)pvParameters;
+
+  TickType_t xLastWakeTime;
+  const TickType_t xFrequency = BRAKE_CHECK_INTERVAL;
+
+  // Initialise the xLastWakeTime variable with the current time.
+  xLastWakeTime = xTaskGetTickCount();
+  for (;;)
+  {
+    // Wait for the next cycle.
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
+    uint16_t gpio_value = read_gpio_value();
+    float filteredval = f_b.filterIn((float)gpio_value);
+    edge_t edge_state = is_edge_b(&edge_detector, filteredval);
+
+    char msg_buffer[100];
+
+    sprintf(msg_buffer, "%s,brake_state,%d\n",
+            NTP.getTimeDateStringUs(),
+            edge_detector.current_line_state);
+
+    Serial.print(msg_buffer);
+    save_to_sd(msg_buffer);
+
+    edge_detector.last_recorded_line_state = edge_detector.current_line_state;
   }
 }
 
@@ -249,7 +280,8 @@ edge_t is_edge_b(Digital_Edge_detector_t *edge_detector_obj, float current_v)
 void init_state_logger()
 {
   // Create a task that will read the data
-  xTaskCreatePinnedToCore(reader_b, "ADC_reader_BRAKE", 2048, &brake_edge_detector, 3, NULL, 0);
+  xTaskCreatePinnedToCore(edge_updater_b, "edge_reader_BRAKE", 2048, &brake_edge_detector, 3, NULL, 0);
+  xTaskCreatePinnedToCore(state_updater_b, "state_reader_BRAKE", 2048, &brake_edge_detector, 2, NULL, 0);
 }
 
 #if 0
