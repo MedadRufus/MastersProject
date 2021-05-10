@@ -164,7 +164,7 @@ void reader(void *pvParameters)
 
       if (elapsed_time < MAX_INTERVAL_BETWEEN_PULSES)
       {
-        Serial.printf("%d\n", elapsed_time);
+        //Serial.printf("%d\n", elapsed_time);
 
         char msg_buffer[100];
 

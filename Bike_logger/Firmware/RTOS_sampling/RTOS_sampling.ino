@@ -400,7 +400,7 @@ void update_baro_data()
   /* Write baro data to file */
   const char *format = "%s,baro,%f,%f,%f\n";
   sprintf(buffer1, format, NTP.getTimeDateStringUs(), temperature, pressure, humidity);
-  Serial.print(buffer1);
+  //Serial.print(buffer1);
 
   save_to_sd(buffer1);
 }
@@ -507,7 +507,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.flags.bits.gnssFixOK,
           ubxDataStruct.fixType);
 
-  Serial.print(buffer_gnss);
+  //Serial.print(buffer_gnss);
 
   save_to_sd(buffer_gnss);
 }
