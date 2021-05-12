@@ -65,7 +65,7 @@ extern "C"
 
 /* INA226 info */
 #define FULL_RANGE_VOLTAGE_DROP (float)0.08192 // Volts
-#define SHUNT_RESISTANCE (float)0.0024         // Ohms
+#define SHUNT_RESISTANCE (float)0.00217        // Ohms for battery measurment module
 
 /* I = V/R */
 #define INA226_FULL_CURRENT_RANGE (float)(FULL_RANGE_VOLTAGE_DROP / SHUNT_RESISTANCE) // Amps
