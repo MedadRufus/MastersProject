@@ -5,131 +5,132 @@ from battery import Battery
 from kalman import ExtendedKalmanFilter as EKF
 from protocol import launch_experiment_protocol
 
-# total capacity
-Q_tot = 3.2
 
-# Thevenin model values
-R0 = 0.062
-R1 = 0.01
-C1 = 3000
+class SocEstimator:
+    def __init__(self):
+        # total capacity
+        self.Q_tot = 3.2
 
-# time period
-time_step = 10
+        # Thevenin model values
+        self.R0 = 0.062
+        self.R1 = 0.01
+        self.C1 = 3000
 
-# Battery simulation model
-battery_simulation = Battery(Q_tot, R0, R1, C1)
+        # time period
+        self.time_step = 10
 
+        # Battery simulation model
+        self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
 
-def get_EKF(R0, R1, C1, std_dev, time_step):
-    # initial state (SoC is intentionally set to a wrong value)
-    # x = [[SoC], [RC voltage]]
-    x = np.matrix([[0.5],
-                   [0.0]])
+        self.battery_simulation.actual_capacity = 0
 
-    exp_coeff = m.exp(-time_step / (C1 * R1))
+        # measurement noise standard deviation
+        self.std_dev = 0.015
 
-    # state transition model
-    F = np.matrix([[1, 0],
-                   [0, exp_coeff]])
+        # get configured EKF
+        self.Kf = self.get_EKF(self.R0, self.R1, self.C1, self.std_dev, self.time_step)
 
-    # control-input model
-    B = np.matrix([[-time_step / (Q_tot * 3600)],
-                   [R1 * (1 - exp_coeff)]])
+        self.time = [0]
+        self.true_SoC = [self.battery_simulation.state_of_charge]
+        self.estim_SoC = [self.Kf.x[0, 0]]
+        self.true_voltage = [self.battery_simulation.voltage]
+        self.mes_voltage = [self.battery_simulation.voltage + np.random.normal(0, 0.1, 1)[0]]
+        self.current = [self.battery_simulation.current]
 
-    # variance from std_dev
-    var = std_dev ** 2
+    def update_all(self, actual_current):
+        self.battery_simulation.current = actual_current
+        self.battery_simulation.update(self.time_step)
 
-    # measurement noise
-    R = var
+        self.time.append(self.time[-1] + self.time_step)
+        self.current.append(actual_current)
 
-    # state covariance
-    P = np.matrix([[var, 0],
-                   [0, var]])
+        self.true_voltage.append(self.battery_simulation.voltage)
+        self.mes_voltage.append(self.battery_simulation.voltage + np.random.normal(0, self.std_dev, 1)[0])
 
-    # process noise covariance matrix
-    Q = np.matrix([[var / 50, 0],
-                   [0, var / 50]])
+        self.Kf.predict(u=actual_current)
+        self.Kf.update(self.mes_voltage[-1] + self.R0 * actual_current)
 
-    def HJacobian(x):
-        return np.matrix([[battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
+        self.true_SoC.append(self.battery_simulation.state_of_charge)
+        self.estim_SoC.append(self.Kf.x[0, 0])
 
-    def Hx(x):
-        return battery_simulation.OCV_model(x[0, 0]) - x[1, 0]
+        return self.battery_simulation.voltage  # mes_voltage[-1]
 
-    return EKF(x, F, B, P, Q, R, Hx, HJacobian)
+    def run_all(self):
+        # launch experiment
+        launch_experiment_protocol(self.Q_tot, self.time_step, self.update_all)
 
+        # plot stuff
+        self.plot_everything(self.time, self.true_voltage, self.mes_voltage, self.true_SoC, self.estim_SoC,
+                             self.current)
 
-def plot_everything(time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
-    import matplotlib.pyplot as plt
+    def get_EKF(self, R0, R1, C1, std_dev, time_step):
+        # initial state (SoC is intentionally set to a wrong value)
+        # x = [[SoC], [RC voltage]]
+        x = np.matrix([[0.5],
+                       [0.0]])
 
-    fig = plt.figure()
-    ax1 = fig.add_subplot(311)
-    ax2 = fig.add_subplot(312)
-    ax3 = fig.add_subplot(313)
+        exp_coeff = m.exp(-time_step / (C1 * R1))
 
-    # title, labels
-    ax1.set_title('')
-    ax1.set_xlabel('Time / s')
-    ax1.set_ylabel('voltage / V')
-    ax2.set_xlabel('Time / s')
-    ax2.set_ylabel('Soc')
-    ax3.set_xlabel('Time / s')
-    ax3.set_ylabel('Current / A')
+        # state transition model
+        F = np.matrix([[1, 0],
+                       [0, exp_coeff]])
 
-    ax1.plot(time, true_voltage, label="True voltage")
-    ax1.plot(time, mes_voltage, label="Mesured voltage")
-    ax2.plot(time, true_SoC, label="True SoC")
-    ax2.plot(time, estim_SoC, label="Estimated SoC")
-    ax3.plot(time, current, label="Current")
+        # control-input model
+        B = np.matrix([[-time_step / (self.Q_tot * 3600)],
+                       [R1 * (1 - exp_coeff)]])
 
-    ax1.legend()
-    ax2.legend()
-    ax3.legend()
+        # variance from std_dev
+        var = std_dev ** 2
 
-    plt.show()
+        # measurement noise
+        R = var
 
+        # state covariance
+        P = np.matrix([[var, 0],
+                       [0, var]])
 
-def run_all():
-    # discharged battery
-    battery_simulation.actual_capacity = 0
+        # process noise covariance matrix
+        Q = np.matrix([[var / 50, 0],
+                       [0, var / 50]])
 
-    # measurement noise standard deviation
-    std_dev = 0.015
+        def HJacobian(x):
+            return np.matrix([[self.battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
 
-    # get configured EKF
-    Kf = get_EKF(R0, R1, C1, std_dev, time_step)
+        def Hx(x):
+            return self.battery_simulation.OCV_model(x[0, 0]) - x[1, 0]
 
-    time = [0]
-    true_SoC = [battery_simulation.state_of_charge]
-    estim_SoC = [Kf.x[0, 0]]
-    true_voltage = [battery_simulation.voltage]
-    mes_voltage = [battery_simulation.voltage + np.random.normal(0, 0.1, 1)[0]]
-    current = [battery_simulation.current]
+        return EKF(x, F, B, P, Q, R, Hx, HJacobian)
 
-    def update_all(actual_current):
-        battery_simulation.current = actual_current
-        battery_simulation.update(time_step)
+    def plot_everything(self, time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
+        import matplotlib.pyplot as plt
 
-        time.append(time[-1] + time_step)
-        current.append(actual_current)
+        fig = plt.figure()
+        ax1 = fig.add_subplot(311)
+        ax2 = fig.add_subplot(312)
+        ax3 = fig.add_subplot(313)
 
-        true_voltage.append(battery_simulation.voltage)
-        mes_voltage.append(battery_simulation.voltage + np.random.normal(0, std_dev, 1)[0])
+        # title, labels
+        ax1.set_title('')
+        ax1.set_xlabel('Time / s')
+        ax1.set_ylabel('voltage / V')
+        ax2.set_xlabel('Time / s')
+        ax2.set_ylabel('Soc')
+        ax3.set_xlabel('Time / s')
+        ax3.set_ylabel('Current / A')
 
-        Kf.predict(u=actual_current)
-        Kf.update(mes_voltage[-1] + R0 * actual_current)
+        ax1.plot(time, true_voltage, label="True voltage")
+        ax1.plot(time, mes_voltage, label="Mesured voltage")
+        ax2.plot(time, true_SoC, label="True SoC")
+        ax2.plot(time, estim_SoC, label="Estimated SoC")
+        ax3.plot(time, current, label="Current")
 
-        true_SoC.append(battery_simulation.state_of_charge)
-        estim_SoC.append(Kf.x[0, 0])
+        ax1.legend()
+        ax2.legend()
+        ax3.legend()
 
-        return battery_simulation.voltage  # mes_voltage[-1]
-
-    # launch experiment
-    launch_experiment_protocol(Q_tot, time_step, update_all)
-
-    # plot stuff
-    plot_everything(time, true_voltage, mes_voltage, true_SoC, estim_SoC, current)
+        plt.show()
 
 
 if __name__ == '__main__':
-    run_all()
+    soc_estimator = SocEstimator()
+    soc_estimator.run_all()
