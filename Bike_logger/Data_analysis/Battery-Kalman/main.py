@@ -1,4 +1,5 @@
 import math as m
+import matplotlib.pyplot as plt
 import numpy as np
 
 from battery import Battery
@@ -63,6 +64,12 @@ class SocEstimator:
         self.plot_everything(self.time, self.true_voltage, self.mes_voltage, self.true_SoC, self.estim_SoC,
                              self.current)
 
+    def HJacobian(self, x):
+        return np.matrix([[self.battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
+
+    def Hx(self, x):
+        return self.battery_simulation.OCV_model(x[0, 0]) - x[1, 0]
+
     def get_EKF(self, R0, R1, C1, std_dev, time_step):
         # initial state (SoC is intentionally set to a wrong value)
         # x = [[SoC], [RC voltage]]
@@ -93,17 +100,9 @@ class SocEstimator:
         Q = np.matrix([[var / 50, 0],
                        [0, var / 50]])
 
-        def HJacobian(x):
-            return np.matrix([[self.battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
-
-        def Hx(x):
-            return self.battery_simulation.OCV_model(x[0, 0]) - x[1, 0]
-
-        return EKF(x, F, B, P, Q, R, Hx, HJacobian)
+        return EKF(x, F, B, P, Q, R, self.Hx, self.HJacobian)
 
     def plot_everything(self, time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
-        import matplotlib.pyplot as plt
-
         fig = plt.figure()
         ax1 = fig.add_subplot(311)
         ax2 = fig.add_subplot(312)
