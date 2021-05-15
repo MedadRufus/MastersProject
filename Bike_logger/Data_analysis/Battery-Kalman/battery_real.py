@@ -26,7 +26,7 @@ class Battery_real:
 
     @property
     def current(self):
-        return self._current
+        return self.df.iloc[self._row]["Current"]
 
     @current.setter
     def current(self, current):
@@ -34,7 +34,7 @@ class Battery_real:
 
     @property
     def voltage(self):
-        return self.OCV - self.R0 * self.current - self._RC_voltage
+        return self.df.iloc[self._row]["Battery_Voltage"]
 
     @property
     def state_of_charge(self):
