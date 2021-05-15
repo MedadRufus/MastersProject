@@ -7,7 +7,7 @@ class Battery_real:
     # capacity in Ah
     def __init__(self, total_capacity):
         self.load_data()
-        
+
         # capacity in As
         self.total_capacity = total_capacity * 3600
         self.actual_capacity = self.total_capacity
@@ -18,8 +18,11 @@ class Battery_real:
         # polynomial representation of OCV vs SoC
         self._OCV_model = Polynomial([3.1400, 3.9905, -14.2391, 24.4140, -13.5688, -4.0621, 4.5056])
 
+        self._row = 0
+
     def update(self, time_delta):
         self.actual_capacity -= self.current * time_delta
+        self._row += 1
 
     @property
     def current(self):
