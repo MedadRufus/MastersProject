@@ -2,7 +2,7 @@ import math as m
 import matplotlib.pyplot as plt
 import numpy as np
 
-from battery_real import Battery_real
+from battery import Battery
 from kalman import ExtendedKalmanFilter as EKF
 from protocol import launch_experiment_protocol
 
@@ -10,7 +10,7 @@ from protocol import launch_experiment_protocol
 class SocEstimator:
     def __init__(self):
         # total capacity
-        self.Q_tot = 3.2
+        self.Q_tot = 3.2  # Ah
 
         # Thevenin model values
         self.R0 = 0.062
@@ -21,7 +21,7 @@ class SocEstimator:
         self.time_step = 10
 
         # Battery simulation model
-        self.battery_simulation = Battery_real(self.Q_tot)
+        self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
 
         self.battery_simulation.actual_capacity = 0
 
