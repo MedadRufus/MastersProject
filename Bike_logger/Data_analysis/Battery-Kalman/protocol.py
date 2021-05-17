@@ -8,7 +8,9 @@ def load_data(self):
 
 
 def get_discharge_time(df):
-    raise NotImplementedError
+    start_time = df.head(1).index
+    end_time = df.tail(1).index
+    return end_time - start_time
 
 
 def launch_experiment_protocol_real_data(Q_tot, time_step, experiment_callback):
