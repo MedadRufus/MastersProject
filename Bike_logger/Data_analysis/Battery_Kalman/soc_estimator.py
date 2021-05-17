@@ -2,9 +2,9 @@ import math as m
 import matplotlib.pyplot as plt
 import numpy as np
 
-from battery import Battery
-from kalman import ExtendedKalmanFilter as EKF
-from protocol import Protocol
+from .battery import Battery
+from .kalman import ExtendedKalmanFilter as EKF
+from .protocol import Protocol
 
 
 class SocEstimator:

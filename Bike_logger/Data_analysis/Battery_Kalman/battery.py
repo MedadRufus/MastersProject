@@ -1,6 +1,6 @@
 import math as m
 
-from utils import Polynomial
+from .utils import Polynomial
 
 
 class Battery:
