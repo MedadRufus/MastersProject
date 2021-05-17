@@ -66,7 +66,7 @@ class SocEstimator:
                              self.current)
 
     def HJacobian(self, x):
-        return np.array([[self.battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
+        return np.matrix([[self.battery_simulation.OCV_model.deriv(x[0, 0]), -1]])
 
     def Hx(self, x):
         return self.battery_simulation.OCV_model(x[0, 0]) - x[1, 0]
