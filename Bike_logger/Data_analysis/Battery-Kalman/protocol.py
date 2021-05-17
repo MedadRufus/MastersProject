@@ -38,9 +38,13 @@ class Protocol:
             voltage = experiment_callback(current)
 
         # discharge first stage
+        df = self.load_data()
+        discharge_time = len(df.index)
         time = 0
-        current = discharge_current_rate * Q_tot
-        while time < discharge_constants_stages_time + discharge_constants_stages_time + total_pulse_time:
+        # current = discharge_current_rate * Q_tot
+        while time < discharge_time:
+            current = df["Current"].iloc[time] / 1000
+            print("Current", current)
             experiment_callback(current)
             time += time_step
 

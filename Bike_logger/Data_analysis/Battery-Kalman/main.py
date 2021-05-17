@@ -18,7 +18,7 @@ class SocEstimator:
         self.C1 = 3000
 
         # time period
-        self.time_step = 10  # seconds
+        self.time_step = 1  # seconds
 
         # Battery simulation model
         self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
