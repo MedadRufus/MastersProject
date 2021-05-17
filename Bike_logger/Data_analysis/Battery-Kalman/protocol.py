@@ -1,5 +1,3 @@
-import pandas as pd
-
 high_cut_off_voltage = 29.36
 
 
@@ -7,29 +5,19 @@ class Protocol:
     def __init__(self):
         pass
 
-    def load_data(self):
-        return pd.read_pickle('../data/df_ml_train.pkl')
-
     def get_discharge_time(self, df):
         start_time = df.head(1).index
         end_time = df.tail(1).index
         return end_time - start_time
 
-    def launch_experiment_protocol_real_data(self, Q_tot, time_step, experiment_callback):
-        charge_current_rate = 0.5  # C
-        discharge_current_rate = 1  # C
-        discharge_constants_stages_time = 20 * 60  # s
-        pulse_time = 60  # s
-        total_pulse_time = 10 * 60  # s
+    def launch_experiment_protocol_real_data(self, df, Q_tot, time_step, experiment_callback):
 
-        # discharge first stage
-        df = self.load_data()
+        # discharge currents taken from real data stored on the dataframe
         discharge_time = len(df.index)
         time = 0
-        # current = discharge_current_rate * Q_tot
+
         while time < discharge_time:
-            current = df["Current"].iloc[time] / 1000
-            print("Current", current)
+            current = df["Current"].iloc[time] / 1000  # Current in dataframe in mA. Convert to A
             experiment_callback(current)
             time += time_step
 

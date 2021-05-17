@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from battery import Battery
+from data_manager import load_data
 from kalman import ExtendedKalmanFilter as EKF
 from protocol import Protocol
 
@@ -44,7 +45,6 @@ class SocEstimator:
 
         self.time.append(self.time[-1] + self.time_step)
         self.current.append(actual_current)
-
         self.true_voltage.append(self.battery_simulation.voltage)
         self.mes_voltage.append(self.battery_simulation.voltage + np.random.normal(0, self.std_dev, 1)[0])
 
@@ -59,7 +59,8 @@ class SocEstimator:
     def run_all(self):
         # launch experiment
         p = Protocol()
-        p.launch_experiment_protocol_real_data(self.Q_tot, self.time_step, self.update_all)
+        df = load_data()
+        p.launch_experiment_protocol_real_data(df, self.Q_tot, self.time_step, self.update_all)
 
         # plot stuff
         self.plot_everything(self.time, self.true_voltage, self.mes_voltage, self.true_SoC, self.estim_SoC,
