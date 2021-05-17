@@ -1,3 +1,10 @@
+import pandas as pd
+
+
+def load_data(self):
+    return pd.read_pickle('../data/df_ml_train.pkl')
+
+
 def launch_experiment_protocol(Q_tot, time_step, experiment_callback):
     charge_current_rate = 0.5  # C
     discharge_current_rate = 1  # C
@@ -5,8 +12,8 @@ def launch_experiment_protocol(Q_tot, time_step, experiment_callback):
     pulse_time = 60  # s
     total_pulse_time = 40 * 60  # s
 
-    high_cut_off_voltage = 4.2
-    low_cut_off_voltage = 2.5
+    high_cut_off_voltage = 4.2 * 6
+    low_cut_off_voltage = 2.5 * 6
 
     # charge CC
     current = -charge_current_rate * Q_tot

@@ -10,7 +10,7 @@ from protocol import launch_experiment_protocol
 class SocEstimator:
     def __init__(self):
         # total capacity
-        self.Q_tot = 3.2  # Ah
+        self.Q_tot = 8.708  # Ah
 
         # Thevenin model values
         self.R0 = 0.062
@@ -18,7 +18,7 @@ class SocEstimator:
         self.C1 = 3000
 
         # time period
-        self.time_step = 10
+        self.time_step = 10  # seconds
 
         # Battery simulation model
         self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
