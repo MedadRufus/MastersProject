@@ -13,13 +13,11 @@ class Protocol:
     def launch_experiment_protocol_real_data(self, df, Q_tot, time_step, experiment_callback):
 
         # discharge currents taken from real data stored on the dataframe
-        discharge_time = len(df.index)
-        time = 0
+        total_rows = len(df.index)
 
-        while time < discharge_time:
-            current = df["Current"].iloc[time] / 1000  # Current in dataframe in mA. Convert to A
+        for i in range(total_rows):
+            current = df["Current"].iloc[i] / 1000  # Current in dataframe in mA. Convert to A
             experiment_callback(current)
-            time += time_step
 
     def launch_experiment_protocol(self, Q_tot, time_step, experiment_callback):
         charge_current_rate = 0.5  # C
