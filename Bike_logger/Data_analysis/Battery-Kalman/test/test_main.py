@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from data_manager import load_data
-from main import SocEstimator
+from soc_estimator import SocEstimator
 
 
 class AllTests(TestCase):
