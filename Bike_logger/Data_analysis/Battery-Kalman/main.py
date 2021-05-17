@@ -105,9 +105,9 @@ class SocEstimator:
 
     def plot_everything(self, time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
         fig = plt.figure()
-        ax1 = fig.add_subplot(311)
-        ax2 = fig.add_subplot(312)
-        ax3 = fig.add_subplot(313)
+
+        # Note that this is the same as
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 
         # title, labels
         ax1.set_title('')
