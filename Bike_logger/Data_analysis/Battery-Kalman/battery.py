@@ -19,7 +19,7 @@ class Battery:
         self._RC_voltage = 0
 
         # polynomial representation of OCV vs SoC
-        multiplier = 6
+        multiplier = 6  # batteries in series
         poly_coefficients = [3.1400, 3.9905, -14.2391, 24.4140, -13.5688, -4.0621, 4.5056]
         poly_coefficients_multiplied = [i * multiplier for i in poly_coefficients]
         self._OCV_model = Polynomial(poly_coefficients_multiplied)
