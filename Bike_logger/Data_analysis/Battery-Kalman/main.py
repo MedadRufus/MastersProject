@@ -4,7 +4,7 @@ import numpy as np
 
 from battery import Battery
 from kalman import ExtendedKalmanFilter as EKF
-from protocol import launch_experiment_protocol
+from protocol import launch_experiment_protocol_real_data
 
 
 class SocEstimator:
@@ -58,7 +58,7 @@ class SocEstimator:
 
     def run_all(self):
         # launch experiment
-        launch_experiment_protocol(self.Q_tot, self.time_step, self.update_all)
+        launch_experiment_protocol_real_data(self.Q_tot, self.time_step, self.update_all)
 
         # plot stuff
         self.plot_everything(self.time, self.true_voltage, self.mes_voltage, self.true_SoC, self.estim_SoC,
