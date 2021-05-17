@@ -5,6 +5,46 @@ def load_data(self):
     return pd.read_pickle('../data/df_ml_train.pkl')
 
 
+def launch_experiment_protocol_real_data(Q_tot, time_step, experiment_callback):
+    charge_current_rate = 0.5  # C
+    discharge_current_rate = 1  # C
+    discharge_constants_stages_time = 20 * 60  # s
+    pulse_time = 60  # s
+    total_pulse_time = 40 * 60  # s
+
+    high_cut_off_voltage = 4.2 * 6
+    low_cut_off_voltage = 2.5 * 6
+
+    # discharge first stage
+    time = 0
+    current = discharge_current_rate * Q_tot
+    while time < discharge_constants_stages_time:
+        experiment_callback(current)
+        time += time_step
+
+    # discharge pulses stage
+    time = 0
+    while time < total_pulse_time:
+        time_low = 0
+        current = 0
+        while time_low < pulse_time:
+            experiment_callback(current)
+            time_low += time_step
+        time_high = 0
+        current = discharge_current_rate * Q_tot
+        while time_high < pulse_time:
+            experiment_callback(current)
+            time_high += time_step
+        time += time_low + time_high
+
+    # discharge last stage
+    time = 0
+    current = discharge_current_rate * Q_tot
+    while time < discharge_constants_stages_time:
+        experiment_callback(current)
+        time += time_step
+
+
 def launch_experiment_protocol(Q_tot, time_step, experiment_callback):
     charge_current_rate = 0.5  # C
     discharge_current_rate = 1  # C
