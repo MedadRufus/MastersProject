@@ -74,18 +74,18 @@ class SocEstimator:
     def get_EKF(self, R0, R1, C1, std_dev, time_step):
         # initial state (SoC is intentionally set to a wrong value)
         # x = [[SoC], [RC voltage]]
-        x = np.matrix([[0.5],
-                       [0.0]])
+        x = np.array([[0.5],
+                      [0.0]])
 
         exp_coeff = m.exp(-time_step / (C1 * R1))
 
         # state transition model
-        F = np.matrix([[1, 0],
-                       [0, exp_coeff]])
+        F = np.array([[1, 0],
+                      [0, exp_coeff]])
 
         # control-input model
-        B = np.matrix([[-time_step / (self.Q_tot * 3600)],
-                       [R1 * (1 - exp_coeff)]])
+        B = np.array([[-time_step / (self.Q_tot * 3600)],
+                      [R1 * (1 - exp_coeff)]])
 
         # variance from std_dev
         var = std_dev ** 2
@@ -94,12 +94,12 @@ class SocEstimator:
         R = var
 
         # state covariance
-        P = np.matrix([[var, 0],
-                       [0, var]])
+        P = np.array([[var, 0],
+                      [0, var]])
 
         # process noise covariance matrix
-        Q = np.matrix([[var / 50, 0],
-                       [0, var / 50]])
+        Q = np.array([[var / 50, 0],
+                      [0, var / 50]])
 
         return EKF(x, F, B, P, Q, R, self.Hx, self.HJacobian)
 
