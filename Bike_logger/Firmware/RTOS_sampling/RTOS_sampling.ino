@@ -443,14 +443,21 @@ void update_imu_data()
 
   xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
 
+  float accelx = myIMU.readFloatAccelX();
+  float accely = myIMU.readFloatAccelY();
+  float accelz = myIMU.readFloatAccelZ();
+  float gyrox = myIMU.readFloatGyroX();
+  float gyroy = myIMU.readFloatGyroY();
+  float gyroz = myIMU.readFloatGyroZ();
+
   sprintf(buffer_imu, "%s,imu,%f,%f,%f,%f,%f,%f\n",
           NTP.getTimeDateStringUs(),
-          myIMU.readFloatAccelX(),
-          myIMU.readFloatAccelY(),
-          myIMU.readFloatAccelZ(),
-          myIMU.readFloatGyroX(),
-          myIMU.readFloatGyroY(),
-          myIMU.readFloatGyroZ());
+          accelx,
+          accely,
+          accelz,
+          gyrox,
+          gyroy,
+          gyroz);
 
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
