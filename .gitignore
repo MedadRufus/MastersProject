@@ -404,3 +404,5 @@ build
 
 # lock files for examples and components
 dependencies.lock
+Bike_logger/Data_analysis/Battery-Kalman/data/df_ml_train.pkl
+Bike_logger/Data_analysis/Battery_Kalman/data/df_ml_train.pkl
