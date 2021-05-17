@@ -78,7 +78,8 @@ if __name__ == '__main__':
         OCV.append(my_battery.OCV)
         RC_voltage.append(my_battery._RC_voltage)
         voltage.append(my_battery.voltage)
-        # print(time[-1], my_battery.state_of_charge, my_battery._OCV, my_battery.voltage)
+        print("Time elapsed[seconds]: ", time[-1], "SOC: ", my_battery.state_of_charge, "OCV: ", my_battery.OCV,
+              "Voltage: ", my_battery.voltage)
 
     import matplotlib.pyplot as plt
 
@@ -92,5 +93,17 @@ if __name__ == '__main__':
 
     ax1.plot(SoC, OCV, label="OCV")
     ax1.plot(SoC, voltage, label="Total voltage")
+
+    plt.show()
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+
+    # title, labels
+    ax1.set_title('')
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel('Voltage')
+
+    ax1.plot(time, OCV, label="OCV")
 
     plt.show()

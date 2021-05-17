@@ -22,21 +22,6 @@ class Protocol:
         pulse_time = 60  # s
         total_pulse_time = 10 * 60  # s
 
-        # charge CC
-        current = -charge_current_rate * Q_tot
-        voltage = 0
-        while voltage < high_cut_off_voltage:
-            voltage = experiment_callback(current)
-
-        # charge CV
-        while current < -0.1:
-            # pseudo current control to simulate CV charge
-            if voltage > high_cut_off_voltage * 1.001:
-                current += 0.01 * Q_tot
-            # if battery_simulation.voltage < high_cut_off_voltage*0.999:
-            #     current += 0.02 * Q_tot
-            voltage = experiment_callback(current)
-
         # discharge first stage
         df = self.load_data()
         discharge_time = len(df.index)

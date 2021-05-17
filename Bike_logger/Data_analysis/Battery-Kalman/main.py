@@ -23,7 +23,7 @@ class SocEstimator:
         # Battery simulation model
         self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
 
-        self.battery_simulation.actual_capacity = 0
+        # self.battery_simulation.actual_capacity = 0.6
 
         # measurement noise standard deviation
         self.std_dev = 0.015
@@ -104,8 +104,6 @@ class SocEstimator:
         return EKF(x, F, B, P, Q, R, self.Hx, self.HJacobian)
 
     def plot_everything(self, time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
-        fig = plt.figure()
-
         # Note that this is the same as
         fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 
