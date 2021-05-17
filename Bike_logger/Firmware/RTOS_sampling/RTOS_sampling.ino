@@ -231,7 +231,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
-      NULL, 2 // Priority
+      NULL, 3 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 #endif
