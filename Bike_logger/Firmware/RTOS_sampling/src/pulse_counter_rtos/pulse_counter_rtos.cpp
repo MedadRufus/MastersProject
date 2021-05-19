@@ -107,7 +107,7 @@ static void log_signal(int index, capture evt, uint32_t *current_cap_value, uint
   current_cap_value[index] = (current_cap_value[index] / 10000) * (10000000000 / rtc_clk_apb_freq_get());
   edge_direction_value[index] = evt.edge_direction;
 
-  Serial.printf("CAP%d, Period %d us, DIRECTION : %d\n", index, current_cap_value[index], edge_direction_value[index]);
+  //Serial.printf("CAP%d, Period %d us, DIRECTION : %d\n", index, current_cap_value[index], edge_direction_value[index]);
 
   char msg_buffer[100];
 
