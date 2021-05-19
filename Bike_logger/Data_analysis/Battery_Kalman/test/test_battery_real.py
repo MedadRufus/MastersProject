@@ -1,12 +1,12 @@
 import unittest
 from unittest import TestCase
 
-from battery_real import Battery_real
+from battery import Battery
 
 
 class TestBattery_real(TestCase):
     def setUp(self) -> None:
-        self.my_batt = Battery_real(total_capacity=720)
+        self.my_batt = Battery(total_capacity=720)
 
     @unittest.skip("Not implemented yet")
     def test_update(self):
@@ -35,7 +35,3 @@ class TestBattery_real(TestCase):
     @unittest.skip("Not implemented yet")
     def test_OCV(self):
         self.fail()
-
-    def test_load_data(self):
-        self.my_batt.load_data()
-        print(self.my_batt.df.head())

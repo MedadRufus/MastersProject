@@ -231,7 +231,7 @@ void start_tasks()
   xTaskCreatePinnedToCore(
       TaskReadImu, "TaskReadImu", 20000 // Stack size
       ,
-      NULL, 2 // Priority
+      NULL, 3 // Priority
       ,
       &Handle_imu_Task, ARDUINO_RUNNING_CORE);
 #endif
@@ -443,18 +443,25 @@ void update_imu_data()
 
   xSemaphoreTake(I2C1_Mutex, portMAX_DELAY);
 
+  float accelx = myIMU.readFloatAccelX();
+  float accely = myIMU.readFloatAccelY();
+  float accelz = myIMU.readFloatAccelZ();
+  float gyrox = myIMU.readFloatGyroX();
+  float gyroy = myIMU.readFloatGyroY();
+  float gyroz = myIMU.readFloatGyroZ();
+
   sprintf(buffer_imu, "%s,imu,%f,%f,%f,%f,%f,%f\n",
           NTP.getTimeDateStringUs(),
-          myIMU.readFloatAccelX(),
-          myIMU.readFloatAccelY(),
-          myIMU.readFloatAccelZ(),
-          myIMU.readFloatGyroX(),
-          myIMU.readFloatGyroY(),
-          myIMU.readFloatGyroZ());
+          accelx,
+          accely,
+          accelz,
+          gyrox,
+          gyroy,
+          gyroz);
 
   xSemaphoreGive(I2C1_Mutex); // release mutex
 
-  //Serial.print(buffer_imu);
+  Serial.print(buffer_imu);
 
   save_to_sd(buffer_imu);
 }
@@ -493,19 +500,24 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
   /* sync systime if it has not yet been done */
   set_sys_time_ublox(ubxDataStruct);
 
-  sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%f,%f,%f,%f,%d,%d,%d\n",
+  sprintf(buffer_gnss, "%s,gps,%02u,%02u,%02u,%03u,%f,%f,%f,%f,%d,%d,%d,%f,%d,%d,%d,%f\n",
           NTP.getTimeDateStringUs(),
           ubxDataStruct.hour,
           ubxDataStruct.min,
           ubxDataStruct.sec,
           ubxDataStruct.iTOW % 1000,
-          (float)ubxDataStruct.lat / 10000000,
-          (float)ubxDataStruct.lon / 10000000,
-          (float)ubxDataStruct.height / 1000,   /* m altitude */
+          (float)ubxDataStruct.lat / 1e7,
+          (float)ubxDataStruct.lon / 1e7,
+          (float)ubxDataStruct.height / 1e3,    /* m altitude */
           (float)ubxDataStruct.gSpeed * 0.0036, /* km/h */
           ubxDataStruct.numSV,
           ubxDataStruct.flags.bits.gnssFixOK,
-          ubxDataStruct.fixType);
+          ubxDataStruct.fixType,
+          (float)ubxDataStruct.headVeh / 1e5,
+          ubxDataStruct.hAcc,
+          ubxDataStruct.vAcc,
+          ubxDataStruct.sAcc,
+          (float)ubxDataStruct.headAcc / 1e5);
 
   //Serial.print(buffer_gnss);
 

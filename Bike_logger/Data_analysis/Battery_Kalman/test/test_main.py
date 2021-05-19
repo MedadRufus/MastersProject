@@ -1,11 +1,14 @@
 from unittest import TestCase
 
-from main import SocEstimator
+from data_manager import load_data
+from soc_estimator import SocEstimator
 
 
 class AllTests(TestCase):
     def setUp(self) -> None:
-        self.soc_estimator = SocEstimator()
+        df = load_data()
+
+        self.soc_estimator = SocEstimator(df)
 
     def test_main(self):
         self.soc_estimator.run_all()

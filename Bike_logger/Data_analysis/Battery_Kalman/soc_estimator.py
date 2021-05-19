@@ -2,15 +2,16 @@ import math as m
 import matplotlib.pyplot as plt
 import numpy as np
 
-from battery_real import Battery_real
-from kalman import ExtendedKalmanFilter as EKF
-from protocol import launch_experiment_protocol
+from .battery import Battery
+from .kalman import ExtendedKalmanFilter as EKF
+from .protocol import Protocol
 
 
 class SocEstimator:
-    def __init__(self):
+    def __init__(self, df):
+        self.df = df
         # total capacity
-        self.Q_tot = 3.2
+        self.Q_tot = 8.708  # Ah
 
         # Thevenin model values
         self.R0 = 0.062
@@ -18,12 +19,12 @@ class SocEstimator:
         self.C1 = 3000
 
         # time period
-        self.time_step = 10
+        self.time_step = 0.01  # seconds
 
         # Battery simulation model
-        self.battery_simulation = Battery_real(self.Q_tot)
+        self.battery_simulation = Battery(self.Q_tot, self.R0, self.R1, self.C1)
 
-        self.battery_simulation.actual_capacity = 0
+        # self.battery_simulation.actual_capacity = 0.6
 
         # measurement noise standard deviation
         self.std_dev = 0.015
@@ -44,7 +45,6 @@ class SocEstimator:
 
         self.time.append(self.time[-1] + self.time_step)
         self.current.append(actual_current)
-
         self.true_voltage.append(self.battery_simulation.voltage)
         self.mes_voltage.append(self.battery_simulation.voltage + np.random.normal(0, self.std_dev, 1)[0])
 
@@ -58,7 +58,8 @@ class SocEstimator:
 
     def run_all(self):
         # launch experiment
-        launch_experiment_protocol(self.Q_tot, self.time_step, self.update_all)
+        p = Protocol()
+        p.launch_experiment_protocol_real_data(self.df, self.Q_tot, self.time_step, self.update_all)
 
         # plot stuff
         self.plot_everything(self.time, self.true_voltage, self.mes_voltage, self.true_SoC, self.estim_SoC,
@@ -73,18 +74,18 @@ class SocEstimator:
     def get_EKF(self, R0, R1, C1, std_dev, time_step):
         # initial state (SoC is intentionally set to a wrong value)
         # x = [[SoC], [RC voltage]]
-        x = np.matrix([[0.5],
-                       [0.0]])
+        x = np.array([[0.5],
+                      [0.0]])
 
         exp_coeff = m.exp(-time_step / (C1 * R1))
 
         # state transition model
-        F = np.matrix([[1, 0],
-                       [0, exp_coeff]])
+        F = np.array([[1, 0],
+                      [0, exp_coeff]])
 
         # control-input model
-        B = np.matrix([[-time_step / (self.Q_tot * 3600)],
-                       [R1 * (1 - exp_coeff)]])
+        B = np.array([[-time_step / (self.Q_tot * 3600)],
+                      [R1 * (1 - exp_coeff)]])
 
         # variance from std_dev
         var = std_dev ** 2
@@ -93,20 +94,18 @@ class SocEstimator:
         R = var
 
         # state covariance
-        P = np.matrix([[var, 0],
-                       [0, var]])
+        P = np.array([[var, 0],
+                      [0, var]])
 
         # process noise covariance matrix
-        Q = np.matrix([[var / 50, 0],
-                       [0, var / 50]])
+        Q = np.array([[var / 50, 0],
+                      [0, var / 50]])
 
         return EKF(x, F, B, P, Q, R, self.Hx, self.HJacobian)
 
     def plot_everything(self, time, true_voltage, mes_voltage, true_SoC, estim_SoC, current):
-        fig = plt.figure()
-        ax1 = fig.add_subplot(311)
-        ax2 = fig.add_subplot(312)
-        ax3 = fig.add_subplot(313)
+        # Note that this is the same as
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 
         # title, labels
         ax1.set_title('')
@@ -128,8 +127,3 @@ class SocEstimator:
         ax3.legend()
 
         plt.show()
-
-
-if __name__ == '__main__':
-    soc_estimator = SocEstimator()
-    soc_estimator.run_all()

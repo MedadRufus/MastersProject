@@ -1,5 +1,6 @@
 import math as m
-from utils import Polynomial
+
+from .utils import Polynomial
 
 
 class Battery:
@@ -18,7 +19,10 @@ class Battery:
         self._RC_voltage = 0
 
         # polynomial representation of OCV vs SoC
-        self._OCV_model = Polynomial([3.1400, 3.9905, -14.2391, 24.4140, -13.5688, -4.0621, 4.5056])
+        multiplier = 29.36 / 4.2  # batteries in series
+        poly_coefficients = [3.1400, 3.9905, -14.2391, 24.4140, -13.5688, -4.0621, 4.5056]
+        poly_coefficients_multiplied = [i * multiplier for i in poly_coefficients]
+        self._OCV_model = Polynomial(poly_coefficients_multiplied)
 
     def update(self, time_delta):
         self.actual_capacity -= self.current * time_delta
@@ -74,7 +78,8 @@ if __name__ == '__main__':
         OCV.append(my_battery.OCV)
         RC_voltage.append(my_battery._RC_voltage)
         voltage.append(my_battery.voltage)
-        # print(time[-1], my_battery.state_of_charge, my_battery._OCV, my_battery.voltage)
+        print("Time elapsed[seconds]: ", time[-1], "SOC: ", my_battery.state_of_charge, "OCV: ", my_battery.OCV,
+              "Voltage: ", my_battery.voltage)
 
     import matplotlib.pyplot as plt
 
@@ -88,5 +93,17 @@ if __name__ == '__main__':
 
     ax1.plot(SoC, OCV, label="OCV")
     ax1.plot(SoC, voltage, label="Total voltage")
+
+    plt.show()
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+
+    # title, labels
+    ax1.set_title('')
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel('Voltage')
+
+    ax1.plot(time, OCV, label="OCV")
 
     plt.show()
