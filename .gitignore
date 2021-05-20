@@ -654,3 +654,4 @@ contrib_docs/_build/
 # Specific
 Bike_logger/Data_analysis/structured_data_regressor/
 Bike_logger/Data_analysis/image_regressor/
+Bike_logger/Data_analysis/time_series_forecaster/
