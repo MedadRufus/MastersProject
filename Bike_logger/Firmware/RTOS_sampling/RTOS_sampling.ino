@@ -513,7 +513,7 @@ void logPVTdata(UBX_NAV_PVT_data_t ubxDataStruct)
           ubxDataStruct.numSV,
           ubxDataStruct.flags.bits.gnssFixOK,
           ubxDataStruct.fixType,
-          (float)ubxDataStruct.headVeh / 1e5,
+          (float)ubxDataStruct.headMot / 1e5,   /* Heading of motion (2-D): deg * 1e-5 */
           ubxDataStruct.hAcc,
           ubxDataStruct.vAcc,
           ubxDataStruct.sAcc,
