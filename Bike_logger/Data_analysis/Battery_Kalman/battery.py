@@ -1,6 +1,6 @@
 import math as m
 
-from .utils import Polynomial
+from utils import Polynomial
 
 
 class Battery:
@@ -56,10 +56,10 @@ class Battery:
 
 
 if __name__ == '__main__':
-    capacity = 3.2  # Ah
+    capacity = 8.708  # Ah
     discharge_rate = 1  # C
-    time_step = 10  # s
-    cut_off_voltage = 2.5
+    time_step = 100  # s
+    cut_off_voltage = 23
 
     current = capacity * discharge_rate
     my_battery = Battery(capacity, 0.062, 0.01, 3000)
