@@ -1,6 +1,7 @@
 import math as m
 
 from utils import Polynomial
+import matplotlib.pyplot as plt
 
 
 class Battery:
@@ -24,11 +25,13 @@ class Battery:
         poly_coefficients_multiplied = [i * multiplier for i in poly_coefficients]
         self._OCV_model = Polynomial(poly_coefficients_multiplied)
 
-    def update(self, time_delta):
-        self.actual_capacity -= self.current * time_delta
+    def update(self, time_delta, current):
+        self.actual_capacity -= current * time_delta
         exp_coeff = m.exp(-time_delta / (self.R1 * self.C1))
         self._RC_voltage *= exp_coeff
-        self._RC_voltage += self.R1 * (1 - exp_coeff) * self.current
+        self._RC_voltage += self.R1 * (1 - exp_coeff) * current
+
+        return self.state_of_charge
 
     @property
     def current(self):
@@ -55,6 +58,7 @@ class Battery:
         return self.OCV_model(self.state_of_charge)
 
 
+
 if __name__ == '__main__':
     capacity = 8.708  # Ah
     discharge_rate = 1  # C
@@ -72,7 +76,8 @@ if __name__ == '__main__':
     voltage = [my_battery.voltage]
 
     while my_battery.voltage > cut_off_voltage:
-        my_battery.update(time_step)
+        soc = my_battery.update(time_step, current)
+        ## Record stuff
         time.append(time[-1] + time_step)
         SoC.append(my_battery.state_of_charge)
         OCV.append(my_battery.OCV)
@@ -81,7 +86,6 @@ if __name__ == '__main__':
         print("Time elapsed[seconds]: ", time[-1], "SOC: ", my_battery.state_of_charge, "OCV: ", my_battery.OCV,
               "Voltage: ", my_battery.voltage)
 
-    import matplotlib.pyplot as plt
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
