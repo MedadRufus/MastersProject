@@ -665,3 +665,4 @@ Bike_logger/Data_analysis/df_ml_sync_gps.pkl
 Bike_logger/Data_analysis/df_ml_test.pkl
 Bike_logger/Data_analysis/xgbr_SOC_model.json
 *.pkl
+Bike_logger/Data_analysis/xgbr_model.json
