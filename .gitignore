@@ -666,3 +666,5 @@ Bike_logger/Data_analysis/df_ml_test.pkl
 Bike_logger/Data_analysis/xgbr_SOC_model.json
 *.pkl
 Bike_logger/Data_analysis/xgbr_model.json
+Bike_logger/Data_analysis/xgbr_model_offline_only.json
+Bike_logger/Data_analysis/xgbr_model_offline_soc_speed.json
