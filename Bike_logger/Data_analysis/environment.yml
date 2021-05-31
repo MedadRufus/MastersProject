@@ -9,3 +9,4 @@ dependencies:
   - py-xgboost
   - python=3.7
   - seaborn
+  - plotly
