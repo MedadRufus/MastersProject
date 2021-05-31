@@ -1,0 +1,11 @@
+name: Masters
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - geopandas
+  - ipykernel
+  - matplotlib
+  - py-xgboost
+  - python=3.7
+  - seaborn
