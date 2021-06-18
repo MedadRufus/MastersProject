@@ -653,3 +653,20 @@ contrib_docs/_build/
 
 # Specific
 Bike_logger/Data_analysis/structured_data_regressor/
+Bike_logger/Data_analysis/image_regressor/
+Bike_logger/Data_analysis/time_series_forecaster/
+Bike_logger/Data_analysis/model_autokeras/
+
+Bike_logger/Data_analysis/df_ml.pkl
+Bike_logger/Data_analysis/df_ml_soc_trainer.pkl
+Bike_logger/Data_analysis/df_ml_soc_trainer1.pkl
+Bike_logger/Data_analysis/df_ml_soc_trainer2.pkl
+Bike_logger/Data_analysis/df_ml_sync_gps.pkl
+Bike_logger/Data_analysis/df_ml_test.pkl
+Bike_logger/Data_analysis/xgbr_SOC_model.json
+*.pkl
+Bike_logger/Data_analysis/xgbr_model.json
+Bike_logger/Data_analysis/xgbr_model_offline_only.json
+Bike_logger/Data_analysis/xgbr_model_offline_soc_speed.json
+Bike_logger/Data_analysis/xgbr_model_offline_online.json
+Bike_logger/Data_analysis/xgbr_model_offline_only_hyper_optimised.json
